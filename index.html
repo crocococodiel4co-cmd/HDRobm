@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBM — Online Brand Monitoring · HDR Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black-1:#050308;
+    --black-2:#080c12;
+    --black-3:#0a0f16;
+    --panel:#0d141c;
+    --panel-2:#0f1720;
+    --border: rgba(255,255,255,0.09);
+    --border-hover: rgba(223,234,232,0.32);
+    --text-0:#f3f6f5;
+    --text-1: rgba(243,246,245,0.66);
+    --text-2: rgba(243,246,245,0.40);
+    --text-3: rgba(243,246,245,0.24);
+    --glow-a: rgba(150,190,255,0.55);
+    --glow-b: rgba(184,217,199,0.30);
+    --platinum:#dfeae8;
+    --radius: 20px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--black-1);
+    color: var(--text-0);
+    font-family:'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 300;
+    line-height:1.5;
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- ambient background ---------- */
+  .bg{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 0%, rgba(120,165,255,0.16), transparent 60%),
+      radial-gradient(ellipse 45% 35% at 85% 25%, rgba(184,217,199,0.08), transparent 65%),
+      radial-gradient(ellipse 55% 45% at 10% 85%, rgba(120,150,255,0.07), transparent 65%),
+      linear-gradient(180deg, var(--black-1) 0%, var(--black-3) 55%, #070a10 100%);
+    animation: drift 22s ease-in-out infinite alternate;
+  }
+  @keyframes drift{
+    0%{ filter:brightness(1); }
+    100%{ filter:brightness(1.12); }
+  }
+  .bg::after{
+    content:'';
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse 120% 90% at 50% 40%, transparent 40%, rgba(0,0,0,0.55) 100%);
+  }
+
+  .wrap{ position:relative; z-index:1; }
+
+  /* ---------- topbar ---------- */
+  header.topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    max-width:1180px;
+    margin:0 auto;
+    padding: 28px 24px 0;
+  }
+  .brand-left{
+    font-size:12px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color: var(--text-1);
+    font-weight:500;
+  }
+  .brand-right{
+    font-size:12px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color: var(--text-2);
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .brand-right .dot{
+    width:5px; height:5px; border-radius:50%;
+    background: var(--platinum);
+    box-shadow: 0 0 8px 1px rgba(223,234,232,0.7);
+    animation: blink 2.6s ease-in-out infinite;
+  }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+
+  /* ---------- hero ---------- */
+  .hero{
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 100px 24px 60px;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .ping{
+    position:relative;
+    width:14px; height:14px;
+    margin-bottom:34px;
+    opacity:0;
+    animation: fadeUp 900ms ease forwards 100ms;
+  }
+  .ping i{
+    position:absolute; inset:0;
+    border-radius:50%;
+    background: var(--platinum);
+    box-shadow: 0 0 18px 3px rgba(223,234,232,0.55);
+  }
+  .ping .ring{
+    position:absolute;
+    top:50%; left:50%;
+    width:14px; height:14px;
+    margin:-7px 0 0 -7px;
+    border-radius:50%;
+    border:1px solid rgba(223,234,232,0.55);
+    animation: ping 3.2s cubic-bezier(0.2,0.6,0.4,1) infinite;
+  }
+  .ping .ring:nth-child(3){ animation-delay:1.06s; }
+  .ping .ring:nth-child(4){ animation-delay:2.13s; }
+  @keyframes ping{
+    0%{ transform:scale(1); opacity:0.9; }
+    100%{ transform:scale(9.5); opacity:0; }
+  }
+
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:0.32em;
+    text-transform:uppercase;
+    color: var(--text-2);
+    font-weight:500;
+    opacity:0;
+    animation: fadeUp 900ms ease forwards 220ms;
+  }
+
+  h1{
+    margin-top:22px;
+    font-size: clamp(34px, 6vw, 58px);
+    font-weight:200;
+    letter-spacing:-0.01em;
+    line-height:1.14;
+    color: var(--text-0);
+    opacity:0;
+    animation: fadeUp 900ms ease forwards 340ms;
+  }
+  h1 b{ font-weight:600; color: var(--platinum); }
+
+  .lead{
+    margin-top:22px;
+    max-width:520px;
+    font-size:16px;
+    font-weight:300;
+    color: var(--text-1);
+    opacity:0;
+    animation: fadeUp 900ms ease forwards 460ms;
+  }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .scrollcue{
+    margin-top:56px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    color: var(--text-3);
+    font-size:11px;
+    letter-spacing:0.24em;
+    text-transform:uppercase;
+    opacity:0;
+    animation: fadeUp 900ms ease forwards 620ms;
+  }
+  .scrollcue svg{ animation: bob 2.2s ease-in-out infinite; }
+  @keyframes bob{
+    0%,100%{ transform:translateY(0); opacity:0.5; }
+    50%{ transform:translateY(6px); opacity:1; }
+  }
+
+  /* ---------- section ---------- */
+  section.cards{
+    max-width:1180px;
+    margin:0 auto;
+    padding: 20px 24px 140px;
+  }
+  .section-head{
+    text-align:center;
+    margin-bottom:44px;
+  }
+  .section-head .eyebrow{ animation:none; opacity:1; }
+  .section-head h2{
+    margin-top:14px;
+    font-size:22px;
+    font-weight:300;
+    color: var(--text-1);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:20px;
+  }
+  @media (max-width: 860px){
+    .grid{ grid-template-columns: 1fr; }
+  }
+
+  .card{
+    --mx:50%;
+    --my:0%;
+    position:relative;
+    display:block;
+    text-decoration:none;
+    color:inherit;
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border:1px solid var(--border);
+    border-radius: var(--radius);
+    padding:32px 26px 28px;
+    overflow:hidden;
+    isolation:isolate;
+    transition: transform 420ms cubic-bezier(.2,.7,.2,1), border-color 420ms ease, box-shadow 420ms ease;
+    opacity:0;
+    animation: fadeUp 800ms ease forwards;
+  }
+  .card:nth-child(1){ animation-delay: 620ms; }
+  .card:nth-child(2){ animation-delay: 720ms; }
+  .card:nth-child(3){ animation-delay: 820ms; }
+
+  .card::before{
+    content:'';
+    position:absolute;
+    inset:-40%;
+    z-index:-1;
+    background: radial-gradient(circle at var(--mx) var(--my), rgba(150,190,255,0.30), transparent 45%);
+    opacity:0;
+    transition: opacity 420ms ease;
+  }
+  .card::after{
+    content:'';
+    position:absolute;
+    top:0; left:24px; right:24px; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    opacity:0;
+    transition: opacity 420ms ease;
+  }
+  .card:hover{
+    transform: translateY(-6px);
+    border-color: var(--border-hover);
+    box-shadow: 0 24px 60px -20px rgba(0,0,0,0.6);
+  }
+  .card:hover::before, .card:hover::after{ opacity:1; }
+
+  .card .icon{
+    width:40px; height:40px;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--border);
+    border-radius:12px;
+    margin-bottom:26px;
+    color: var(--platinum);
+    background: rgba(255,255,255,0.02);
+  }
+  .card .icon svg{ width:20px; height:20px; }
+
+  .card h3{
+    font-size:19px;
+    font-weight:500;
+    color: var(--text-0);
+    margin-bottom:10px;
+    letter-spacing:-0.01em;
+  }
+  .card p{
+    font-size:14px;
+    font-weight:300;
+    color: var(--text-1);
+    margin-bottom:28px;
+    min-height:42px;
+  }
+  .card .cta{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    font-weight:500;
+    color: var(--text-1);
+    letter-spacing:0.02em;
+    transition: color 300ms ease, gap 300ms ease;
+  }
+  .card .cta svg{
+    width:14px; height:14px;
+    transition: transform 300ms cubic-bezier(.2,.7,.2,1);
+  }
+  .card:hover .cta{ color: var(--platinum); gap:12px; }
+  .card:hover .cta svg{ transform: translateX(3px); }
+
+  .card .tag{
+    position:absolute;
+    top:26px; right:26px;
+    font-size:10px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color: var(--text-3);
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    max-width:1180px;
+    margin:0 auto;
+    padding: 30px 24px 40px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-top:1px solid var(--border);
+    font-size:12px;
+    color: var(--text-3);
+    letter-spacing:0.02em;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  footer a{ color: var(--text-2); text-decoration:none; }
+  footer a:hover{ color: var(--text-1); }
+
+  @media (max-width: 480px){
+    header.topbar{ padding:20px 18px 0; }
+    .brand-left, .brand-right{ font-size:10.5px; letter-spacing:0.14em; white-space:nowrap; }
+    .brand-right .long{ display:none; }
+    .hero{ padding:64px 18px 36px; }
+    section.cards{ padding:10px 18px 90px; }
+    footer{ padding:24px 18px 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<div class="wrap">
+
+  <header class="topbar">
+    <div class="brand-left">HDR GROUP</div>
+    <div class="brand-right"><span class="dot"></span> OBM<span class="long"> · Online Brand Monitoring</span></div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="ping">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <i></i>
+      </div>
+
+      <div class="eyebrow">Online Brand Monitoring</div>
+
+      <h1>Единая точка контроля <br><b>контента бренда</b></h1>
+
+      <p class="lead">Брифы, ведение и мониторинг активности клиента по всем каналам — соцсети, геосервисы, сайт — в одном месте.</p>
+
+      <div class="scrollcue">
+        Выберите направление
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 14l6 6 6-6"/></svg>
+      </div>
+    </section>
+
+    <section class="cards" id="directions">
+      <div class="section-head">
+        <div class="eyebrow">Начните с брифа</div>
+        <h2>Три направления — один стандарт работы</h2>
+      </div>
+
+      <div class="grid">
+
+        <a class="card" href="/tz-vk/" data-card>
+          <span class="tag">01</span>
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v6.5a2 2 0 0 1-2 2h-6.2L7 19v-3.5H7a2 2 0 0 1-2-2V7z"/>
+              <path d="M8.3 8.6h7.4M8.3 11.2h4.6"/>
+            </svg>
+          </div>
+          <h3>VK-группа</h3>
+          <p>Бриф на запуск и ведение сообщества ВКонтакте: контент, оформление, стиль коммуникации.</p>
+          <div class="cta">Заполнить бриф
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </a>
+
+        <a class="card" href="/tz-maps/" data-card>
+          <span class="tag">02</span>
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/>
+              <circle cx="12" cy="9.5" r="2.4"/>
+            </svg>
+          </div>
+          <h3>Яндекс.Карты / 2ГИС</h3>
+          <p>Бриф по продвижению и ведению карточек компании на геосервисах.</p>
+          <div class="cta">Заполнить бриф
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </a>
+
+        <a class="card" href="/tz-site/" data-card>
+          <span class="tag">03</span>
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3.5" y="5" width="17" height="14" rx="2.4"/>
+              <path d="M3.5 9H20.5"/>
+              <path d="M7 6.6h.01M9.3 6.6h.01"/>
+              <path d="M9 15l-2.5-2.2L9 10.6M15 10.6l2.5 2.2L15 15"/>
+            </svg>
+          </div>
+          <h3>Разработка сайта</h3>
+          <p>Бриф на дизайн и разработку сайта: структура, функциональность, технические требования.</p>
+          <div class="cta">Заполнить бриф
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </a>
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>© 2026 HDR Group</div>
+    <div><a href="https://hdrgrouporm.ru">hdrgrouporm.ru</a> — экосистема сервисов агентства</div>
+  </footer>
+
+</div>
+
+<script>
+  // cursor-follow spotlight on cards
+  document.querySelectorAll('[data-card]').forEach(function(card){
+    card.addEventListener('mousemove', function(e){
+      var r = card.getBoundingClientRect();
+      var x = ((e.clientX - r.left) / r.width) * 100;
+      var y = ((e.clientY - r.top) / r.height) * 100;
+      card.style.setProperty('--mx', x + '%');
+      card.style.setProperty('--my', y + '%');
+    });
+  });
+</script>
+
+</body>
+</html>
