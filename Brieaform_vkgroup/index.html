@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Аудит сети «Спарта-Ломбард» — 9 филиалов, Новосибирск</title>
+<style>
+  :root{
+    --bg:#07101E; --panel:rgba(255,255,255,.03); --panel-strong:rgba(255,255,255,.05);
+    --line:rgba(206,158,140,.17); --line-soft:rgba(206,158,140,.09);
+    --cream:#F1E6D2; --text:#D9DCE4; --text-dim:#8993A6;
+    --accent:#CDA08F; --accent-soft:rgba(205,160,143,.15); --accent-2:#B98476;
+    --good:#7FB894; --warn:#D2A05E; --bad:#C4736E;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.6;
+    background:
+      radial-gradient(ellipse 900px 500px at 12% -5%, rgba(205,160,143,.11), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 15%, rgba(205,160,143,.07), transparent 55%),
+      linear-gradient(163deg, rgba(205,160,143,.05), rgba(205,160,143,.02) 40%, transparent 70%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:56px 28px 100px;}
+  header.top{border-bottom:1px solid var(--line);padding-bottom:30px;margin-bottom:40px;}
+  .eyebrow{color:var(--accent);letter-spacing:.18em;text-transform:uppercase;font-size:11px;font-family:'Courier New',monospace;margin-bottom:14px;}
+  h1{font-size:30px;margin:0 0 10px;font-weight:700;color:var(--cream);letter-spacing:.01em;}
+  .sub{color:var(--text-dim);font-size:14px;}
+  .sub b{color:var(--text);font-weight:600;}
+
+  .block-tag{display:flex;align-items:center;gap:12px;font-family:'Courier New',monospace;font-size:11px;color:var(--accent);letter-spacing:.2em;margin:52px 0 10px;}
+  .block-tag .ln{flex:1;height:1px;background:linear-gradient(to right, var(--accent-soft), transparent);}
+  h2{font-size:21px;color:var(--cream);font-weight:700;margin:0 0 16px;letter-spacing:.01em;}
+  h3{font-size:15px;color:var(--accent);font-weight:700;margin:0 0 10px;letter-spacing:.02em;}
+  p{font-size:14px;color:var(--text);}
+  .lede{font-size:14.5px;color:var(--text-dim);}
+
+  /* HUD frame */
+  .hud{position:relative;}
+  .hud::before,.hud::after{content:"";position:absolute;width:14px;height:14px;pointer-events:none;}
+  .hud::before{top:-1px;left:-1px;border-top:1px solid var(--accent);border-left:1px solid var(--accent);}
+  .hud::after{bottom:-1px;right:-1px;border-bottom:1px solid var(--accent);border-right:1px solid var(--accent);}
+
+  .table-wrap{position:relative;border:1px solid var(--line);background:var(--panel);margin:14px 0 6px;overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:820px;}
+  th{background:var(--panel-strong);color:var(--accent);text-align:left;padding:12px 14px;font-weight:700;border-bottom:1px solid var(--line);white-space:nowrap;font-family:'Courier New',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;}
+  td{padding:12px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top;}
+  tbody tr{cursor:pointer;transition:background .12s ease;}
+  tbody tr:hover{background:var(--accent-soft);}
+  tbody tr:hover td{color:var(--cream);}
+  .num{color:var(--text-dim);font-family:'Courier New',monospace;}
+  .go{color:var(--accent);font-family:'Courier New',monospace;font-size:14px;text-align:center;}
+  .tag{display:inline-block;font-size:10px;padding:3px 8px;font-family:'Courier New',monospace;letter-spacing:.05em;border:1px solid var(--line);color:var(--text-dim);}
+  .rating{font-weight:700;font-family:'Courier New',monospace;}
+  .r-high{color:var(--good);}
+  .r-mid{color:var(--warn);}
+
+  .card{position:relative;background:var(--panel);border:1px solid var(--line);padding:22px 24px;margin:16px 0;}
+  .card.warn{border-left:2px solid var(--warn);}
+  .card.bad{border-left:2px solid var(--bad);}
+
+  .qa{position:relative;background:var(--panel);border:1px solid var(--line);padding:20px 24px;margin:14px 0;}
+  .qa .q{color:var(--cream);font-weight:700;font-size:14px;margin-bottom:8px;letter-spacing:.01em;}
+  .qa .answer{font-size:13.5px;color:var(--text-dim);}
+
+  ul{font-size:14px;color:var(--text);margin:8px 0;padding-left:0;list-style:none;}
+  li{margin-bottom:10px;padding-left:20px;position:relative;}
+  li::before{content:"—";position:absolute;left:0;color:var(--accent);}
+
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft);}
+  a:hover{border-bottom-color:var(--accent);}
+
+  .highlight{position:relative;background:var(--panel-strong);border:1px solid var(--line);padding:22px 24px;margin:18px 0;}
+
+  .footer-note{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:var(--text-dim);font-family:'Courier New',monospace;}
+
+  @media (max-width:720px){ th,td{padding:9px 8px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">Аудит карточек сети · Яндекс Карты и 2ГИС</div>
+    <h1>Сеть «Спарта-Ломбард» — Новосибирск</h1>
+    <div class="sub">9 филиалов · <b>ООО «СПАРТА-ЛОМБАРД»</b> · ИНН 5503188051 · sparta-lombard.ru · выдача краткосрочных займов под залог</div>
+  </header>
+
+  <p class="lede">Ниже — анализ представленности сети в Яндекс Картах: сводные данные по всем 9 филиалам, выявленные проблемы карточек и разбор по направлениям, определяющим дальнейшую работу.</p>
+
+  <div class="block-tag">БЛОК 01/04 · КАРТА СЕТИ<span class="ln"></span></div>
+  <h2>Сводная таблица по филиалам</h2>
+  <p class="lede">Данные из карточек Яндекс Карт на момент проверки. Разброс количества отзывов (от 4 до 52 на разных филиалах) и разный режим работы точек (часть работает в режиме 24/7, часть — до 22:00/23:00) — факторы, определяющие текущую неоднородность позиций сети в поиске. Строка филиала открывает его карточку.</p>
+
+  <div class="table-wrap hud">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Название в карточке</th><th>Адрес</th><th>Режим</th><th>Рейтинг</th><th>Оценок</th><th>Отзывов</th><th>Фото</th><th>Сторис</th><th>Новости</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDu0ye','_blank')"><td>1</td><td>Спарта Ломбард-Маркет</td><td>Б. Богаткова, 206А, пом.12,16</td><td>24 ч</td><td class="rating r-high">4.5</td><td class="num">9</td><td class="num">9</td><td class="num">20</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
+        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDuPNo','_blank')"><td>2</td><td>Sparta <span class="tag">лат.</span></td><td>Выборная, 117/3</td><td>до 22:00</td><td class="rating r-mid">4.3</td><td class="num">20</td><td class="num">9</td><td class="num">15</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
+        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDyZmm','_blank')"><td>3</td><td>Sparta <span class="tag">лат.</span></td><td>25 лет Октября, 15, пом.1</td><td>24 ч</td><td class="rating r-mid">4.3</td><td class="num">5</td><td class="num">4</td><td class="num">15</td><td class="num">0</td><td class="num">1</td><td class="go">↗</td></tr>
+        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDyTZh','_blank')"><td>4</td><td>Спарта</td><td>Нарымская, 11</td><td>до 22:00</td><td class="rating r-mid">4.3</td><td class="num">23</td><td class="num">12</td><td class="num">11</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
+        <tr onclick="window.open('https://yandex.ru/maps/-/CTdD56mt','_blank')"><td>5</td><td>Спарта</td><td>Дмитрия Донского, 30</td><td>до 22:00</td><td class="rating r-high">4.6</td><td class="num">90</td><td class="num">52</td><td class="num">14</td><td class="num">2</td><td class="num">1</td><td class="go">↗</td></tr>
+        <tr onclick="window.open('https://yandex.ru/maps/-/CTdD5WYf','_blank')"><td>6</td><td>Спарта</td><td>Забалуева, 78Б</td><td>до 22:00</td><td class="rating r-mid">4.3</td><td class="num">70</td><td class="num">21</td><td class="num">17</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
+        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDBMia','_blank')"><td>7</td><td>Sparta <span class="tag">лат.</span></td><td>Волховская, 38к1</td><td>24 ч</td><td class="rating r-high">4.6</td><td class="num">49</td><td class="num">26</td><td class="num">16</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
+        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDJQjG','_blank')"><td>8</td><td>ООО «Спарта-Ломбард»</td><td>Гусинобродское шоссе, 11/1с3</td><td>до 23:00</td><td class="rating r-mid">4.4</td><td class="num">55</td><td class="num">16</td><td class="num">16</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
+        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDJ65d','_blank')"><td>9</td><td>Sparta <span class="tag">лат.</span></td><td>Петропавловская, 2, офис 5</td><td>до 22:00</td><td class="rating r-high">4.5</td><td class="num">45</td><td class="num">23</td><td class="num">17</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="lede" style="margin-top:10px;">Ссылки на 2ГИС по отдельным филиалам не предоставлялись — проверка выполнена выборочно, по одному адресу. По филиалу на Забалуева, 78Б в 2ГИС рейтинг <b style="color:var(--cream)">4.8 из 128 оценок</b>, в Яндекс Картах — <b style="color:var(--cream)">4.3 из 70</b>. Расхождение почти на балл при одном и том же адресе — карточки на двух площадках ведутся неравномерно, Яндекс.Карты заметно отстают от 2ГИС.</p>
+
+  <div class="block-tag">БЛОК 02/04 · ДИАГНОСТИКА<span class="ln"></span></div>
+  <h2>Обнаруженные проблемы карточек</h2>
+
+  <div class="card bad hud">
+    <h3>Разнобой в названии — «Спарта» / «Sparta» / «Спарта Ломбард-Маркет» / «ООО Спарта-Ломбард»</h3>
+    <p>4 из 9 карточек названы латиницей «Sparta», остальные — по-разному на кириллице. Для поисковых алгоритмов Яндекс.Карт и 2ГИС это разные сигналы NAP (Name-Address-Phone) — сеть выглядит менее консистентной, чем есть на самом деле, что размывает вес бренда в локальном поиске и в Discovery. Первый шаг в работе с сетью — унификация названия по единому шаблону «Спарта, ломбард» на всех точках.</p>
+  </div>
+
+  <div class="card warn hud">
+    <h3>Неполный и неодинаковый набор категорий</h3>
+    <p>Часть карточек указывает только «Ломбард», часть — дополнительно «Комиссионный магазин» и «Скупка золота и украшений» (например, филиалы на Выборной и Петропавловской). Если скупка золота — услуга, доступная во всех точках сети, эта категория должна стоять на всех 9 карточках: часть трафика по запросам «скупка золота рядом» сейчас не доходит до части филиалов.</p>
+  </div>
+
+  <div class="card warn hud">
+    <h3>Критический перекос по объёму отзывов между точками</h3>
+    <p>От 4 отзывов (25 лет Октября) до 52 (Дмитрия Донского) при сопоставимом формате бизнеса. Объём и свежесть отзывов — один из значимых факторов ранжирования в локальном поиске и в выдаче Discovery. Слабые по отзывам точки (25 лет Октября, Выборная, Нарымская) систематически проигрывают конкурентам в ТОП-3/ТОП-5 просто по этому фактору, независимо от остальной оптимизации карточки.</p>
+  </div>
+
+  <div class="card warn hud">
+    <h3>Почти нет «Новостей» на карточках</h3>
+    <p>Функция публикаций/новостей на Яндекс Картах задействована только на 2 филиалах из 9, и там — по одной записи. Раздел новостей и текстовые публикации на странице организации влияют не только на показы в Discovery: это один из факторов, который поисковая система учитывает при ранжировании самой карточки — регулярные текстовые обновления дают дополнительный вес странице компании в поисковой выдаче по целевым запросам. Системное использование этого раздела сейчас отсутствует практически у всей сети.</p>
+  </div>
+
+  <div class="card warn hud">
+    <h3>Раздел «Истории» практически не заполнен</h3>
+    <p>Истории на карточках заполнены только на одном филиале из 9 — на Дмитрия Донского, 30 (2 истории), на остальных восьми — 0. Как и новости, истории — дополнительный формат присутствия карточки, работающий на вовлечённость аудитории и на регулярность обновления страницы, что напрямую влияет на позиции в поиске и на показы в Discovery. Сейчас этот инструмент задействован фактически на одной точке из девяти.</p>
+  </div>
+
+  <div class="card bad hud">
+    <h3>Репутационный риск на одной из точек</h3>
+    <p>На филиале на Петропавловской, 2 среди отзывов зафиксированы жалобы на некорректность персонала и споры по условиям выкупа залога. Подобные случаи требуют не удаления или накрутки отзывов, а официальных ответов, разбора ситуации и профилактики повторения — это ключевой принцип системной работы с репутацией.</p>
+  </div>
+
+  <div class="block-tag">БЛОК 03/04 · РАЗБОР<span class="ln"></span></div>
+  <h2>Разбор по направлениям</h2>
+
+  <div class="qa hud">
+    <div class="q">Позиции по целевым запросам и конкуренты в ТОП-3/5</div>
+    <div class="answer">Точный анализ позиций по конкретным поисковым запросам и определение конкурентов в ТОП-3/5 по каждому филиалу требует доступа к Яндекс.Бизнес аккаунту сети либо списка приоритетных запросов по каждой точке («ломбард [район]», «скупка золота [район]», «залог техники [район]» и т.п.). После получения данных анализ дополняется точными значениями по каждому филиалу.</div>
+  </div>
+
+  <div class="qa hud">
+    <div class="q">Проблемы карточек и необходимые изменения</div>
+    <div class="answer">Полный перечень выявленных проблем и то, что по каждой из них меняется — в разделе «Обнаруженные проблемы карточек» выше.</div>
+  </div>
+
+  <div class="qa hud">
+    <div class="q">Механика роста в Discovery</div>
+    <div class="answer">Discovery — рекомендательная лента Яндекса: показ карточки происходит не по прямому запросу пользователя, а по поведенческим и тематическим сигналам — интересам аудитории, истории посещений, геолокации, активности конкурентов в радиусе. Рост показов и позиций в Discovery определяется тремя факторами: полнотой и свежестью карточки (фото, новости, актуальные атрибуты), вовлечённостью аудитории (переходы, звонки, сохранения в избранное — сигналы интереса к карточке) и конкурентной плотностью в радиусе — чем активнее конкуренты обновляют свои карточки, тем быстрее без регулярной работы теряются позиции.</div>
+  </div>
+
+  <div class="qa hud">
+    <div class="q">Стоимость обслуживания</div>
+    <div class="answer">Единая ставка — 5 000 ₽ за филиал в месяц, без пакетных тарифов и скидочных вариантов. Для сети из 9 филиалов итоговая стоимость обслуживания — 45 000 ₽ в месяц. В рамках обслуживания — регулярное обновление карточек, публикации и новости, работа с отзывами и контроль актуальности категорий и атрибутов, описанные в разделе «Обнаруженные проблемы карточек».</div>
+  </div>
+
+  <div class="qa hud">
+    <div class="q">Система работы с реальными отзывами</div>
+    <div class="answer">На основе выявленного случая на Петропавловской предлагается: регламент ответа на каждый отзыв в течение 24 часов; для точек с малым количеством отзывов (25 лет Октября, Выборная, Нарымская) — упрощённый путь оставления отзыва после визита (QR-код/ссылка) без мотивированных накруток; разбор негативных кейсов с передачей в профильный отдел компании — без покупки или удаления отзывов.</div>
+  </div>
+
+  <div class="block-tag">БЛОК 04/04 · СЛЕДУЮЩИЙ ШАГ<span class="ln"></span></div>
+  <h2>Дальнейшие действия до начала сотрудничества</h2>
+  <div class="highlight hud">
+    <ul>
+      <li>Доступ в личный кабинет Яндекс.Бизнеса — для более детального анализа ситуации с профилями, а также для анализа конкурентной ситуации.</li>
+      <li>Заполнение брифа для более детального знакомства с компанией и её фактурой — <a href="https://pkonavlin.github.io/TZ_Yandexmaps/" target="_blank">заполнить бриф</a>.</li>
+    </ul>
+  </div>
+
+  <div class="footer-note">
+    Аудит подготовлен по 9 ссылкам на Яндекс Карты.
+  </div>
+
+</div>
+</body>
+</html>
