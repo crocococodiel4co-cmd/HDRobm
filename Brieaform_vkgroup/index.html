@@ -1,192 +1,1125 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Аудит сети «Спарта-Ломбард» — 9 филиалов, Новосибирск</title>
+<title>Старт проекта — знакомство с компанией</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#07101E; --panel:rgba(255,255,255,.03); --panel-strong:rgba(255,255,255,.05);
-    --line:rgba(206,158,140,.17); --line-soft:rgba(206,158,140,.09);
-    --cream:#F1E6D2; --text:#D9DCE4; --text-dim:#8993A6;
-    --accent:#CDA08F; --accent-soft:rgba(205,160,143,.15); --accent-2:#B98476;
-    --good:#7FB894; --warn:#D2A05E; --bad:#C4736E;
+    --h-cream:#F1E6D2;
+    --ink:#EEF5FF; --ink-soft:#9CB4D2; --line:rgba(126,178,255,.17);
+    --accent:#5FA0EE; --accent-soft:#7FB6FF;
+    --bg:#07101E;
+    --font-display:"Bricolage Grotesque","Arial Black",sans-serif;
+    --font-body:"Public Sans",-apple-system,"Segoe UI",sans-serif;
+    --font-mono:"IBM Plex Mono","SFMono-Regular",monospace;
   }
   *{box-sizing:border-box;}
+  html{ overflow-x:hidden; width:100%; }
   body{
-    margin:0;color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.6;
+    margin:0; color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
     background:
-      radial-gradient(ellipse 900px 500px at 12% -5%, rgba(205,160,143,.11), transparent 60%),
-      radial-gradient(ellipse 700px 500px at 100% 15%, rgba(205,160,143,.07), transparent 55%),
-      linear-gradient(163deg, rgba(205,160,143,.05), rgba(205,160,143,.02) 40%, transparent 70%),
+      radial-gradient(1100px 520px at 12% -10%, rgba(56,116,214,.17), transparent 62%),
+      radial-gradient(760px 420px at 92% 4%, rgba(38,86,170,.12), transparent 64%),
+      radial-gradient(900px 620px at 62% 106%, rgba(30,70,140,.11), transparent 62%),
+      linear-gradient(163deg,
+        rgba(46,94,168,.10) 0%,
+        rgba(16,32,58,.04) 34%,
+        rgba(9,18,34,0) 58%,
+        rgba(28,64,122,.08) 100%),
       var(--bg);
     background-attachment:fixed;
   }
-  .wrap{max-width:1100px;margin:0 auto;padding:56px 28px 100px;}
-  header.top{border-bottom:1px solid var(--line);padding-bottom:30px;margin-bottom:40px;}
-  .eyebrow{color:var(--accent);letter-spacing:.18em;text-transform:uppercase;font-size:11px;font-family:'Courier New',monospace;margin-bottom:14px;}
-  h1{font-size:30px;margin:0 0 10px;font-weight:700;color:var(--cream);letter-spacing:.01em;}
-  .sub{color:var(--text-dim);font-size:14px;}
-  .sub b{color:var(--text);font-weight:600;}
+  img,svg{ max-width:100%; }
+  h1,h2,h3,h4{ font-family:var(--font-display); font-weight:700; color:var(--h-cream); margin:0; text-wrap:balance; }
+  a{ color:var(--accent-soft); }
+  .mono{ font-family:var(--font-mono); }
 
-  .block-tag{display:flex;align-items:center;gap:12px;font-family:'Courier New',monospace;font-size:11px;color:var(--accent);letter-spacing:.2em;margin:52px 0 10px;}
-  .block-tag .ln{flex:1;height:1px;background:linear-gradient(to right, var(--accent-soft), transparent);}
-  h2{font-size:21px;color:var(--cream);font-weight:700;margin:0 0 16px;letter-spacing:.01em;}
-  h3{font-size:15px;color:var(--accent);font-weight:700;margin:0 0 10px;letter-spacing:.02em;}
-  p{font-size:14px;color:var(--text);}
-  .lede{font-size:14.5px;color:var(--text-dim);}
+  /* ---------- закреплённая шапка со шкалой заполнения ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    padding:0; color:#EAF2FF;
+    background:linear-gradient(180deg,#0C1B30,#091529);
+    border-bottom:1px solid rgba(126,178,255,.18);
+    box-shadow:0 8px 22px -14px rgba(0,0,0,.9);
+  }
+  .topbar-row{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px 26px; flex-wrap:wrap; padding:14px 34px 12px;
+  }
+  .topbar .brand{
+    font-family:var(--font-display); font-weight:800; font-size:22px;
+    color:#fff; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; min-width:0;
+  }
+  .topbar .brand small{ font-family:var(--font-mono); font-weight:500; font-size:11px; color:#8FB2D8; letter-spacing:.07em; }
+  .topbar-progress{
+    display:flex; align-items:baseline; gap:8px 16px; flex-wrap:wrap;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.03em;
+  }
+  .tp-main{ color:#9FBEDD; }
+  .tp-req{ color:#E0A33C; }
+  .tp-req.done{ color:#6FCF97; }
+  /* навигация по разделам */
+  .section-nav{
+    display:flex; gap:2px; overflow-x:auto; padding:0 34px 10px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  }
+  .section-nav::-webkit-scrollbar{ display:none; }
+  .section-nav a{
+    flex:0 0 auto; display:inline-flex; align-items:baseline; gap:6px;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.03em;
+    color:#8FA9C6; text-decoration:none; padding:6px 11px;
+    border:1px solid transparent; white-space:nowrap;
+    transition:color .15s, background .15s, border-color .15s;
+  }
+  .section-nav a i{ font-style:normal; color:#5D7B9C; font-size:10px; }
+  .section-nav a:hover{ color:#DCE9F8; border-color:rgba(124,182,255,.26); }
+  .section-nav a:focus-visible{ outline:2px solid var(--accent-soft); outline-offset:-2px; }
+  .section-nav a.active{ color:#07101E; background:var(--accent-soft); border-color:var(--accent-soft); }
+  .section-nav a.active i{ color:rgba(7,16,30,.55); }
 
-  /* HUD frame */
-  .hud{position:relative;}
-  .hud::before,.hud::after{content:"";position:absolute;width:14px;height:14px;pointer-events:none;}
-  .hud::before{top:-1px;left:-1px;border-top:1px solid var(--accent);border-left:1px solid var(--accent);}
-  .hud::after{bottom:-1px;right:-1px;border-bottom:1px solid var(--accent);border-right:1px solid var(--accent);}
+  /* шкала заполнения: цвет меняется по мере продвижения */
+  .progress-bar{ height:4px; background:rgba(124,182,255,.13); overflow:hidden; }
+  .progress-fill{
+    height:100%; width:0%; background:#3F638F;
+    transition:width .25s ease, background-color .4s ease, box-shadow .4s ease;
+    box-shadow:0 0 9px 1px rgba(63,99,143,.5);
+  }
+  .progress-fill.stage-red{    background:#C4736E; box-shadow:0 0 9px 1px rgba(196,115,110,.45); }
+  .progress-fill.stage-orange{ background:#D2A05E; box-shadow:0 0 9px 1px rgba(210,160,94,.45); }
+  .progress-fill.stage-green{  background:#7FB894; box-shadow:0 0 9px 1px rgba(127,184,148,.45); }
 
-  .table-wrap{position:relative;border:1px solid var(--line);background:var(--panel);margin:14px 0 6px;overflow-x:auto;}
-  table{width:100%;border-collapse:collapse;font-size:13px;min-width:820px;}
-  th{background:var(--panel-strong);color:var(--accent);text-align:left;padding:12px 14px;font-weight:700;border-bottom:1px solid var(--line);white-space:nowrap;font-family:'Courier New',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;}
-  td{padding:12px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top;}
-  tbody tr{cursor:pointer;transition:background .12s ease;}
-  tbody tr:hover{background:var(--accent-soft);}
-  tbody tr:hover td{color:var(--cream);}
-  .num{color:var(--text-dim);font-family:'Courier New',monospace;}
-  .go{color:var(--accent);font-family:'Courier New',monospace;font-size:14px;text-align:center;}
-  .tag{display:inline-block;font-size:10px;padding:3px 8px;font-family:'Courier New',monospace;letter-spacing:.05em;border:1px solid var(--line);color:var(--text-dim);}
-  .rating{font-weight:700;font-family:'Courier New',monospace;}
-  .r-high{color:var(--good);}
-  .r-mid{color:var(--warn);}
+  @media (max-width:820px){
+    .topbar-row{ padding:11px 16px 8px; gap:7px 14px; }
+    .topbar .brand{ flex-direction:column; align-items:flex-start; gap:2px; font-size:17px; }
+    .topbar .brand small{ letter-spacing:.04em; font-size:10px; }
+    .topbar-progress{ font-size:10.5px; gap:6px 12px; }
+    .section-nav{ padding:0 16px 8px; }
+    .section-nav a{ font-size:10.5px; padding:5px 9px; }
+  }
 
-  .card{position:relative;background:var(--panel);border:1px solid var(--line);padding:22px 24px;margin:16px 0;}
-  .card.warn{border-left:2px solid var(--warn);}
-  .card.bad{border-left:2px solid var(--bad);}
+  .wrap{ max-width:880px; margin:0 auto; padding:44px 28px 40px; width:100%; }
+  section.hpanel--flow{ scroll-margin-top:calc(var(--head-h, 128px) + 14px); }
 
-  .qa{position:relative;background:var(--panel);border:1px solid var(--line);padding:20px 24px;margin:14px 0;}
-  .qa .q{color:var(--cream);font-weight:700;font-size:14px;margin-bottom:8px;letter-spacing:.01em;}
-  .qa .answer{font-size:13.5px;color:var(--text-dim);}
+  /* ---------- flow sections ---------- */
+  section.hpanel--flow{ margin-bottom:46px; }
+  main.wrap section.hpanel--flow:last-of-type{ margin-bottom:0; }
+  .hflow-tag{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.24em; text-transform:uppercase;
+    color:var(--accent-soft); margin-bottom:16px;
+  }
+  .hflow-tag::before{ content:""; width:26px; height:1px; background:var(--accent); display:block; flex:0 0 auto; }
+  .hflow-tag::after{ content:""; flex:1 1 auto; height:1px; background:linear-gradient(90deg, rgba(95,160,238,.35), transparent); }
 
-  ul{font-size:14px;color:var(--text);margin:8px 0;padding-left:0;list-style:none;}
-  li{margin-bottom:10px;padding-left:20px;position:relative;}
-  li::before{content:"—";position:absolute;left:0;color:var(--accent);}
+  /* заголовок блока: 38px, межстрочное и отступ до описания сокращены на 25% */
+  h2.block-title{
+    font-size:clamp(27px, 5vw, 38px);
+    line-height:1.16;
+    margin-bottom:15px;
+    letter-spacing:-.01em;
+  }
+  .block-hint{ font-size:14px; color:var(--ink-soft); margin:0 0 22px; max-width:60ch; }
 
-  a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft);}
-  a:hover{border-bottom-color:var(--accent);}
+  /* ---------- hero ---------- */
+  .hero-title{ font-size:clamp(26px,3.6vw,36px); line-height:1.15; margin-bottom:18px; max-width:22ch; }
+  .hero-text{ color:#C3D6EE; font-size:15.5px; max-width:64ch; margin:0; }
+  .hero-points{ margin:0; padding:0; list-style:none; max-width:62ch; }
+  .hero-points li{
+    position:relative; padding-left:20px; color:#C3D6EE; font-size:15px; line-height:1.45; margin-bottom:8px;
+  }
+  .hero-points li:last-child{ margin-bottom:0; }
+  .hero-points li::before{
+    content:""; position:absolute; left:0; top:.62em; width:8px; height:1px; background:var(--accent);
+  }
+  .hero-facts{
+    position:relative; display:grid; grid-template-columns:repeat(3,1fr);
+    margin-top:28px; border:1px solid var(--line); background:rgba(160,205,255,.025);
+  }
+  .hero-facts::before, .hero-facts::after{ content:""; position:absolute; width:14px; height:14px; pointer-events:none; }
+  .hero-facts::before{ left:0; top:0; border-left:2px solid var(--accent); border-top:2px solid var(--accent); }
+  .hero-facts::after{ right:0; bottom:0; border-right:2px solid var(--accent); border-bottom:2px solid var(--accent); }
+  .hero-facts div{ padding:16px 18px; border-right:1px solid var(--line); }
+  .hero-facts div:last-child{ border-right:0; }
+  .hero-facts b{ display:block; color:var(--h-cream); font-size:14.5px; font-weight:600; margin-bottom:4px; text-transform:uppercase; letter-spacing:.02em; }
+  .hero-facts span{ color:#9FB9D8; font-size:13px; }
+  @media (max-width:720px){
+    .hero-facts{ grid-template-columns:1fr; }
+    .hero-facts div{ border-right:0; border-bottom:1px solid var(--line); }
+    .hero-facts div:last-child{ border-bottom:0; }
+  }
+  .hnote{
+    border:1px solid var(--line); border-left:2px solid var(--accent);
+    padding:16px 18px; color:#A9C2DE; font-size:13.5px; background:rgba(160,205,255,.03); margin-top:18px;
+  }
+  .hnote b{ color:var(--h-cream); }
+  .hnote p{ margin:0; }
+  .hnote p + p{ margin-top:9px; }
 
-  .highlight{position:relative;background:var(--panel-strong);border:1px solid var(--line);padding:22px 24px;margin:18px 0;}
+  /* ---------- question cards ---------- */
+  .q{
+    position:relative; overflow:hidden;
+    background:linear-gradient(160deg, rgba(38,84,148,.22), rgba(8,17,32,.72));
+    border:1px solid rgba(124,182,255,.24);
+    padding:18px 20px; margin-bottom:14px;
+  }
+  .q::after{ content:""; position:absolute; left:0; right:0; top:0; height:1px; background:linear-gradient(90deg, transparent, rgba(160,205,255,.55), transparent); }
+  .q.req{ border-left:3px solid var(--accent); }
+  .req-chip{
+    display:inline-block; font-family:var(--font-mono); font-size:9.5px; font-weight:600;
+    letter-spacing:.09em; text-transform:uppercase; color:#07101E; background:var(--accent-soft);
+    padding:2px 7px; margin-left:9px; vertical-align:1px; white-space:nowrap;
+  }
+  .q label.qtitle{ display:block; font-size:14.5px; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .q .qnum{ font-family:var(--font-mono); color:var(--accent-soft); margin-right:6px; }
+  .q .qhint{ font-size:12.5px; color:var(--ink-soft); margin-bottom:10px; }
+  .q input[type=text], .q textarea{
+    width:100%; border:1px solid rgba(124,182,255,.30); background:rgba(6,15,28,.7);
+    font-family:var(--font-body); font-size:14px; color:#EEF5FF; padding:11px 13px; border-radius:0; resize:vertical;
+  }
+  .q textarea{ min-height:72px; }
+  .q input::placeholder, .q textarea::placeholder{ color:#61809F; }
+  .q input:focus, .q textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(95,160,238,.18); }
+  .choice-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .choice-btn{
+    font-family:var(--font-mono); font-size:12px; padding:8px 14px;
+    border:1px solid rgba(124,182,255,.32); background:rgba(6,15,28,.5); color:var(--ink);
+    cursor:pointer; transition:.15s; letter-spacing:.02em;
+  }
+  .choice-btn.active{ background:var(--accent); border-color:var(--accent); color:#07101E; font-weight:600; }
 
-  .footer-note{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:var(--text-dim);font-family:'Courier New',monospace;}
 
-  @media (max-width:720px){ th,td{padding:9px 8px;} }
+  /* ---------- submit block ---------- */
+  .hsubmit-panel{
+    position:relative; overflow:hidden; text-align:center;
+    background:linear-gradient(160deg, rgba(38,84,148,.34), rgba(8,17,32,.82));
+    border:1px solid rgba(124,182,255,.30); padding:30px 24px;
+  }
+  .hsubmit-panel::before{ content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(220px 150px at 88% -14%, rgba(140,195,255,.35), transparent 68%); }
+  .hsubmit-panel > *{ position:relative; z-index:1; }
+  .hsubmit-panel h3{ font-size:18px; margin-bottom:8px; }
+  .hsubmit-panel p{ font-size:13.5px; color:var(--ink-soft); margin:0 0 18px; max-width:52ch; margin-left:auto; margin-right:auto; }
+
+  /* кнопки: матовое стекло, градиентная обводка с отблеском, слабое голубое свечение */
+  .btn-row{
+    display:flex; flex-wrap:wrap; justify-content:center;
+    gap:10px; margin:0;
+  }
+  .btn{
+    position:relative; isolation:isolate;
+    font-family:var(--font-mono); font-weight:700; font-size:12.5px; cursor:pointer;
+    padding:10px 18px; border-radius:0; letter-spacing:.05em; text-transform:uppercase;
+    border:1px solid transparent; color:#F4F9FF;
+    text-shadow:0 1px 2px rgba(4,10,20,.75);
+    background:rgba(122,176,255,.055);
+    -webkit-backdrop-filter:blur(10px) saturate(125%);
+    backdrop-filter:blur(10px) saturate(125%);
+    box-shadow:0 0 20px -8px rgba(95,160,238,.40), inset 0 1px 0 rgba(185,218,255,.09);
+    transition:background .18s ease, box-shadow .18s ease, color .18s ease;
+    max-width:100%;
+  }
+  .btn::before{
+    content:""; position:absolute; inset:0; padding:1px; pointer-events:none; z-index:-1;
+    background:linear-gradient(115deg,
+      rgba(140,190,255,.18) 0%,
+      rgba(205,232,255,.72) 22%,
+      rgba(120,180,255,.20) 46%,
+      rgba(205,232,255,.66) 72%,
+      rgba(140,190,255,.18) 100%);
+    background-size:300% 100%;
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    animation:btnSheen 7s linear infinite;
+  }
+  @keyframes btnSheen{ from{ background-position:0 0; } to{ background-position:-300% 0; } }
+  .btn:hover{
+    background:rgba(122,176,255,.10);
+    box-shadow:0 0 26px -7px rgba(95,160,238,.55), inset 0 1px 0 rgba(185,218,255,.14);
+    color:#fff;
+  }
+  .btn:focus-visible{ outline:2px solid var(--accent-soft); outline-offset:2px; }
+  .btn-primary{ color:#FFFFFF; background:rgba(122,176,255,.10); }
+  .btn-secondary{ color:#EAF3FF; }
+  .btn-secondary::before{ animation-duration:9s; opacity:.8; }
+  @media (prefers-reduced-motion:reduce){ .btn::before{ animation:none; } }
+  @media (max-width:420px){
+    .btn-row{ flex-direction:column; }
+    .btn{ width:100%; }
+  }
+
+  .btn[disabled]{ cursor:not-allowed; color:#AFC4DE; background:rgba(122,176,255,.03); box-shadow:none; }
+  .btn[disabled]::before{ animation:none; opacity:.35; }
+  .btn[disabled]:hover{ background:rgba(122,176,255,.03); box-shadow:none; color:#AFC4DE; }
+
+  /* ---------- согласие на обработку персональных данных ---------- */
+  .consent{
+    display:flex; align-items:flex-start; gap:11px; text-align:left;
+    border:1px solid rgba(124,182,255,.28); border-left:2px solid var(--accent);
+    background:rgba(6,15,28,.45); padding:14px 16px; margin:0 auto 18px; max-width:56ch;
+  }
+  .consent input[type=checkbox]{
+    appearance:none; -webkit-appearance:none; flex:0 0 auto;
+    width:18px; height:18px; margin:1px 0 0; border:1px solid rgba(150,200,255,.55);
+    background:rgba(6,15,28,.8); cursor:pointer; position:relative;
+  }
+  .consent input[type=checkbox]:checked{ background:var(--accent); border-color:var(--accent); }
+  .consent input[type=checkbox]:checked::after{
+    content:""; position:absolute; left:5px; top:1px; width:5px; height:10px;
+    border:solid #07101E; border-width:0 2px 2px 0; transform:rotate(42deg);
+  }
+  .consent input[type=checkbox]:focus-visible{ outline:2px solid var(--accent-soft); outline-offset:2px; }
+  .consent label{ font-size:13px; color:#B7CCE6; line-height:1.5; cursor:pointer; }
+
+  .aux-row{
+    display:flex; flex-wrap:wrap; justify-content:center; align-items:center;
+    gap:6px 16px; margin-top:20px; padding-top:16px; border-top:1px solid rgba(124,182,255,.16);
+  }
+  .aux-link{
+    font-family:var(--font-mono); font-size:11px; color:#8FA9C6;
+    background:none; border:0; cursor:pointer; text-decoration:underline;
+    text-underline-offset:3px; padding:2px 4px;
+  }
+  .aux-link:hover{ color:var(--accent-soft); }
+  .aux-note{ font-size:11.5px; color:#7C97B8; margin:12px auto 0; max-width:560px; line-height:1.55; }
+
+  .status-msg{ font-size:12.5px; color:var(--accent-soft); margin-top:14px; min-height:16px; }
+  textarea#exportOut{
+    width:100%; min-height:160px; margin-top:14px; font-family:var(--font-mono); font-size:12px;
+    border:1px solid rgba(124,182,255,.30); padding:12px; background:rgba(6,15,28,.7); color:var(--ink); display:none;
+  }
+
+  footer.doc-footer{ margin-top:0; text-align:center; padding:0 24px 22px; }
+  footer.doc-footer p{ font-size:12px; color:#7C97B8; margin:0; }
+  footer.doc-footer p + p{ margin-top:5px; }
+  footer.doc-footer a{ color:#8FB2D8; text-decoration:underline; text-underline-offset:3px; }
+  footer.doc-footer a:hover{ color:var(--accent-soft); }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <header class="top">
-    <div class="eyebrow">Аудит карточек сети · Яндекс Карты и 2ГИС</div>
-    <h1>Сеть «Спарта-Ломбард» — Новосибирск</h1>
-    <div class="sub">9 филиалов · <b>ООО «СПАРТА-ЛОМБАРД»</b> · ИНН 5503188051 · sparta-lombard.ru · выдача краткосрочных займов под залог</div>
-  </header>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <p class="lede">Ниже — анализ представленности сети в Яндекс Картах: сводные данные по всем 9 филиалам, выявленные проблемы карточек и разбор по направлениям, определяющим дальнейшую работу.</p>
-
-  <div class="block-tag">БЛОК 01/04 · КАРТА СЕТИ<span class="ln"></span></div>
-  <h2>Сводная таблица по филиалам</h2>
-  <p class="lede">Данные из карточек Яндекс Карт на момент проверки. Разброс количества отзывов (от 4 до 52 на разных филиалах) и разный режим работы точек (часть работает в режиме 24/7, часть — до 22:00/23:00) — факторы, определяющие текущую неоднородность позиций сети в поиске. Строка филиала открывает его карточку.</p>
-
-  <div class="table-wrap hud">
-    <table>
-      <thead>
-        <tr><th>#</th><th>Название в карточке</th><th>Адрес</th><th>Режим</th><th>Рейтинг</th><th>Оценок</th><th>Отзывов</th><th>Фото</th><th>Сторис</th><th>Новости</th><th></th></tr>
-      </thead>
-      <tbody>
-        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDu0ye','_blank')"><td>1</td><td>Спарта Ломбард-Маркет</td><td>Б. Богаткова, 206А, пом.12,16</td><td>24 ч</td><td class="rating r-high">4.5</td><td class="num">9</td><td class="num">9</td><td class="num">20</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
-        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDuPNo','_blank')"><td>2</td><td>Sparta <span class="tag">лат.</span></td><td>Выборная, 117/3</td><td>до 22:00</td><td class="rating r-mid">4.3</td><td class="num">20</td><td class="num">9</td><td class="num">15</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
-        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDyZmm','_blank')"><td>3</td><td>Sparta <span class="tag">лат.</span></td><td>25 лет Октября, 15, пом.1</td><td>24 ч</td><td class="rating r-mid">4.3</td><td class="num">5</td><td class="num">4</td><td class="num">15</td><td class="num">0</td><td class="num">1</td><td class="go">↗</td></tr>
-        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDyTZh','_blank')"><td>4</td><td>Спарта</td><td>Нарымская, 11</td><td>до 22:00</td><td class="rating r-mid">4.3</td><td class="num">23</td><td class="num">12</td><td class="num">11</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
-        <tr onclick="window.open('https://yandex.ru/maps/-/CTdD56mt','_blank')"><td>5</td><td>Спарта</td><td>Дмитрия Донского, 30</td><td>до 22:00</td><td class="rating r-high">4.6</td><td class="num">90</td><td class="num">52</td><td class="num">14</td><td class="num">2</td><td class="num">1</td><td class="go">↗</td></tr>
-        <tr onclick="window.open('https://yandex.ru/maps/-/CTdD5WYf','_blank')"><td>6</td><td>Спарта</td><td>Забалуева, 78Б</td><td>до 22:00</td><td class="rating r-mid">4.3</td><td class="num">70</td><td class="num">21</td><td class="num">17</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
-        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDBMia','_blank')"><td>7</td><td>Sparta <span class="tag">лат.</span></td><td>Волховская, 38к1</td><td>24 ч</td><td class="rating r-high">4.6</td><td class="num">49</td><td class="num">26</td><td class="num">16</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
-        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDJQjG','_blank')"><td>8</td><td>ООО «Спарта-Ломбард»</td><td>Гусинобродское шоссе, 11/1с3</td><td>до 23:00</td><td class="rating r-mid">4.4</td><td class="num">55</td><td class="num">16</td><td class="num">16</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
-        <tr onclick="window.open('https://yandex.ru/maps/-/CTdDJ65d','_blank')"><td>9</td><td>Sparta <span class="tag">лат.</span></td><td>Петропавловская, 2, офис 5</td><td>до 22:00</td><td class="rating r-high">4.5</td><td class="num">45</td><td class="num">23</td><td class="num">17</td><td class="num">0</td><td class="num">0</td><td class="go">↗</td></tr>
-      </tbody>
-    </table>
+<header class="topbar">
+  <div class="topbar-row">
+    <span class="brand">СТАРТ ПРОЕКТА <small>ЗНАКОМСТВО С КОМПАНИЕЙ ПЕРЕД ЗАПУСКОМ СООБЩЕСТВА ВК</small></span>
+    <div class="topbar-progress">
+      <span class="tp-main"><span id="progressCount">0</span> / <span id="progressTotal">44</span> заполнено</span>
+      <span class="tp-req" id="reqBadge">обязательных <span id="reqCount">0</span> / <span id="reqTotal">17</span></span>
+    </div>
   </div>
-  <p class="lede" style="margin-top:10px;">Ссылки на 2ГИС по отдельным филиалам не предоставлялись — проверка выполнена выборочно, по одному адресу. По филиалу на Забалуева, 78Б в 2ГИС рейтинг <b style="color:var(--cream)">4.8 из 128 оценок</b>, в Яндекс Картах — <b style="color:var(--cream)">4.3 из 70</b>. Расхождение почти на балл при одном и том же адресе — карточки на двух площадках ведутся неравномерно, Яндекс.Карты заметно отстают от 2ГИС.</p>
+  <nav class="section-nav" id="sectionNav" aria-label="Разделы анкеты">
+    <a href="#s1"><i>01</i> Компания</a>
+    <a href="#s2"><i>02</i> Ресурсы</a>
+    <a href="#s3"><i>03</i> Дизайн</a>
+    <a href="#s4"><i>04</i> Фото</a>
+    <a href="#s5"><i>05</i> Стиль общения</a>
+    <a href="#s6"><i>06</i> Темы</a>
+    <a href="#s7"><i>07</i> Цены</a>
+    <a href="#s8"><i>08</i> Обложка и прайс</a>
+    <a href="#s9"><i>09</i> Согласование</a>
+  </nav>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</header>
 
-  <div class="block-tag">БЛОК 02/04 · ДИАГНОСТИКА<span class="ln"></span></div>
-  <h2>Обнаруженные проблемы карточек</h2>
+<main class="wrap">
 
-  <div class="card bad hud">
-    <h3>Разнобой в названии — «Спарта» / «Sparta» / «Спарта Ломбард-Маркет» / «ООО Спарта-Ломбард»</h3>
-    <p>4 из 9 карточек названы латиницей «Sparta», остальные — по-разному на кириллице. Для поисковых алгоритмов Яндекс.Карт и 2ГИС это разные сигналы NAP (Name-Address-Phone) — сеть выглядит менее консистентной, чем есть на самом деле, что размывает вес бренда в локальном поиске и в Discovery. Первый шаг в работе с сетью — унификация названия по единому шаблону «Спарта, ломбард» на всех точках.</p>
-  </div>
-
-  <div class="card warn hud">
-    <h3>Неполный и неодинаковый набор категорий</h3>
-    <p>Часть карточек указывает только «Ломбард», часть — дополнительно «Комиссионный магазин» и «Скупка золота и украшений» (например, филиалы на Выборной и Петропавловской). Если скупка золота — услуга, доступная во всех точках сети, эта категория должна стоять на всех 9 карточках: часть трафика по запросам «скупка золота рядом» сейчас не доходит до части филиалов.</p>
-  </div>
-
-  <div class="card warn hud">
-    <h3>Критический перекос по объёму отзывов между точками</h3>
-    <p>От 4 отзывов (25 лет Октября) до 52 (Дмитрия Донского) при сопоставимом формате бизнеса. Объём и свежесть отзывов — один из значимых факторов ранжирования в локальном поиске и в выдаче Discovery. Слабые по отзывам точки (25 лет Октября, Выборная, Нарымская) систематически проигрывают конкурентам в ТОП-3/ТОП-5 просто по этому фактору, независимо от остальной оптимизации карточки.</p>
-  </div>
-
-  <div class="card warn hud">
-    <h3>Почти нет «Новостей» на карточках</h3>
-    <p>Функция публикаций/новостей на Яндекс Картах задействована только на 2 филиалах из 9, и там — по одной записи. Раздел новостей и текстовые публикации на странице организации влияют не только на показы в Discovery: это один из факторов, который поисковая система учитывает при ранжировании самой карточки — регулярные текстовые обновления дают дополнительный вес странице компании в поисковой выдаче по целевым запросам. Системное использование этого раздела сейчас отсутствует практически у всей сети.</p>
-  </div>
-
-  <div class="card warn hud">
-    <h3>Раздел «Истории» практически не заполнен</h3>
-    <p>Истории на карточках заполнены только на одном филиале из 9 — на Дмитрия Донского, 30 (2 истории), на остальных восьми — 0. Как и новости, истории — дополнительный формат присутствия карточки, работающий на вовлечённость аудитории и на регулярность обновления страницы, что напрямую влияет на позиции в поиске и на показы в Discovery. Сейчас этот инструмент задействован фактически на одной точке из девяти.</p>
-  </div>
-
-  <div class="card bad hud">
-    <h3>Репутационный риск на одной из точек</h3>
-    <p>На филиале на Петропавловской, 2 среди отзывов зафиксированы жалобы на некорректность персонала и споры по условиям выкупа залога. Подобные случаи требуют не удаления или накрутки отзывов, а официальных ответов, разбора ситуации и профилактики повторения — это ключевой принцип системной работы с репутацией.</p>
-  </div>
-
-  <div class="block-tag">БЛОК 03/04 · РАЗБОР<span class="ln"></span></div>
-  <h2>Разбор по направлениям</h2>
-
-  <div class="qa hud">
-    <div class="q">Позиции по целевым запросам и конкуренты в ТОП-3/5</div>
-    <div class="answer">Точный анализ позиций по конкретным поисковым запросам и определение конкурентов в ТОП-3/5 по каждому филиалу требует доступа к Яндекс.Бизнес аккаунту сети либо списка приоритетных запросов по каждой точке («ломбард [район]», «скупка золота [район]», «залог техники [район]» и т.п.). После получения данных анализ дополняется точными значениями по каждому филиалу.</div>
-  </div>
-
-  <div class="qa hud">
-    <div class="q">Проблемы карточек и необходимые изменения</div>
-    <div class="answer">Полный перечень выявленных проблем и то, что по каждой из них меняется — в разделе «Обнаруженные проблемы карточек» выше.</div>
-  </div>
-
-  <div class="qa hud">
-    <div class="q">Механика роста в Discovery</div>
-    <div class="answer">Discovery — рекомендательная лента Яндекса: показ карточки происходит не по прямому запросу пользователя, а по поведенческим и тематическим сигналам — интересам аудитории, истории посещений, геолокации, активности конкурентов в радиусе. Рост показов и позиций в Discovery определяется тремя факторами: полнотой и свежестью карточки (фото, новости, актуальные атрибуты), вовлечённостью аудитории (переходы, звонки, сохранения в избранное — сигналы интереса к карточке) и конкурентной плотностью в радиусе — чем активнее конкуренты обновляют свои карточки, тем быстрее без регулярной работы теряются позиции.</div>
-  </div>
-
-  <div class="qa hud">
-    <div class="q">Стоимость обслуживания</div>
-    <div class="answer">Единая ставка — 5 000 ₽ за филиал в месяц, без пакетных тарифов и скидочных вариантов. Для сети из 9 филиалов итоговая стоимость обслуживания — 45 000 ₽ в месяц. В рамках обслуживания — регулярное обновление карточек, публикации и новости, работа с отзывами и контроль актуальности категорий и атрибутов, описанные в разделе «Обнаруженные проблемы карточек».</div>
-  </div>
-
-  <div class="qa hud">
-    <div class="q">Система работы с реальными отзывами</div>
-    <div class="answer">На основе выявленного случая на Петропавловской предлагается: регламент ответа на каждый отзыв в течение 24 часов; для точек с малым количеством отзывов (25 лет Октября, Выборная, Нарымская) — упрощённый путь оставления отзыва после визита (QR-код/ссылка) без мотивированных накруток; разбор негативных кейсов с передачей в профильный отдел компании — без покупки или удаления отзывов.</div>
-  </div>
-
-  <div class="block-tag">БЛОК 04/04 · СЛЕДУЮЩИЙ ШАГ<span class="ln"></span></div>
-  <h2>Дальнейшие действия до начала сотрудничества</h2>
-  <div class="highlight hud">
-    <ul>
-      <li>Доступ в личный кабинет Яндекс.Бизнеса — для более детального анализа ситуации с профилями, а также для анализа конкурентной ситуации.</li>
-      <li>Заполнение брифа для более детального знакомства с компанией и её фактурой — <a href="https://pkonavlin.github.io/TZ_Yandexmaps/" target="_blank">заполнить бриф</a>.</li>
+  <section class="hpanel--flow">
+    <h1 class="hero-title">Чем лучше мы узнаем вашу компанию, тем сильнее будет результат</h1>
+    <ul class="hero-points">
+      <li>Анкета заполняется один раз, до начала работ.</li>
+      <li>Ваши ответы становятся основой технического задания.</li>
+      <li>Оформление: обложка, аватар, меню, прайс-лист, описание, контакты.</li>
+      <li>Публикации: новости с фотографиями. Видео и аудио не входят.</li>
+      <li>Точная формулировка не нужна — достаточно сути, остальное уточним при согласовании.</li>
     </ul>
-  </div>
+    <div class="hero-facts">
+      <div><b>9 разделов</b><span>42 вопроса, 17 из них обязательные</span></div>
+      <div><b>15–20 минут</b><span>ориентировочное время заполнения</span></div>
+      <div><b>Меньше правок</b><span>чем подробнее ответы, тем ближе первая версия к тому, что вы ждёте</span></div>
+    </div>
+    <div class="hnote">
+      <p><b>Состав работ.</b> Новостные публикации (текст и фотографии), оформление прайс-листа, общее оформление сообщества, актуализация сведений о компании и контактных телефонов.</p>
+      <p><b>Требования площадки.</b> Материалы готовятся с учётом правил ВКонтакте. Публикуются только изображения, права на использование которых принадлежат компании либо получены законным образом. Сведения о товарах, услугах, ценах и акциях должны быть достоверными и действующими на дату публикации. Для отдельных сфер деятельности (медицина, финансовые услуги, образование и другие) может потребоваться указание сведений о лицензии, возрастной маркировки или предупредительных надписей — просим отметить это в разделе 09.</p>
+    </div>
+  </section>
 
-  <div class="footer-note">
-    Аудит подготовлен по 9 ссылкам на Яндекс Карты.
-  </div>
+  <section class="hpanel--flow" id="s1">
+    <span class="hflow-tag">Раздел 01 / 09 — компания</span>
+    <h2 class="block-title">Сведения о компании</h2>
+    <p class="block-hint">Базовые данные для описания сообщества и текстов публикаций. Раздел подходит для организации любой сферы деятельности и любого масштаба.</p>
 
-</div>
+    <div class="q req"><label class="qtitle"><span class="qnum">1.</span>Наименование компании<span class="req-chip">обязательно</span></label>
+      <div class="qhint">В том виде, в котором оно должно отображаться в сообществе</div>
+      <input type="text" data-req="1" data-q="1. Наименование компании">
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">2.</span>Сфера деятельности и краткое описание работы компании<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Достаточно двух-трёх предложений</div>
+      <textarea data-req="1" data-q="2. Сфера деятельности"></textarea>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">3.</span>Основные услуги или товары с кратким описанием каждой позиции<span class="req-chip">обязательно</span></label>
+      <textarea data-req="1" data-q="3. Услуги и товары"></textarea>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">4.</span>Ключевые преимущества компании перед конкурентами<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Что важно донести до аудитории в первую очередь</div>
+      <textarea data-req="1" data-q="4. Преимущества компании"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">5.</span>Режим работы</label>
+      <input type="text" data-q="5. Режим работы">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">6.</span>Контактный телефон для карточки сообщества и публикаций</label>
+      <input type="text" data-q="6. Контактный телефон">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">7.</span>Адрес, при наличии помещения или точки обслуживания</label>
+      <div class="qhint">Если работа ведётся без физического адреса, поле можно оставить незаполненным</div>
+      <input type="text" data-q="7. Адрес">
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s2">
+    <span class="hflow-tag">Раздел 02 / 09 — ресурсы</span>
+    <h2 class="block-title">Онлайн-ресурсы компании</h2>
+    <p class="block-hint">Действующие ссылки для карточки сообщества и закреплённой публикации.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">8.</span>Ссылка на сообщество ВКонтакте, которое передаётся в работу<span class="req-chip">обязательно</span></label>
+      <input type="text" data-req="1" data-q="8. Ссылка на сообщество ВК">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">9.</span>Официальный сайт компании</label>
+      <div class="qhint">При отсутствии сайта укажите «нет»</div>
+      <input type="text" data-q="9. Сайт компании">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">10.</span>Иные действующие онлайн-ресурсы компании</label>
+      <div class="qhint">Карточки на картах и справочных сервисах, страницы в других социальных сетях, мессенджеры</div>
+      <textarea data-q="10. Иные онлайн-ресурсы"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s3">
+    <span class="hflow-tag">Раздел 03 / 09 — дизайн</span>
+    <h2 class="block-title">Фирменный стиль и общий дизайн сообщества</h2>
+    <p class="block-hint">Что уже есть по бренду и как должно выглядеть сообщество в целом: аватар, меню, виджеты, альбомы.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">11.</span>Имеется ли логотип в векторном формате<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Принимаются файлы AI, EPS, SVG, PDF либо PNG на прозрачном фоне</div>
+      <div class="choice-row" data-req="1" data-group="11">
+        <button class="choice-btn" type="button">Да, предоставим файл</button>
+        <button class="choice-btn" type="button">Нет, требуется адаптация</button>
+      </div>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">12.</span>Фирменные цвета<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Коды в формате HEX, при их отсутствии — словесное описание</div>
+      <input type="text" data-req="1" data-q="12. Фирменные цвета">
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">13.</span>Общая стилистика оформления<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Задаёт плотность и характер всех визуальных элементов сообщества</div>
+      <div class="choice-row" data-req="1" data-group="13">
+        <button class="choice-btn" type="button">Сдержанный минимализм</button>
+        <button class="choice-btn" type="button">Насыщенная инфографика</button>
+        <button class="choice-btn" type="button">Коллаж и фактуры</button>
+        <button class="choice-btn" type="button">На усмотрение исполнителя</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">14.</span>Ссылка на файл логотипа</label>
+      <div class="qhint">Облачное хранилище или любой доступный источник. При отсутствии — укажите «нет»</div>
+      <input type="text" data-q="14. Ссылка на логотип">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">15.</span>Фирменные шрифты, если они утверждены</label>
+      <input type="text" data-q="15. Фирменные шрифты">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">16.</span>Примеры оформления, которые вам нравятся</label>
+      <div class="qhint">Ссылки на сообщества, сайты или изображения с пояснением, что именно привлекает</div>
+      <textarea data-q="16. Референсы оформления"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">17.</span>Решения, которых следует избегать</label>
+      <div class="qhint">Цвета, приёмы, стилистика, недопустимые для вашего бренда</div>
+      <textarea data-q="17. Недопустимые решения"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">18.</span>Пожелания по аватару сообщества</label>
+      <div class="qhint">Квадратное изображение от 400 × 400 px, отображается в круге. Обычно размещается знак или сокращённая версия логотипа</div>
+      <input type="text" data-q="18. Аватар сообщества">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">19.</span>Разделы меню и виджеты сообщества</label>
+      <div class="qhint">Меню — плитки 376 × 256 px под обложкой: «Услуги», «Прайс-лист», «Отзывы», «О компании», «Контакты». Виджеты ведут к действию: «Записаться», «Оставить заявку», «Рассчитать стоимость». Укажите нужные разделы и целевые действия</div>
+      <textarea data-q="19. Разделы меню и виджеты"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">20.</span>Нужны ли фотоальбомы и подборки</label>
+      <div class="qhint">Оформленные разделы с фотографиями работ, ассортимента, помещения</div>
+      <div class="choice-row" data-group="20">
+        <button class="choice-btn" type="button">Да, нужны</button>
+        <button class="choice-btn" type="button">Нет, не нужны</button>
+        <button class="choice-btn" type="button">На усмотрение исполнителя</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">21.</span>Какие альбомы нужны и какие материалы вы предоставите</label>
+      <div class="qhint"><b>Важно:</b> альбомы и подборки формируются только из ваших исходных материалов. Укажите названия альбомов и сразу — что передадите: фотографии, видео, ссылки на ресурсы, откуда можно взять контент. Без исходников раздел собрать не получится</div>
+      <textarea data-q="21. Альбомы и исходные материалы"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s4">
+    <span class="hflow-tag">Раздел 04 / 09 — фотоматериалы</span>
+    <h2 class="block-title">Фотоматериалы</h2>
+    <p class="block-hint">Источники изображений для публикаций, прайс-листа и оформления сообщества.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">22.</span>Имеется ли подготовленный архив фотографий компании<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Товары, услуги, помещение, коллектив. Укажите ссылку на архив либо «нет»</div>
+      <input type="text" data-req="1" data-q="22. Архив фотографий">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">23.</span>Кто и с какой периодичностью направляет новые фотографии</label>
+      <div class="qhint">Например: ответственный сотрудник, один раз в неделю</div>
+      <input type="text" data-q="23. Порядок передачи фотографий">
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s5">
+    <span class="hflow-tag">Раздел 05 / 09 — стиль общения</span>
+    <h2 class="block-title">Стиль общения с аудиторией</h2>
+    <p class="block-hint">Каким должно быть звучание сообщества в текстах публикаций.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">24.</span>Форма обращения к аудитории<span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-req="1" data-group="24">
+        <button class="choice-btn" type="button">На «ты»</button>
+        <button class="choice-btn" type="button">На «вы»</button>
+      </div>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">25.</span>Допустим ли неформальный тон и юмор либо требуется строго деловой стиль<span class="req-chip">обязательно</span></label>
+      <textarea data-req="1" data-q="25. Тональность публикаций"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">26.</span>Слова и выражения, использование которых недопустимо</label>
+      <textarea data-q="26. Недопустимые формулировки"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">27.</span>Примеры сообществ или брендов, чей стиль общения вам близок</label>
+      <textarea data-q="27. Референсы стиля общения"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s6">
+    <span class="hflow-tag">Раздел 06 / 09 — темы публикаций</span>
+    <h2 class="block-title">Приоритеты по темам публикаций</h2>
+    <p class="block-hint">Какие направления следует освещать в первую очередь.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">28.</span>Услуги, товары или новости, требующие первоочередного продвижения<span class="req-chip">обязательно</span></label>
+      <textarea data-req="1" data-q="28. Приоритетные темы"></textarea>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">29.</span>Темы, освещение которых недопустимо<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Например: упоминание конкурентов, общественно-политическая повестка, внутренние процессы компании. Если ограничений нет — укажите «нет»</div>
+      <textarea data-req="1" data-q="29. Закрытые темы"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">30.</span>Сезонные события и информационные поводы, которые следует учесть</label>
+      <div class="qhint">Профессиональные праздники, сезонный спрос, плановые мероприятия компании</div>
+      <textarea data-q="30. Сезонные поводы"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s7">
+    <span class="hflow-tag">Раздел 07 / 09 — цены</span>
+    <h2 class="block-title">Содержание прайс-листа</h2>
+    <p class="block-hint">Данные, которые будут размещены в прайс-листе сообщества. Оформление прайс-листа рассматривается отдельно в разделе 08.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">31.</span>Действующий прайс-лист<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Перечислите позиции с ценами текстом или укажите ссылку на файл в облачном хранилище</div>
+      <textarea data-req="1" data-q="31. Прайс-лист" style="min-height:120px;"></textarea>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">32.</span>Формат указания стоимости<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Сведения о ценах должны быть достоверными на дату публикации</div>
+      <div class="choice-row" data-req="1" data-group="32">
+        <button class="choice-btn" type="button">Точные цены</button>
+        <button class="choice-btn" type="button">Формат «от N ₽»</button>
+        <button class="choice-btn" type="button">Без указания цен</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">33.</span>Действующие акции и специальные предложения</label>
+      <div class="qhint">Условия и срок действия. При отсутствии — укажите «нет»</div>
+      <textarea data-q="33. Акции и предложения"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s8">
+    <span class="hflow-tag">Раздел 08 / 09 — оформление</span>
+    <h2 class="block-title">Обложка сообщества и прайс-лист</h2>
+    <p class="block-hint">Два крупных изображения: шапка сообщества и прайс-лист. Вопросы — о том, что на них вынести и как они должны выглядеть.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">34.</span>Обязательные элементы обложки сообщества<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Размер для десктопной версии — 1590 × 530 px; на мобильных устройствах отображается центральная часть, поэтому ключевые элементы размещаются в безопасной зоне. Например: логотип, наименование, направления деятельности, телефон, срок работы на рынке, призыв к действию</div>
+      <textarea data-req="1" data-q="34. Элементы обложки сообщества"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">35.</span>Цветовые акценты обложки и прайс-листа</label>
+      <div class="qhint">Какой из фирменных цветов должен быть ведущим, а какие — второстепенными. Если предпочтений нет, укажите «на усмотрение исполнителя»</div>
+      <input type="text" data-q="35. Цветовые акценты">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">36.</span>Структура прайс-листа и расстановка акцентов</label>
+      <div class="qhint">По каким категориям группировать позиции, в каком порядке их выводить, какие позиции выделить крупно как основные</div>
+      <textarea data-q="36. Структура прайс-листа"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">37.</span>Использование фотографий в прайс-листе</label>
+      <div class="choice-row" data-group="37">
+        <button class="choice-btn" type="button">Фото к каждой позиции</button>
+        <button class="choice-btn" type="button">Только к ключевым позициям</button>
+        <button class="choice-btn" type="button">Без фотографий</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">38.</span>Дополнительные элементы на изображении прайс-листа</label>
+      <div class="qhint">Например: логотип, телефон, адрес, режим работы, QR-код, отметка о сроке действия цен, сноска об уточнении стоимости</div>
+      <textarea data-q="38. Дополнительные элементы прайс-листа"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s9">
+    <span class="hflow-tag">Раздел 09 / 09 — согласование</span>
+    <h2 class="block-title">Порядок согласования и обратная связь</h2>
+    <p class="block-hint">Как будет организовано взаимодействие в ходе работы.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">39.</span>Удобный мессенджер для создания рабочей группы<span class="req-chip">обязательно</span></label>
+      <div class="qhint">В выбранном мессенджере будет создан общий чат для оперативной связи и согласования материалов</div>
+      <div class="choice-row" data-req="1" data-group="39">
+        <button class="choice-btn" type="button">Telegram</button>
+        <button class="choice-btn" type="button">MAX</button>
+        <button class="choice-btn" type="button">WhatsApp</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">40.</span>Порядок согласования материалов</label>
+      <div class="qhint">Определяет, как часто вы будете подключаться к работе над публикациями</div>
+      <div class="choice-row" data-group="40">
+        <button class="choice-btn" type="button">Согласование первых публикаций, далее еженедельный отчёт</button>
+        <button class="choice-btn" type="button">Согласование каждой публикации</button>
+        <button class="choice-btn" type="button">Согласование каждой публикации и еженедельный отчёт</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">41.</span>Обязательные юридические сведения и предупредительные надписи</label>
+      <div class="qhint">Например: номер лицензии, возрастная маркировка, указание на наличие противопоказаний, отметка «не является публичной офертой». При отсутствии требований укажите «нет»</div>
+      <textarea data-q="41. Юридические сведения"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">42.</span>Иные пожелания и ограничения</label>
+      <textarea data-q="42. Иные пожелания"></textarea>
+    </div>
+
+    <div class="hsubmit-panel">
+      <h3>Анкета заполнена?</h3>
+      <p>Выберите удобный способ — ответы отправятся готовым сообщением.</p>
+
+      <div class="consent">
+        <input type="checkbox" id="consentBox">
+        <label for="consentBox">Я даю согласие на обработку персональных данных, указанных в настоящей анкете, на условиях <a href="#" id="policyLink" target="_blank" rel="noopener">Политики обработки персональных данных</a>. Согласие предоставляется в целях организации взаимодействия при оказании услуг и может быть отозвано.</label>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="mailBtn" type="button" disabled>Отправить на почту</button>
+        <button class="btn btn-secondary" id="tgBtn" type="button" disabled>Отправить в Telegram</button>
+        <button class="btn btn-secondary" id="waBtn" type="button" disabled>Отправить в WhatsApp</button>
+      </div>
+      <div class="status-msg" id="statusMsg"></div>
+      <textarea id="exportOut" readonly></textarea>
+
+      <div class="aux-row">
+        <button class="aux-link" id="downloadBtn" type="button">Скачать PDF с ответами</button>
+        <button class="aux-link" id="exportBtn" type="button">Показать ответы текстом</button>
+        <button class="aux-link" id="clearBtn" type="button">Очистить анкету и удалить черновик</button>
+      </div>
+      <p class="aux-note">Ответы записываются напрямую в форму агентства при любом способе отправки. Почта дополнительно откроет почтовый клиент с готовым письмом, мессенджер — сохранит PDF с ответами и откроет чат, останется прикрепить файл к сообщению.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="doc-footer">
+  <p>Старт проекта · оформление и ведение сообщества ВКонтакте</p>
+  <p><span id="footerCopy">© 2026</span> · <a href="#" id="policyLinkFooter" target="_blank" rel="noopener">Политика обработки персональных данных</a></p>
+  <p>Черновик анкеты сохраняется только в браузере вашего устройства и не передаётся до момента отправки.</p>
+</footer>
+
+<script>
+  document.querySelectorAll('.choice-row').forEach(function(row){
+    row.querySelectorAll('.choice-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        row.querySelectorAll('.choice-btn').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        row.dataset.selected = btn.textContent;
+        updateProgress();
+        saveDraft();
+      });
+    });
+  });
+
+  var fields = Array.prototype.slice.call(document.querySelectorAll('[data-q]'));
+  var choiceGroups = Array.prototype.slice.call(document.querySelectorAll('.choice-row'));
+
+
+  function requiredState(){
+    var reqFields = fields.filter(function(f){ return f.dataset.req; });
+    var reqGroups = choiceGroups.filter(function(g){ return g.dataset.req; });
+    var total = reqFields.length + reqGroups.length;
+    var done = reqFields.filter(function(f){ return f.value && f.value.trim().length > 0; }).length
+             + reqGroups.filter(function(g){ return !!g.dataset.selected; }).length;
+    return { total: total, done: done };
+  }
+
+  function updateProgress(){
+    var total = fields.length + choiceGroups.length;
+    var filled = fields.filter(function(f){ return f.value && f.value.trim().length > 0; }).length
+               + choiceGroups.filter(function(g){ return !!g.dataset.selected; }).length;
+    var pct = filled / total;
+    var fill = document.getElementById('progressFill');
+    fill.style.width = (pct * 100) + '%';
+    document.getElementById('progressCount').textContent = filled;
+    document.getElementById('progressTotal').textContent = total;
+
+    var req = requiredState();
+    document.getElementById('reqCount').textContent = req.done;
+    document.getElementById('reqTotal').textContent = req.total;
+    document.getElementById('reqBadge').classList.toggle('done', req.done === req.total);
+
+    /* цвет шкалы: пока не закрыты обязательные — приглушённый синий,
+       дальше мягкий красный → оранжевый → зелёный */
+    fill.classList.remove('stage-red', 'stage-orange', 'stage-green');
+    if(req.done >= req.total){
+      if(pct >= 0.75)      fill.classList.add('stage-green');
+      else if(pct >= 0.60) fill.classList.add('stage-orange');
+      else                 fill.classList.add('stage-red');
+    }
+  }
+
+  /* ---------- навигация по разделам ---------- */
+  (function(){
+    var header = document.querySelector('.topbar');
+    var links = Array.prototype.slice.call(document.querySelectorAll('.section-nav a'));
+    var nav = document.getElementById('sectionNav');
+    var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+
+    function syncHeadHeight(){
+      document.documentElement.style.setProperty('--head-h', header.offsetHeight + 'px');
+    }
+    syncHeadHeight();
+    window.addEventListener('resize', syncHeadHeight);
+
+    var ticking = false;
+    function syncActive(){
+      var line = header.offsetHeight + 40;
+      var current = 0;
+      sections.forEach(function(sec, i){
+        if(sec && sec.getBoundingClientRect().top <= line) current = i;
+      });
+      links.forEach(function(a, i){
+        var on = i === current;
+        if(a.classList.contains('active') !== on) a.classList.toggle('active', on);
+        if(on){
+          var r = a.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+          if(r.left < nr.left || r.right > nr.right){
+            nav.scrollTo({ left: a.offsetLeft - nav.clientWidth / 2 + a.offsetWidth / 2, behavior: 'smooth' });
+          }
+        }
+      });
+      ticking = false;
+    }
+    window.addEventListener('scroll', function(){
+      if(!ticking){ ticking = true; window.requestAnimationFrame(syncActive); }
+    }, { passive: true });
+    syncActive();
+  })();
+
+  function saveDraft(){
+    try{
+      var data = {};
+      fields.forEach(function(f){ data[f.dataset.q] = f.value; });
+      choiceGroups.forEach(function(g){ data['choice:'+g.dataset.group] = g.dataset.selected || ''; });
+      localStorage.setItem('client_brief_draft_v2', JSON.stringify(data));
+    }catch(e){}
+  }
+
+  function loadDraft(){
+    try{
+      var raw = localStorage.getItem('client_brief_draft_v2');
+      if(!raw) return;
+      var data = JSON.parse(raw);
+      fields.forEach(function(f){ if(data[f.dataset.q]) f.value = data[f.dataset.q]; });
+      choiceGroups.forEach(function(g){
+        var val = data['choice:'+g.dataset.group];
+        if(val){
+          g.dataset.selected = val;
+          g.querySelectorAll('.choice-btn').forEach(function(b){
+            if(b.textContent === val) b.classList.add('active');
+          });
+        }
+      });
+    }catch(e){}
+  }
+
+  fields.forEach(function(f){
+    f.addEventListener('input', function(){ updateProgress(); saveDraft(); });
+  });
+
+  /* ============================================================
+     НАСТРОЙКИ — заполнить перед публикацией страницы
+     ============================================================ */
+  var AGENCY_EMAIL       = 'worldweb.lev@gmail.com';
+  var COMPANY_NAME       = 'HDR Group';   // владелец страницы, выводится в подвале
+  var POLICY_URL         = '';            // ССЫЛКА НА ПОЛИТИКУ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ — обязательна к заполнению
+  var WHATSAPP_PHONE     = '79120503855'; // только цифры, в международном формате
+  var TELEGRAM_USERNAME  = 'pkonavlin';   // без @
+
+  /* Google-форма. Пустой GFORM_ID полностью отключает отправку в форму. */
+  var GFORM_ID = '1FAIpQLSfzuJoQ7M8HlXrXTW44YO-1q6UNnoEx4E2l352EH64VQP381Q';
+
+  /* Номер вопроса анкеты → идентификатор поля в Google-форме */
+  var GFORM_ENTRIES = {
+     1:'entry.1446023673',  2:'entry.1373606512',  3:'entry.1150476960',  4:'entry.224580314',
+     5:'entry.1631410882',  6:'entry.329294478',   7:'entry.1884535524',  8:'entry.1150406445',
+     9:'entry.521546543',  10:'entry.1937939289', 11:'entry.963366902',  12:'entry.1031926290',
+    13:'entry.749174386',  14:'entry.1004886598', 15:'entry.1547176901', 16:'entry.1018998287',
+    17:'entry.1777326005', 18:'entry.398083951',  19:'entry.496841177',  20:'entry.604387519',
+    21:'entry.775778727',  22:'entry.78970758',   23:'entry.244592356',  24:'entry.1533632602',
+    25:'entry.1188073614', 26:'entry.1124878431', 27:'entry.24052109',   28:'entry.689176830',
+    29:'entry.623946225',  30:'entry.612705859',
+    31:'entry.1916197692',
+    32:'entry.1762276308', 33:'entry.978607232',  34:'entry.1962668850', 35:'entry.301480086',
+    36:'entry.285843997',  37:'entry.1568077120', 38:'entry.1117028693', 39:'entry.1033721411',
+    40:'entry.400642214',  41:'entry.165620550',  42:'entry.734173078'
+  };
+
+  /* Варианты выбора должны совпадать с Google-формой символ в символ.
+     Слева — текст на этой странице, справа — текст в форме. */
+  var CHOICE_MAP = {
+    'На «ты»': 'На "Ты"',
+    'На «вы»': 'На "Вы"',
+    'Формат «от N ₽»': 'Формат "от N ₽"',
+    'Согласование первых публикаций, далее еженедельный отчёт': 'Согласование первых публикаций, далее еженедельный отчет',
+    'Согласование каждой публикации и еженедельный отчёт': 'Согласование каждой публикации и еженедельный отчет'
+  };
+  /* ============================================================ */
+
+  var SUBJECT = 'Анкета клиента — оформление и ведение сообщества ВКонтакте';
+
+  document.getElementById('footerCopy').textContent = '© ' + new Date().getFullYear() + ' ' + COMPANY_NAME;
+  ['policyLink','policyLinkFooter'].forEach(function(id){
+    var a = document.getElementById(id);
+    if(POLICY_URL){ a.href = POLICY_URL; }
+    else { a.removeAttribute('href'); a.removeAttribute('target'); a.style.textDecoration = 'none'; a.style.cursor = 'default'; }
+  });
+
+  var consentBox = document.getElementById('consentBox');
+  var mailBtn = document.getElementById('mailBtn');
+  var tgBtn   = document.getElementById('tgBtn');
+  var waBtn   = document.getElementById('waBtn');
+  var exportBtn = document.getElementById('exportBtn');
+  var sendButtons = [mailBtn, tgBtn, waBtn];
+
+  function syncConsent(){
+    var ok = consentBox.checked;
+    sendButtons.forEach(function(b){ b.disabled = !ok; });
+    if(!ok) document.getElementById('statusMsg').textContent = '';
+  }
+  consentBox.addEventListener('change', syncConsent);
+  syncConsent();
+
+  document.getElementById('clearBtn').addEventListener('click', function(){
+    if(!confirm('Очистить все ответы и удалить сохранённый черновик из браузера?')) return;
+    fields.forEach(function(f){ f.value = ''; });
+    choiceGroups.forEach(function(g){
+      delete g.dataset.selected;
+      g.querySelectorAll('.choice-btn').forEach(function(b){ b.classList.remove('active'); });
+    });
+    consentBox.checked = false;
+    syncConsent();
+    var out = document.getElementById('exportOut');
+    out.value = ''; out.style.display = 'none';
+    try{ localStorage.removeItem('client_brief_draft_v2'); }catch(e){}
+    updateProgress();
+    document.getElementById('statusMsg').textContent = 'Анкета очищена, сохранённый черновик удалён.';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function questionTitle(el){
+    var card = el.closest('.q');
+    if(!card) return '';
+    var label = card.querySelector('.qtitle');
+    if(!label) return '';
+    var clone = label.cloneNode(true);
+    clone.querySelectorAll('.req-chip, .qnum').forEach(function(el){ el.remove(); });
+    return clone.textContent.replace(/\s+/g, ' ').trim();
+  }
+
+  function collectAnswers(){
+    var all = [];
+    fields.forEach(function(f){
+      all.push({
+        n: parseInt(f.dataset.q, 10),
+        label: f.dataset.q,
+        title: questionTitle(f),
+        required: !!f.dataset.req,
+        value: f.value.trim()
+      });
+    });
+    choiceGroups.forEach(function(g){
+      all.push({
+        n: parseInt(g.dataset.group, 10),
+        label: g.dataset.group + '. (выбор варианта)',
+        title: questionTitle(g),
+        required: !!g.dataset.req,
+        value: g.dataset.selected || ''
+      });
+    });
+    all.sort(function(a,b){ return a.n - b.n; });
+    return all;
+  }
+
+  function companyName(){
+    var f = fields.filter(function(x){ return x.dataset.q.indexOf('1. Наименование') === 0; })[0];
+    return (f && f.value.trim()) || 'компания не указана';
+  }
+
+  function buildExportText(){
+    var lines = ['АНКЕТА КЛИЕНТА — оформление и ведение сообщества ВКонтакте', ''];
+    var all = collectAnswers();
+    all.forEach(function(item){
+      lines.push(item.label + ':');
+      lines.push(item.value || '(не заполнено)');
+      lines.push('');
+    });
+    lines.push('---');
+    lines.push('Согласие на обработку персональных данных: предоставлено ' + new Date().toLocaleString('ru-RU'));
+    return lines.join('\n');
+  }
+
+  function showExportText(text){
+    var out = document.getElementById('exportOut');
+    out.value = text;
+    out.style.display = 'block';
+  }
+
+  var statusMsg = document.getElementById('statusMsg');
+
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(c){
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c];
+    });
+  }
+
+  /* ---------- отправка в Google-форму ---------- */
+  function submitToGoogleForm(){
+    return new Promise(function(resolve){
+      if(!GFORM_ID){ resolve(false); return; }
+
+      var sink = document.getElementById('gformSink');
+      if(!sink){
+        sink = document.createElement('iframe');
+        sink.id = 'gformSink';
+        sink.name = 'gformSink';
+        sink.setAttribute('aria-hidden', 'true');
+        sink.style.cssText = 'position:absolute; width:0; height:0; border:0; left:-9999px;';
+        document.body.appendChild(sink);
+      }
+
+      var form = document.createElement('form');
+      form.action = 'https://docs.google.com/forms/d/e/' + GFORM_ID + '/formResponse';
+      form.method = 'POST';
+      form.target = 'gformSink';
+      form.style.display = 'none';
+
+      var sent = 0;
+      collectAnswers().forEach(function(item){
+        var name = GFORM_ENTRIES[item.n];
+        if(!name || !item.value) return;
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = CHOICE_MAP[item.value] || item.value;
+        form.appendChild(input);
+        sent++;
+      });
+
+      if(!sent){ resolve(false); return; }
+
+      document.body.appendChild(form);
+      var settled = false;
+      function finish(ok){
+        if(settled) return;
+        settled = true;
+        try{ document.body.removeChild(form); }catch(e){}
+        resolve(ok);
+      }
+      /* ответ Google читать нельзя — другой домен; считаем отправку выполненной
+         по загрузке скрытого фрейма либо по таймауту */
+      sink.addEventListener('load', function(){ finish(true); }, { once: true });
+      setTimeout(function(){ finish(true); }, 4000);
+      try{ form.submit(); }catch(e){ finish(false); }
+    });
+  }
+
+  function formNote(ok){
+    return ok ? ' Ответы записаны в форму агентства.' : '';
+  }
+
+  function requiredWarning(){
+    var r = requiredState();
+    return r.done < r.total
+      ? ' Обратите внимание: не заполнено обязательных вопросов — ' + (r.total - r.done) + '.'
+      : '';
+  }
+
+  /* ---------- сборка PDF с ответами ---------- */
+  function buildPdfNode(){
+    var node = document.createElement('div');
+    node.style.cssText = 'position:fixed; left:-10000px; top:0; width:760px; background:#ffffff; color:#141414;'
+      + 'font-family:Arial,"Helvetica Neue",Helvetica,sans-serif; font-size:13px; line-height:1.5; padding:38px 42px;';
+
+    var head = '<div style="border-bottom:2px solid #141414; padding-bottom:14px; margin-bottom:22px;">'
+      + '<div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#777;">Старт проекта · анкета клиента</div>'
+      + '<div style="font-size:21px; font-weight:bold; margin-top:7px;">Оформление и ведение сообщества ВКонтакте</div>'
+      + '<div style="font-size:12px; color:#555; margin-top:8px;">' + esc(companyName())
+      + ' &nbsp;·&nbsp; ' + esc(new Date().toLocaleString('ru-RU')) + '</div></div>';
+
+    var body = '';
+    collectAnswers().forEach(function(item){
+      var filled = !!item.value;
+      body += '<div style="margin-bottom:16px; page-break-inside:avoid;">'
+        + '<div style="font-size:12.5px; font-weight:bold; color:#141414;">'
+        + item.n + '. ' + esc(item.title || item.label)
+        + (item.required ? ' <span style="font-size:9px; font-weight:normal; color:#1F5FA8;">[обязательный]</span>' : '')
+        + '</div>'
+        + '<div style="font-size:13px; color:' + (filled ? '#222' : '#999') + '; white-space:pre-wrap; '
+        + 'border-left:3px solid ' + (filled ? '#1F5FA8' : '#DDD') + '; padding-left:11px; margin-top:5px;">'
+        + esc(filled ? item.value : 'не заполнено') + '</div></div>';
+    });
+
+    var tail = '';
+    tail += '<div style="margin-top:22px; padding-top:14px; border-top:1px solid #DDD; font-size:11px; color:#666;">'
+      + 'Согласие на обработку персональных данных предоставлено ' + esc(new Date().toLocaleString('ru-RU')) + '.</div>';
+
+    node.innerHTML = head + body + tail;
+    return node;
+  }
+
+  function pdfFileName(){
+    var name = companyName().replace(/[^\wА-Яа-яЁё\- ]+/g, '').trim().replace(/\s+/g, '-').slice(0, 40);
+    return 'anketa-' + (name || 'klient') + '.pdf';
+  }
+
+  function makePdf(){
+    return new Promise(function(resolve, reject){
+      if(typeof html2canvas !== 'function' || !window.jspdf || !window.jspdf.jsPDF){
+        reject(new Error('libs')); return;
+      }
+      var node = buildPdfNode();
+      document.body.appendChild(node);
+      html2canvas(node, { scale: 2, backgroundColor: '#ffffff', logging: false }).then(function(canvas){
+        document.body.removeChild(node);
+        var pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
+        var margin = 10, imgW = 190, pageH = 297 - margin * 2;
+        var imgH = canvas.height * imgW / canvas.width;
+        var img = canvas.toDataURL('image/jpeg', 0.85);
+        var position = margin, heightLeft = imgH;
+        pdf.addImage(img, 'JPEG', margin, position, imgW, imgH);
+        heightLeft -= pageH;
+        while(heightLeft > 0){
+          position = margin - (imgH - heightLeft);
+          pdf.addPage();
+          pdf.addImage(img, 'JPEG', margin, position, imgW, imgH);
+          heightLeft -= pageH;
+        }
+        var name = pdfFileName();
+        pdf.save(name);
+        resolve(name);
+      }).catch(function(err){
+        if(node.parentNode) document.body.removeChild(node);
+        reject(err);
+      });
+    });
+  }
+
+  function shortMessage(fileName){
+    var r = requiredState();
+    return 'Анкета «Старт проекта» — ' + companyName() + '.\n'
+      + 'Заполнено ' + document.getElementById('progressCount').textContent + ' из '
+      + document.getElementById('progressTotal').textContent + ' вопросов, обязательных ' + r.done + ' из ' + r.total + '.\n'
+      + 'Ответы во вложении: ' + fileName;
+  }
+
+  function sendViaMessenger(kind){
+    if(!consentBox.checked) return;
+    statusMsg.textContent = 'Отправляем ответы и готовим PDF…';
+    var formOk = false;
+    submitToGoogleForm().then(function(ok){ formOk = ok; return makePdf(); }).then(function(fileName){
+      var text = shortMessage(fileName);
+      var url = kind === 'tg'
+        ? (TELEGRAM_USERNAME ? 'https://t.me/' + TELEGRAM_USERNAME : 'https://t.me/share/url?url=&text=' + encodeURIComponent(text))
+        : 'https://wa.me/' + WHATSAPP_PHONE + '?text=' + encodeURIComponent(text);
+      window.open(url, '_blank', 'noopener');
+      showExportText(text + '\n\n— — —\n\n' + buildExportText());
+      statusMsg.textContent = (kind === 'tg'
+        ? 'PDF «' + fileName + '» сохранён в загрузки. Telegram открыт — прикрепите этот файл к сообщению в чате.'
+        : 'PDF «' + fileName + '» сохранён в загрузки. WhatsApp открыт — прикрепите этот файл к сообщению.')
+        + formNote(formOk) + requiredWarning();
+    }).catch(function(){
+      var text = buildExportText();
+      showExportText(text);
+      var url = kind === 'tg'
+        ? 'https://t.me/share/url?url=&text=' + encodeURIComponent(text)
+        : 'https://wa.me/' + WHATSAPP_PHONE + '?text=' + encodeURIComponent(text);
+      window.open(url, '_blank', 'noopener');
+      statusMsg.textContent = 'Собрать PDF не получилось — ответы отправляются текстом.' + formNote(formOk)
+        + ' Если сообщение обрезалось, скопируйте текст ниже.';
+    });
+  }
+
+  mailBtn.addEventListener('click', function(){
+    if(!consentBox.checked) return;
+    var text = buildExportText();
+    showExportText(text);
+    statusMsg.textContent = 'Отправляем ответы…';
+    submitToGoogleForm().then(function(ok){
+      window.location.href = 'mailto:' + AGENCY_EMAIL
+        + '?subject=' + encodeURIComponent(SUBJECT)
+        + '&body=' + encodeURIComponent(text);
+      statusMsg.textContent = 'Открывается почтовый клиент с готовым письмом. Проверьте, что письмо отправлено.'
+        + formNote(ok) + requiredWarning();
+    });
+  });
+
+  tgBtn.addEventListener('click', function(){ sendViaMessenger('tg'); });
+  waBtn.addEventListener('click', function(){ sendViaMessenger('wa'); });
+
+  document.getElementById('downloadBtn').addEventListener('click', function(){
+    statusMsg.textContent = 'Готовим PDF с ответами…';
+    makePdf().then(function(fileName){
+      statusMsg.textContent = 'PDF «' + fileName + '» сохранён в загрузки.' + requiredWarning();
+    }).catch(function(){
+      var text = buildExportText();
+      try{
+        var blob = new Blob(['﻿' + text], { type: 'text/plain;charset=utf-8' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url; a.download = 'anketa-klienta.txt';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+        statusMsg.textContent = 'PDF собрать не удалось — сохранён текстовый файл с ответами.';
+      }catch(e){
+        showExportText(text);
+        statusMsg.textContent = 'Скачивание недоступно в этом браузере. Текст ответов показан ниже.';
+      }
+    });
+  });
+
+  exportBtn.addEventListener('click', function(){
+    var text = buildExportText();
+    showExportText(text);
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        statusMsg.textContent = 'Ответы показаны ниже и скопированы в буфер обмена.';
+      }).catch(function(){
+        statusMsg.textContent = 'Ответы показаны ниже — выделите текст и скопируйте.';
+      });
+    } else {
+      statusMsg.textContent = 'Ответы показаны ниже — выделите текст и скопируйте.';
+    }
+  });
+
+  loadDraft();
+  updateProgress();
+</script>
+
 </body>
 </html>
