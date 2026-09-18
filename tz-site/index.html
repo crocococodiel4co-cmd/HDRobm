@@ -192,6 +192,36 @@
   }
   .choice-btn.active{ background:var(--accent); border-color:var(--accent); color:#07101E; font-weight:600; }
 
+  /* ---------- поле с приёмом файлов ---------- */
+  .dropzone{ position:relative; }
+  .dropzone textarea{ min-height:110px; }
+  .dropzone.is-over textarea{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(140,111,239,.20); }
+  .drop-overlay{
+    position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+    background:rgba(20,12,40,.90); border:1px dashed var(--accent);
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent-soft); pointer-events:none;
+  }
+  .dropzone.is-over .drop-overlay{ display:flex; }
+  .drop-actions{ display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; margin-top:9px; }
+  .file-pick{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase;
+    padding:7px 13px; border:1px solid rgba(178,158,255,.34); background:rgba(6,15,28,.5);
+    color:var(--ink); cursor:pointer; transition:.15s;
+  }
+  .file-pick:hover{ border-color:var(--accent); color:#fff; }
+  .drop-note{ font-size:11.5px; color:var(--ink-faint,#8A7CB4); }
+  .file-list{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:7px; }
+  .file-list li{
+    display:flex; align-items:center; gap:8px;
+    font-family:var(--font-mono); font-size:11.5px; color:var(--ink);
+    border:1px solid rgba(178,158,255,.32); background:rgba(6,15,28,.55); padding:6px 8px 6px 11px;
+  }
+  .file-list button{
+    background:none; border:0; color:#9C8FC0; cursor:pointer; font-size:15px; line-height:1; padding:0 3px;
+  }
+  .file-list button:hover{ color:var(--accent-soft); }
+
   /* ---------- submit block ---------- */
   .hsubmit-panel{
     position:relative; overflow:hidden; text-align:center;
@@ -276,16 +306,22 @@
 
   .aux-row{
     display:flex; flex-wrap:wrap; justify-content:center; align-items:center;
-    gap:6px 16px; margin-top:20px; padding-top:16px; border-top:1px solid rgba(178,158,255,.16);
+    gap:10px 12px; margin-top:22px; padding-top:18px; border-top:1px solid rgba(178,158,255,.16);
   }
   .aux-link{
-    font-family:var(--font-mono); font-size:11px; color:#9C8FC0;
-    background:none; border:0; cursor:pointer; text-decoration:underline;
-    text-underline-offset:3px; padding:2px 4px;
+    font-family:var(--font-mono); font-size:12.5px; letter-spacing:.02em; color:#C9BEEB;
+    background:rgba(6,15,28,.5); border:1px solid rgba(178,158,255,.30); cursor:pointer;
+    padding:10px 18px; transition:.15s;
   }
-  .aux-link:hover{ color:var(--accent-soft); }
-  .aux-note{ font-size:11.5px; color:#8A7CB4; margin:12px auto 0; max-width:560px; line-height:1.55; }
+  .aux-link:hover{ border-color:var(--accent); color:#fff; }
+  .aux-link:focus-visible{ outline:2px solid var(--accent-soft); outline-offset:2px; }
+  .aux-link--quiet{ color:#9C8FC0; border-color:rgba(178,158,255,.18); }
+  .aux-link--quiet:hover{ border-color:#FF9B9B; color:#FFC4C4; }
+  @media (max-width:560px){ .aux-link{ flex:1 1 100%; } }
+  .aux-note{ font-size:11.5px; color:#8A7CB4; margin:16px auto 0; max-width:560px; line-height:1.55; }
 
+  .status-msg.is-error{ color:#FF9B9B; }
+  .status-msg.is-ok{ color:#9BE8B4; }
   .status-msg{ font-size:12.5px; color:var(--accent-soft); margin-top:14px; min-height:16px; }
   textarea#exportOut{
     width:100%; min-height:160px; margin-top:14px; font-family:var(--font-mono); font-size:12px;
@@ -562,8 +598,16 @@
       </div>
     </div>
     <div class="q"><label class="qtitle"><span class="qnum">35.</span>Материалы для передачи в работу</label>
-      <div class="qhint">Готовые тексты, ссылки на фото/видео, файл логотипа, брендбук — впишите текстом или укажите ссылку на облачное хранилище</div>
-      <textarea data-q="35. Материалы для передачи" placeholder="Впишите текстом или укажите ссылку"></textarea>
+      <div class="qhint">Готовые тексты, ссылки на фото/видео, файл логотипа, брендбук — впишите текстом, укажите ссылку или перетащите файл прямо в поле. Файлы TXT и CSV подставятся текстом автоматически, остальные — запомнятся списком</div>
+      <div class="dropzone" id="dropzone35">
+        <textarea data-q="35. Материалы для передачи" placeholder="Начните печатать или перетащите сюда файл"></textarea>
+        <div class="drop-overlay">Отпустите файл</div>
+      </div>
+      <div class="drop-actions">
+        <label class="file-pick">Выбрать файл<input type="file" id="filePick35" multiple hidden></label>
+        <span class="drop-note">TXT, CSV, DOCX, XLSX, PDF, изображения · до 10 файлов, всего до 25 МБ</span>
+      </div>
+      <ul class="file-list" id="fileList35" hidden></ul>
     </div>
     <div class="q"><label class="qtitle"><span class="qnum">36.</span>SEO-требования</label>
       <div class="qhint">Ключевые запросы, регион продвижения, нужна ли базовая SEO-оптимизация уже на этапе разработки. Если требований нет — укажите «нет»</div>
@@ -630,7 +674,7 @@
 
     <div class="hsubmit-panel">
       <h3>Анкета заполнена?</h3>
-      <p>Выберите удобный способ — ответы отправятся готовым сообщением.</p>
+      <p>Нажмите «Отправить анкету» — ответы и приложенные файлы сразу придут нам.</p>
 
       <div class="consent">
         <input type="checkbox" id="consentBox">
@@ -638,19 +682,16 @@
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-primary" id="mailBtn" type="button" disabled>Отправить на почту</button>
-        <button class="btn btn-secondary" id="tgBtn" type="button" disabled>Отправить в Telegram</button>
-        <button class="btn btn-secondary" id="waBtn" type="button" disabled>Отправить в WhatsApp</button>
+        <button class="btn btn-primary" id="sendFormBtn" type="button" disabled>Отправить анкету</button>
       </div>
       <div class="status-msg" id="statusMsg"></div>
       <textarea id="exportOut" readonly></textarea>
 
       <div class="aux-row">
         <button class="aux-link" id="downloadBtn" type="button">Скачать PDF с ответами</button>
-        <button class="aux-link" id="exportBtn" type="button">Показать ответы текстом</button>
-        <button class="aux-link" id="clearBtn" type="button">Очистить анкету и удалить черновик</button>
+        <button class="aux-link aux-link--quiet" id="clearBtn" type="button">Очистить анкету и удалить черновик</button>
       </div>
-      <p class="aux-note">Почта откроет почтовый клиент с готовым письмом. При отправке в мессенджер ответы сохраняются в PDF-файл на ваше устройство и открывается чат агентства — останется прикрепить этот файл к сообщению.</p>
+      <p class="aux-note">Анкета и файлы передаются напрямую, ничего открывать не нужно. Копию ответов можно сохранить себе в PDF.</p>
     </div>
   </section>
 
@@ -661,8 +702,6 @@
   <p><span id="footerCopy">© 2026</span> · <a href="#" id="policyLinkFooter" target="_blank" rel="noopener">Политика обработки персональных данных</a></p>
   <p>Черновик анкеты сохраняется только в браузере вашего устройства и не передаётся до момента отправки.</p>
 </footer>
-
-<iframe name="gformSink" style="display:none" aria-hidden="true" tabindex="-1"></iframe>
 
 <script>
   document.querySelectorAll('.choice-row').forEach(function(row){
@@ -679,6 +718,77 @@
 
   var fields = Array.prototype.slice.call(document.querySelectorAll('[data-q]'));
   var choiceGroups = Array.prototype.slice.call(document.querySelectorAll('.choice-row'));
+
+  /* ---------- приём файлов в поле материалов ---------- */
+  var attachedFiles = [];
+  var dz = document.getElementById('dropzone35');
+  var dzArea = dz.querySelector('textarea');
+  var dzList = document.getElementById('fileList35');
+
+  function isTextFile(file){
+    return /^text\//.test(file.type) || /\.(txt|csv|tsv|md)$/i.test(file.name);
+  }
+  function humanSize(bytes){
+    if(bytes < 1024) return bytes + ' Б';
+    if(bytes < 1048576) return Math.round(bytes/1024) + ' КБ';
+    return (bytes/1048576).toFixed(1) + ' МБ';
+  }
+  function renderFileList(){
+    dzList.innerHTML = '';
+    dzList.hidden = attachedFiles.length === 0;
+    attachedFiles.forEach(function(f, i){
+      var li = document.createElement('li');
+      li.appendChild(document.createTextNode(f.name + ' · ' + f.size));
+      var x = document.createElement('button');
+      x.type = 'button';
+      x.textContent = '×';
+      x.setAttribute('aria-label', 'Убрать файл ' + f.name);
+      x.addEventListener('click', function(){
+        attachedFiles.splice(i, 1);
+        renderFileList();
+      });
+      li.appendChild(x);
+      dzList.appendChild(li);
+    });
+  }
+  function handleFiles(list){
+    Array.prototype.forEach.call(list, function(file){
+      if(isTextFile(file)){
+        var reader = new FileReader();
+        reader.onload = function(){
+          var prefix = dzArea.value.trim() ? dzArea.value.replace(/\s+$/, '') + '\n\n' : '';
+          dzArea.value = prefix + '— из файла «' + file.name + '» —\n' + reader.result;
+          updateProgress();
+          saveDraft();
+        };
+        reader.readAsText(file, 'UTF-8');
+      } else {
+        if(!attachedFiles.some(function(f){ return f.name === file.name; })){
+          attachedFiles.push({ name: file.name, size: humanSize(file.size), bytes: file.size, file: file });
+        }
+        renderFileList();
+      }
+    });
+  }
+
+  ['dragenter','dragover'].forEach(function(ev){
+    dz.addEventListener(ev, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.add('is-over'); });
+  });
+  ['dragleave','dragend'].forEach(function(ev){
+    dz.addEventListener(ev, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.remove('is-over'); });
+  });
+  dz.addEventListener('drop', function(e){
+    e.preventDefault(); e.stopPropagation();
+    dz.classList.remove('is-over');
+    if(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+  });
+  document.getElementById('filePick35').addEventListener('change', function(e){
+    if(e.target.files && e.target.files.length) handleFiles(e.target.files);
+    e.target.value = '';
+  });
+  ['dragover','drop'].forEach(function(ev){
+    window.addEventListener(ev, function(e){ if(!dz.contains(e.target)) e.preventDefault(); });
+  });
 
   function requiredState(){
     var reqFields = fields.filter(function(f){ return f.dataset.req; });
@@ -786,70 +896,31 @@
   /* ============================================================
      НАСТРОЙКИ — заполнить перед публикацией страницы
      ============================================================ */
-  var AGENCY_EMAIL       = 'crocococodiel4co@gmail.com';
   var COMPANY_NAME       = 'HDR Group';   // владелец страницы, выводится в подвале
   var POLICY_URL         = '';            // ССЫЛКА НА ПОЛИТИКУ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ — обязательна к заполнению
-  var WHATSAPP_PHONE     = '79120503855'; // только цифры, в международном формате
-  var TELEGRAM_USERNAME  = 'pkonavlin';   // без @
 
-  /* ---------- связка с Google-формой ---------- */
-  var GFORM_ID = '1FAIpQLSe_flsbYc79I7ZA3uGAhBbSRjndDwlNYOLWcjmP9MMg96SfEw';
+  // Google Форма «СТАРТ ПРОЕКТА (разработка сайта)» — сюда уходят ответы
+  var GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSe_flsbYc79I7ZA3uGAhBbSRjndDwlNYOLWcjmP9MMg96SfEw/formResponse';
+  var GOOGLE_FORM_PAGES  = 8;             // страниц в форме (разделов); нужно для многостраничной формы
+  // Веб-приложение Google Apps Script для загрузки файлов на Диск (см. apps-script.gs).
+  // Если оставить пустым — файлы не загружаются, в вопрос 35 уходят только их названия.
+  var FILES_UPLOAD_URL   = 'https://script.google.com/macros/s/AKfycbyIj70GSaOepbivioyGsYPhy8cezGgzwqGUiGCpSO3yMIyGIVNDMlMvPWh3ReJzfZOd/exec';
+  var MAX_FILES = 10, MAX_TOTAL_BYTES = 25 * 1024 * 1024;
 
-  /* Номер вопроса → entry ID Google-формы. Получено из присланной пользователем ссылки
-     с предзаполненными данными — порядок параметров в URL совпал 1:1 с нумерацией анкеты,
-     включая все 17 choice-вопросов (сверены дословно, расхождений в написании не найдено).
-     ВНИМАНИЕ: вопрос 31 («Решения, которых следует избегать») в Google-форме — судя по
-     значению «Вариант 1» в присланной ссылке — до сих пор оформлен как «Один из списка»
-     с не отредактированными вариантами по умолчанию, а не как «Короткий ответ» / «Абзац».
-     Пока это поле в форме не переключат на текстовый тип, вписанный клиентом текст
-     в это entry ID уйдёт, но радиокнопка не выберется — ответ в таблице останется пустым
-     без ошибки. Нужно поправить тип этого вопроса в редакторе формы. */
-  var GFORM_ENTRY_MAP = {
-    1:'1929833996', 2:'43413899', 3:'865489413', 4:'1390451938', 5:'326054720',
-    6:'1065224994', 7:'164947898', 8:'1538323078', 9:'1227264864', 10:'351380990',
-    11:'1020657521', 12:'1126438607', 13:'1436848237', 14:'702611654', 15:'1848657448',
-    16:'1892551301', 17:'958445139', 18:'1880109873', 19:'334817922', 20:'1541004431',
-    21:'1131373083', 22:'1992248030', 23:'1936717524', 24:'1993490182', 25:'1621421414',
-    26:'1997947005', 27:'1610558655', 28:'729040439', 29:'1254148775', 30:'778835608',
-    31:'867385482', 32:'1657796298', 33:'436510751', 34:'1164176481', 35:'1463799193',
-    36:'1336908226', 37:'235942631', 38:'1712518159', 39:'729816960', 40:'1825559244',
-    41:'948121288', 42:'1820638413', 43:'1649042803', 44:'690827070'
+  // номер вопроса анкеты → поле Google Формы
+  var FORM_ENTRIES = {
+     1: 1929833996,  2: 43413899,    3: 865489413,   4: 1390451938,  5: 326054720,
+     6: 1065224994,  7: 164947898,   8: 1538323078,  9: 1227264864, 10: 351380990,
+    11: 1020657521, 12: 1126438607, 13: 1436848237, 14: 702611654,  15: 1848657448,
+    16: 1892551301, 17: 958445139,  18: 1880109873, 19: 334817922,  20: 1541004431,
+    21: 1131373083, 22: 1992248030, 23: 1936717524, 24: 1993490182, 25: 1621421414,
+    26: 1997947005, 27: 1610558655, 28: 729040439,  29: 1254148775, 30: 778835608,
+    31: 867385482,  32: 1657796298, 33: 436510751,  34: 1164176481, 35: 1463799193,
+    36: 1336908226, 37: 235942631,  38: 1712518159, 39: 729816960,  40: 1825559244,
+    41: 948121288,  42: 1820638413, 43: 1649042803, 44: 690827070
   };
-
-  /* Подмена написания вариантов выбора: радиокнопки Google принимают только точное
-     совпадение текста, иначе поле в таблице ответов останется пустым без ошибки.
-     Все 17 choice-вопросов этой анкеты сверены с присланными тестовыми значениями
-     дословно — расхождений не найдено, подмены на данный момент не требуются.
-     При любом изменении текста варианта на странице или в самой форме — проверять
-     обе стороны заново (типичные ловушки: ёлочки против прямых кавычек, «ё» против «е»). */
-  var GFORM_CHOICE_MAP = {};
-
-  function submitToGform(){
-    try{
-      var all = collectAnswers();
-      var form = document.createElement('form');
-      form.action = 'https://docs.google.com/forms/d/e/' + GFORM_ID + '/formResponse';
-      form.method = 'POST';
-      form.target = 'gformSink';
-      form.style.display = 'none';
-      all.forEach(function(item){
-        var entryId = GFORM_ENTRY_MAP[item.n];
-        if(!entryId || !item.value) return;
-        var val = GFORM_CHOICE_MAP.hasOwnProperty(item.value) ? GFORM_CHOICE_MAP[item.value] : item.value;
-        var input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'entry.' + entryId;
-        input.value = val;
-        form.appendChild(input);
-      });
-      document.body.appendChild(form);
-      form.submit();
-      setTimeout(function(){ if(form.parentNode) form.parentNode.removeChild(form); }, 4000);
-    }catch(e){}
-  }
   /* ============================================================ */
 
-  var SUBJECT = 'Анкета клиента — разработка сайта';
 
   document.getElementById('footerCopy').textContent = '© ' + new Date().getFullYear() + ' ' + COMPANY_NAME;
   ['policyLink','policyLinkFooter'].forEach(function(id){
@@ -859,11 +930,8 @@
   });
 
   var consentBox = document.getElementById('consentBox');
-  var mailBtn = document.getElementById('mailBtn');
-  var tgBtn   = document.getElementById('tgBtn');
-  var waBtn   = document.getElementById('waBtn');
-  var exportBtn = document.getElementById('exportBtn');
-  var sendButtons = [mailBtn, tgBtn, waBtn];
+  var sendFormBtn = document.getElementById('sendFormBtn');
+  var sendButtons = [sendFormBtn];
 
   function syncConsent(){
     var ok = consentBox.checked;
@@ -881,6 +949,8 @@
       g.querySelectorAll('.choice-btn').forEach(function(b){ b.classList.remove('active'); });
     });
     consentBox.checked = false;
+    attachedFiles.length = 0;
+    renderFileList();
     syncConsent();
     var out = document.getElementById('exportOut');
     out.value = ''; out.style.display = 'none';
@@ -937,6 +1007,12 @@
       lines.push(item.value || '(не заполнено)');
       lines.push('');
     });
+    if(attachedFiles.length){
+      lines.push('---');
+      lines.push('ПРИЛОЖЕННЫЕ ФАЙЛЫ (передаются вместе с анкетой, в этот текст не входят):');
+      attachedFiles.forEach(function(f){ lines.push('· ' + f.name + ' (' + f.size + ')'); });
+      lines.push('');
+    }
     lines.push('---');
     lines.push('Согласие на обработку персональных данных: предоставлено ' + new Date().toLocaleString('ru-RU'));
     return lines.join('\n');
@@ -988,7 +1064,17 @@
         + esc(filled ? item.value : 'не заполнено') + '</div></div>';
     });
 
-    var tail = '<div style="margin-top:22px; padding-top:14px; border-top:1px solid #DDD; font-size:11px; color:#666;">'
+    var tail = '';
+    if(attachedFiles.length){
+      tail += '<div style="margin-top:22px; padding-top:14px; border-top:1px solid #DDD;">'
+        + '<div style="font-size:12px; font-weight:bold;">Приложенные файлы</div>'
+        + '<div style="font-size:11.5px; color:#555; margin-top:4px;">Не входят в этот PDF — направляются отдельно:</div>';
+      attachedFiles.forEach(function(f){
+        tail += '<div style="font-size:12px; margin-top:3px;">· ' + esc(f.name) + ' (' + esc(f.size) + ')</div>';
+      });
+      tail += '</div>';
+    }
+    tail += '<div style="margin-top:22px; padding-top:14px; border-top:1px solid #DDD; font-size:11px; color:#666;">'
       + 'Согласие на обработку персональных данных предоставлено ' + esc(new Date().toLocaleString('ru-RU')) + '.</div>';
 
     node.innerHTML = head + body + tail;
@@ -1032,57 +1118,111 @@
     });
   }
 
-  function shortMessage(fileName){
-    var r = requiredState();
-    return 'Анкета «Старт проекта — бриф на разработку сайта» — ' + companyName() + '.\n'
-      + 'Заполнено ' + document.getElementById('progressCount').textContent + ' из '
-      + document.getElementById('progressTotal').textContent + ' вопросов, обязательных ' + r.done + ' из ' + r.total + '.\n'
-      + 'Ответы во вложении: ' + fileName;
+  /* ---------- отправка в Google Форму ---------- */
+  function setStatus(text, kind){
+    statusMsg.textContent = text;
+    statusMsg.classList.toggle('is-error', kind === 'error');
+    statusMsg.classList.toggle('is-ok', kind === 'ok');
   }
 
-  function sendViaMessenger(kind){
-    if(!consentBox.checked) return;
-    submitToGform();
-    statusMsg.textContent = 'Готовим PDF с ответами…';
-    makePdf().then(function(fileName){
-      var text = shortMessage(fileName);
-      var url = kind === 'tg'
-        ? (TELEGRAM_USERNAME ? 'https://t.me/' + TELEGRAM_USERNAME : 'https://t.me/share/url?url=&text=' + encodeURIComponent(text))
-        : 'https://wa.me/' + WHATSAPP_PHONE + '?text=' + encodeURIComponent(text);
-      window.open(url, '_blank', 'noopener');
-      showExportText(text + '\n\n— — —\n\n' + buildExportText());
-      statusMsg.textContent = kind === 'tg'
-        ? 'PDF «' + fileName + '» сохранён в загрузки. Telegram открыт — прикрепите этот файл к сообщению в чате.' + requiredWarning()
-        : 'PDF «' + fileName + '» сохранён в загрузки. WhatsApp открыт — прикрепите этот файл к сообщению.' + requiredWarning();
-    }).catch(function(){
-      var text = buildExportText();
-      showExportText(text);
-      var url = kind === 'tg'
-        ? 'https://t.me/share/url?url=&text=' + encodeURIComponent(text)
-        : 'https://wa.me/' + WHATSAPP_PHONE + '?text=' + encodeURIComponent(text);
-      window.open(url, '_blank', 'noopener');
-      statusMsg.textContent = 'Собрать PDF не получилось — ответы отправляются текстом. Если сообщение обрезалось, скопируйте текст ниже.';
+  function missingRequired(){
+    return collectAnswers().filter(function(a){ return a.required && !a.value; });
+  }
+
+  function readAsBase64(file){
+    return new Promise(function(resolve, reject){
+      var r = new FileReader();
+      r.onload = function(){ resolve(String(r.result).split(',')[1] || ''); };
+      r.onerror = function(){ reject(r.error); };
+      r.readAsDataURL(file);
     });
   }
 
-  mailBtn.addEventListener('click', function(){
+  // загружает файлы через Apps Script, возвращает текст со ссылками для вопроса 35
+  function uploadFiles(){
+    if(!attachedFiles.length) return Promise.resolve('');
+    var names = attachedFiles.map(function(f){ return '· ' + f.name + ' (' + f.size + ')'; }).join('\n');
+    if(!FILES_UPLOAD_URL){
+      return Promise.resolve('Клиент приложил файлы (не загружены автоматически, запросите отдельно):\n' + names);
+    }
+    var total = attachedFiles.reduce(function(s, f){ return s + (f.bytes || 0); }, 0);
+    if(attachedFiles.length > MAX_FILES || total > MAX_TOTAL_BYTES){
+      return Promise.reject(new Error('limit'));
+    }
+    return Promise.all(attachedFiles.map(function(f){
+      return readAsBase64(f.file).then(function(data){
+        return { name: f.name, type: f.file.type || 'application/octet-stream', data: data };
+      });
+    })).then(function(files){
+      // text/plain — чтобы браузер не делал preflight-запрос, Apps Script его не поддерживает
+      return fetch(FILES_UPLOAD_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ company: companyName(), files: files })
+      });
+    }).then(function(res){ return res.json(); }).then(function(json){
+      if(!json || !json.ok) throw new Error(json && json.error || 'upload');
+      return 'Файлы клиента (Google Диск): ' + json.folder + '\n'
+        + json.files.map(function(f){ return '· ' + f.name + ' — ' + f.url; }).join('\n');
+    });
+  }
+
+  function sendToGoogleForm(filesNote){
+    var body = new URLSearchParams();
+    collectAnswers().forEach(function(a){
+      var id = FORM_ENTRIES[a.n];
+      var value = a.value;
+      if(a.n === 35 && filesNote) value = value ? value + '\n\n' + filesNote : filesNote;
+      if(id && value) body.append('entry.' + id, value);
+    });
+    var pages = [];
+    for(var i = 0; i < GOOGLE_FORM_PAGES; i++) pages.push(i);
+    body.append('pageHistory', pages.join(','));
+    body.append('fvv', '1');
+    // no-cors: Google не отдаёт ответ сторонним сайтам, поэтому проверяется только факт доставки запроса
+    return fetch(GOOGLE_FORM_ACTION, { method: 'POST', mode: 'no-cors', body: body });
+  }
+
+  sendFormBtn.addEventListener('click', function(){
     if(!consentBox.checked) return;
-    submitToGform();
-    var text = buildExportText();
-    showExportText(text);
-    window.location.href = 'mailto:' + AGENCY_EMAIL
-      + '?subject=' + encodeURIComponent(SUBJECT)
-      + '&body=' + encodeURIComponent(text);
-    statusMsg.textContent = 'Открывается почтовый клиент с готовым письмом. Проверьте, что письмо отправлено.' + requiredWarning();
+    var missing = missingRequired();
+    if(missing.length){
+      setStatus('Заполните обязательные вопросы: ' + missing.map(function(m){ return m.n; }).join(', ') + '. Без них анкета не примется.', 'error');
+      var first = document.querySelector('[data-q^="' + missing[0].n + '."], .choice-row[data-group="' + missing[0].n + '"]');
+      if(first){
+        first.closest('.q').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if(first.focus && first.tagName !== 'DIV') setTimeout(function(){ first.focus({ preventScroll: true }); }, 400);
+      }
+      return;
+    }
+    sendButtons.forEach(function(b){ b.disabled = true; });
+    setStatus(attachedFiles.length && FILES_UPLOAD_URL ? 'Загружаем файлы…' : 'Отправляем анкету…');
+
+    uploadFiles().catch(function(err){
+      var names = attachedFiles.map(function(f){ return f.name; }).join(', ');
+      var why = err && err.message === 'limit'
+        ? 'превышен лимит (до ' + MAX_FILES + ' файлов, всего до 25 МБ)'
+        : 'ошибка загрузки';
+      return 'Файлы не загрузились (' + why + '), запросите у клиента: ' + names;
+    }).then(function(filesNote){
+      setStatus('Отправляем анкету…');
+      return sendToGoogleForm(filesNote).then(function(){ return filesNote; });
+    }).then(function(filesNote){
+      var failed = filesNote && filesNote.indexOf('Файлы не загрузились') === 0;
+      setStatus(failed
+        ? 'Анкета отправлена, но файлы загрузить не удалось. Мы свяжемся с вами в выбранном мессенджере и попросим прислать их.'
+        : 'Анкета отправлена. Спасибо! Мы свяжемся с вами в выбранном мессенджере.', failed ? 'error' : 'ok');
+      sendFormBtn.textContent = 'Анкета отправлена';
+    }).catch(function(){
+      setStatus('Не удалось отправить анкету — проверьте интернет и попробуйте ещё раз. Ответы сохранены в браузере, заново заполнять не нужно.', 'error');
+      syncConsent();
+    });
   });
 
-  tgBtn.addEventListener('click', function(){ sendViaMessenger('tg'); });
-  waBtn.addEventListener('click', function(){ sendViaMessenger('wa'); });
-
   document.getElementById('downloadBtn').addEventListener('click', function(){
-    statusMsg.textContent = 'Готовим PDF с ответами…';
+    setStatus('Готовим PDF с ответами…');
     makePdf().then(function(fileName){
-      statusMsg.textContent = 'PDF «' + fileName + '» сохранён в загрузки.' + requiredWarning();
+      setStatus('PDF «' + fileName + '» сохранён в загрузки.' + requiredWarning());
     }).catch(function(){
       var text = buildExportText();
       try{
@@ -1092,26 +1232,12 @@
         a.href = url; a.download = 'brief-sayt-klienta.txt';
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
         setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
-        statusMsg.textContent = 'PDF собрать не удалось — сохранён текстовый файл с ответами.';
+        setStatus('PDF собрать не удалось — сохранён текстовый файл с ответами.');
       }catch(e){
         showExportText(text);
-        statusMsg.textContent = 'Скачивание недоступно в этом браузере. Текст ответов показан ниже.';
+        setStatus('Скачивание недоступно в этом браузере. Текст ответов показан ниже.');
       }
     });
-  });
-
-  exportBtn.addEventListener('click', function(){
-    var text = buildExportText();
-    showExportText(text);
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(function(){
-        statusMsg.textContent = 'Ответы показаны ниже и скопированы в буфер обмена.';
-      }).catch(function(){
-        statusMsg.textContent = 'Ответы показаны ниже — выделите текст и скопируйте.';
-      });
-    } else {
-      statusMsg.textContent = 'Ответы показаны ниже — выделите текст и скопируйте.';
-    }
   });
 
   loadDraft();
