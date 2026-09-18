@@ -558,7 +558,7 @@
       </div>
       <div class="drop-actions">
         <label class="file-pick">Выбрать файл<input type="file" id="filePick30" multiple hidden></label>
-        <span class="drop-note">TXT, CSV, XLSX, PDF, изображения · до 10 файлов, всего до 25 МБ</span>
+        <span class="drop-note">TXT, CSV, XLSX, PDF, изображения · до 15 файлов, каждый до 25 МБ</span>
       </div>
       <ul class="file-list" id="fileList30" hidden></ul>
     </div>
@@ -876,7 +876,7 @@
   var GOOGLE_FORM_PAGES  = 8;             // страниц в форме; нужно для многостраничной формы
   // Веб-приложение Google Apps Script для загрузки файлов на Диск (тот же, что у брифа на сайт)
   var FILES_UPLOAD_URL   = 'https://script.google.com/macros/s/AKfycbyIj70GSaOepbivioyGsYPhy8cezGgzwqGUiGCpSO3yMIyGIVNDMlMvPWh3ReJzfZOd/exec';
-  var MAX_FILES = 10, MAX_TOTAL_BYTES = 25 * 1024 * 1024;
+  var MAX_FILES = 15, MAX_FILE_BYTES = 25 * 1024 * 1024, MAX_TOTAL_BYTES = 100 * 1024 * 1024;
 
   /* ============================================================ */
 
@@ -1105,32 +1105,59 @@
     });
   }
 
-  // загружает файлы через Apps Script, возвращает текст со ссылками для вопроса с материалами
-  function uploadFiles(){
-    if(!hasFiles()) return Promise.resolve('');
-    var names = attachedFiles.map(function(f){ return '· ' + f.name + ' (' + f.size + ')'; }).join('\n');
+  // загружает файлы через Apps Script по одному (так быстрее и надёжнее, чем одним запросом);
+  // возвращает { note, failed } — note вписывается в вопрос с материалами
+  function uploadFiles(onProgress){
+    if(!attachedFiles.length) return Promise.resolve({ note: '', failed: [] });
     if(!FILES_UPLOAD_URL){
-      return Promise.resolve('Клиент приложил файлы (не загружены автоматически, запросите отдельно):\n' + names);
+      return Promise.resolve({ failed: [], note: 'Клиент приложил файлы (не загружены автоматически, запросите отдельно):\n'
+        + attachedFiles.map(function(f){ return '· ' + f.name + ' (' + f.size + ')'; }).join('\n') });
     }
-    var total = attachedFiles.reduce(function(s, f){ return s + (f.bytes || 0); }, 0);
-    if(attachedFiles.length > MAX_FILES || total > MAX_TOTAL_BYTES){
-      return Promise.reject(new Error('limit'));
-    }
-    return Promise.all(attachedFiles.map(function(f){
-      return readAsBase64(f.file).then(function(data){
-        return { name: f.name, type: f.file.type || 'application/octet-stream', data: data };
+    var folder = null, saved = [], failed = [], total = 0;
+    var queue = attachedFiles.filter(function(f, i){
+      if(i >= MAX_FILES){ failed.push(f.name + ' — больше ' + MAX_FILES + ' файлов'); return false; }
+      if(f.bytes > MAX_FILE_BYTES){ failed.push(f.name + ' — файл больше ' + Math.round(MAX_FILE_BYTES / 1048576) + ' МБ'); return false; }
+      if(total + f.bytes > MAX_TOTAL_BYTES){ failed.push(f.name + ' — превышен общий объём ' + Math.round(MAX_TOTAL_BYTES / 1048576) + ' МБ'); return false; }
+      total += f.bytes; return true;
+    });
+
+    var chain = Promise.resolve();
+    queue.forEach(function(f, i){
+      chain = chain.then(function(){
+        if(onProgress) onProgress(i + 1, queue.length, f);
+        return readAsBase64(f.file).then(function(data){
+          // text/plain — чтобы браузер не делал preflight-запрос, Apps Script его не поддерживает
+          return fetch(FILES_UPLOAD_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              company: companyName(),
+              folderId: folder ? folder.id : '',
+              files: [{ name: f.name, type: f.file.type || 'application/octet-stream', data: data }]
+            })
+          });
+        }).then(function(res){ return res.json(); }).then(function(json){
+          if(!json || !json.ok) throw new Error(json && json.error || 'нет ответа');
+          if(!folder) folder = { id: json.folderId, url: json.folder };
+          saved.push(json.files[0]);
+        }).catch(function(err){
+          failed.push(f.name + ' — ' + (err && err.message ? err.message : 'ошибка загрузки'));
+        });
       });
-    })).then(function(files){
-      // text/plain — чтобы браузер не делал preflight-запрос, Apps Script его не поддерживает
-      return fetch(FILES_UPLOAD_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ company: companyName(), files: files })
-      });
-    }).then(function(res){ return res.json(); }).then(function(json){
-      if(!json || !json.ok) throw new Error(json && json.error || 'upload');
-      return 'Файлы клиента (Google Диск): ' + json.folder + '\n'
-        + json.files.map(function(f){ return '· ' + f.name + ' — ' + f.url; }).join('\n');
+    });
+
+    return chain.then(function(){
+      var lines = [];
+      if(saved.length){
+        lines.push('Файлы клиента (Google Диск): ' + folder.url);
+        saved.forEach(function(s){ lines.push('· ' + s.name + ' — ' + s.url); });
+      }
+      if(failed.length){
+        if(lines.length) lines.push('');
+        lines.push('Не загрузились, запросите у клиента:');
+        failed.forEach(function(x){ lines.push('· ' + x); });
+      }
+      return { note: lines.join('\n'), failed: failed };
     });
   }
 
@@ -1165,22 +1192,22 @@
       return;
     }
     sendButtons.forEach(function(b){ b.disabled = true; });
-    setStatus(hasFiles() && FILES_UPLOAD_URL ? 'Загружаем файлы…' : 'Отправляем анкету…');
+    setStatus('Отправляем анкету…');
 
-    uploadFiles().catch(function(err){
-      var names = attachedFiles.map(function(f){ return f.name; }).join(', ');
-      var why = err && err.message === 'limit'
-        ? 'превышен лимит (до ' + MAX_FILES + ' файлов, всего до 25 МБ)'
-        : 'ошибка загрузки';
-      return 'Файлы не загрузились (' + why + '), запросите у клиента: ' + names;
-    }).then(function(filesNote){
+    var failedFiles = [];
+    uploadFiles(function(i, n, f){
+      setStatus('Загружаем файл ' + i + ' из ' + n + ' («' + f.name + '», ' + f.size + ')… Не закрывайте страницу, крупные файлы загружаются до минуты.');
+    }).then(function(r){
+      failedFiles = r.failed;
       setStatus('Отправляем анкету…');
-      return sendToGoogleForm(filesNote).then(function(){ return filesNote; });
-    }).then(function(filesNote){
-      var failed = filesNote && filesNote.indexOf('Файлы не загрузились') === 0;
-      setStatus(failed
-        ? 'Анкета отправлена, но файлы загрузить не удалось. Мы свяжемся с вами в выбранном мессенджере и попросим прислать их.'
-        : 'Анкета отправлена. Спасибо! Мы свяжемся с вами в выбранном мессенджере.', failed ? 'error' : 'ok');
+      return sendToGoogleForm(r.note);
+    }).then(function(){
+      if(failedFiles.length){
+        setStatus('Анкета отправлена, но часть файлов не загрузилась: '
+          + failedFiles.join('; ') + '. Мы свяжемся с вами в выбранном мессенджере и попросим прислать их.', 'error');
+      } else {
+        setStatus('Анкета отправлена. Спасибо! Мы свяжемся с вами в выбранном мессенджере.', 'ok');
+      }
       sendFormBtn.textContent = 'Анкета отправлена';
     }).catch(function(){
       setStatus('Не удалось отправить анкету — проверьте интернет и попробуйте ещё раз. Ответы сохранены в браузере, заново заполнять не нужно.', 'error');
