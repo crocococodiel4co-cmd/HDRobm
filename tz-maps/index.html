@@ -841,41 +841,12 @@
   var COMPANY_NAME       = 'HDR Group';   // владелец страницы, выводится в подвале
   var POLICY_URL         = '';            // ССЫЛКА НА ПОЛИТИКУ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ — обязательна к заполнению
 
-  /* ---------- связка с Google-формой ---------- */
-  var GFORM_ID = '1FAIpQLSc43L8kCVeIq2Quvld-Gc1dpNC_nIYiTFzlboZPYn6cSYnCLw';
-
-  /* Номер вопроса → entry ID Google-формы. Получено из ссылки с предзаполненными
-     данными («⋮» в редакторе формы → «Получить ссылку с предзаполненными данными»).
-     Поля «Загрузка файлов» entry ID не имеют — у вопроса 30 в форме должен стоять
-     тип «Развёрнутый ответ», не «Загрузка файлов». */
-  var GFORM_ENTRY_MAP = {
-    1:'705026796', 2:'396548545', 3:'1863804934', 4:'2035616434', 5:'55692197',
-    6:'1133614376', 7:'763979064', 8:'1029780174', 9:'261475920', 10:'1198460745',
-    11:'1415448025', 12:'888946797', 13:'590754921', 14:'579746003', 15:'2129059301',
-    16:'331069784', 17:'729769821', 18:'1754230164', 19:'1321628567', 20:'207006344',
-    21:'932401358', 22:'1882753344', 23:'852244283', 24:'1256596514', 25:'378910395',
-    26:'1003085118', 27:'1120842364', 28:'1088263733', 29:'1303819117', 30:'1149600105',
-    31:'1937069322', 32:'259174321', 33:'46202714', 34:'1987554260', 35:'711790461',
-    36:'2049786835', 37:'1671153829', 38:'471511031'
-  };
-
-  /* Подмена написания вариантов выбора: радиокнопки Google принимают только точное
-     совпадение текста, иначе поле в таблице ответов останется пустым без ошибки.
-     При любом изменении текста варианта на странице или в самой форме — проверять
-     обе стороны заново (типичные ловушки: ёлочки против прямых кавычек, «ё» против «е»). */
-  var GFORM_CHOICE_MAP = {
-    'На «ты»': 'На "Ты"',
-    'На «вы»': 'На "Вы"',
-    'Формат «от N ₽»': 'Формат "от N ₽"',
-    'Согласование первых публикаций, далее еженедельный отчёт': 'Согласование первых публикаций, далее еженедельный отчет',
-    // в форме в двух вариантах опечатка «Согласвоание» — отправляем как в форме, иначе Google отклонит анкету
-    'Согласование каждой публикации': 'Согласвоание каждой публикации',
-    'Согласование каждой публикации и еженедельный отчёт': 'Согласвоание каждой публикации и еженедельный отчет'
-  };
-
-  var GOOGLE_FORM_PAGES  = 8;             // страниц в форме; нужно для многостраничной формы
-  // Веб-приложение Google Apps Script для загрузки файлов на Диск (тот же, что у брифа на сайт)
-  var FILES_UPLOAD_URL   = 'https://script.google.com/macros/s/AKfycbyIj70GSaOepbivioyGsYPhy8cezGgzwqGUiGCpSO3yMIyGIVNDMlMvPWh3ReJzfZOd/exec';
+  /* ---------- куда уходят ответы ---------- */
+  // Веб-приложение Google Apps Script: пишет ответы в Google Таблицу,
+  // файлы — в папку на Google Диске, и шлёт уведомление в Telegram (см. apps-script.gs).
+  var API_URL   = 'https://script.google.com/macros/s/AKfycbyIj70GSaOepbivioyGsYPhy8cezGgzwqGUiGCpSO3yMIyGIVNDMlMvPWh3ReJzfZOd/exec';
+  var BRIEF_KEY = 'maps';            // лист в таблице: site / maps / vk
+  var FILES_UPLOAD_URL = API_URL;
   var MAX_FILES = 15, MAX_FILE_BYTES = 25 * 1024 * 1024, MAX_TOTAL_BYTES = 100 * 1024 * 1024;
 
   /* ============================================================ */
@@ -1078,7 +1049,6 @@
   }
 
   /* ---------- отправка в Google Форму ---------- */
-  var GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/' + GFORM_ID + '/formResponse';
   var FILE_QUESTION = 30;           // номер вопроса, куда вписываются ссылки на файлы (0 — нет файлов)
 
   function setStatus(text, kind){
@@ -1161,22 +1131,26 @@
     });
   }
 
-  function sendToGoogleForm(filesNote){
-    var body = new URLSearchParams();
-    collectAnswers().forEach(function(a){
-      var id = GFORM_ENTRY_MAP[a.n];
-      var value = a.value;
-      if(a.n === FILE_QUESTION && filesNote) value = value ? value + '\n\n' + filesNote : filesNote;
-      if(!id || !value) return;
-      if(GFORM_CHOICE_MAP.hasOwnProperty(value)) value = GFORM_CHOICE_MAP[value];
-      body.append('entry.' + String(id).replace(/^entry\./, ''), value);
+  function sendToSheet(filesNote){
+    var payload = {
+      kind: 'brief',
+      brief: BRIEF_KEY,
+      company: companyName(),
+      answers: collectAnswers().map(function(a){
+        var value = a.value;
+        if(a.n === FILE_QUESTION && filesNote) value = value ? value + '\n\n' + filesNote : filesNote;
+        return { n: a.n, title: a.n + '. ' + a.title, value: value };
+      })
+    };
+    // text/plain — чтобы браузер не делал preflight-запрос, Apps Script его не поддерживает
+    return fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).then(function(res){ return res.json(); }).then(function(json){
+      if(!json || !json.ok) throw new Error(json && json.error || 'ответ не сохранён');
+      return json;
     });
-    var pages = [];
-    for(var i = 0; i < GOOGLE_FORM_PAGES; i++) pages.push(i);
-    body.append('pageHistory', pages.join(','));
-    body.append('fvv', '1');
-    // no-cors: Google не отдаёт ответ сторонним сайтам, поэтому проверяется только факт доставки запроса
-    return fetch(GOOGLE_FORM_ACTION, { method: 'POST', mode: 'no-cors', body: body });
   }
 
   sendFormBtn.addEventListener('click', function(){
@@ -1200,7 +1174,7 @@
     }).then(function(r){
       failedFiles = r.failed;
       setStatus('Отправляем анкету…');
-      return sendToGoogleForm(r.note);
+      return sendToSheet(r.note);
     }).then(function(){
       if(failedFiles.length){
         setStatus('Анкета отправлена, но часть файлов не загрузилась: '
