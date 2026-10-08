@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Доступ к Яндекс Директу</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: одна колонка-инструкция, слева номер шага, справа текст + схема экрана; переключатель «компьютер / телефон» */
+:root{
+  --bg:#050308; --surface:#0f1720; --surface-2:#0d141c; --ink:#f3f6f5; --muted:rgba(243,246,245,.62); --line:rgba(255,255,255,.10);
+  --accent:#dfeae8; --accent-soft:rgba(223,234,232,.09); --mark:#FFD84D; --warn:#F5B35A; --warn-soft:rgba(245,179,90,.09); --ok:#9fdcbb; --ok-soft:rgba(159,220,187,.08);
+  --ui-bar:#141d27; --ui-btn:#FFDB4D; --ui-btn-ink:#14171F;
+  --f-display:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(ellipse 60% 40% at 50% 0%,rgba(120,165,255,.16),transparent 60%),
+  radial-gradient(ellipse 45% 35% at 85% 25%,rgba(184,217,199,.08),transparent 65%),
+  radial-gradient(ellipse 55% 45% at 10% 85%,rgba(120,150,255,.07),transparent 65%),
+  linear-gradient(180deg,#050308 0%,#0a0f16 55%,#070a10 100%)}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;font-weight:300;line-height:1.6;margin:0;-webkit-font-smoothing:antialiased;position:relative}
+.wrap{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,50px);line-height:1.14;font-weight:300;letter-spacing:-.01em}
+h2{font-size:clamp(22px,3.4vw,28px);line-height:1.2;font-weight:400}
+h3{font-size:19px;line-height:1.3;font-weight:600}
+p{margin:0}
+.eyebrow{font-size:12px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:var(--accent)}
+.lead{font-size:18px;color:var(--muted);max-width:62ch}
+section{display:grid;gap:20px;margin-top:56px}
+
+header.top{display:grid;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:500;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.brand i{width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px 1px rgba(223,234,232,.7);display:block}
+
+.login{display:flex;flex-wrap:wrap;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.login .lbl{font-size:13px;color:var(--muted);width:100%}
+.login code{font-family:var(--f-mono);font-size:clamp(18px,4vw,24px);font-weight:600;background:var(--accent-soft);color:var(--ink);padding:6px 12px;border-radius:8px;user-select:all;word-break:break-all}
+.btn{font:600 14px var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:10px 14px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn:focus-visible,.tab:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.login .alt{font-size:13px;color:var(--muted)}
+
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.fact{background:linear-gradient(180deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:4px}
+.fact b{font-size:15px}
+.fact span{font-size:14px;color:var(--muted)}
+
+.note{display:grid;gap:4px;border-radius:14px;padding:16px 18px;font-size:15px}
+.note.warn{background:var(--warn-soft);color:var(--ink)}
+.note.warn b{color:var(--warn)}
+.note.ok{background:var(--ok-soft)}
+.note.ok b{color:var(--ok)}
+
+.tabs{display:flex;flex-wrap:wrap;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px;width:fit-content;max-width:100%;position:sticky;top:calc(env(safe-area-inset-top,0px) + 10px);z-index:5}
+.tab{font:700 15px var(--f-body);border:0;background:transparent;color:var(--muted);padding:10px 16px;border-radius:10px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:28px;counter-reset:s}
+ol.steps>li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px;counter-increment:s}
+ol.steps>li::before{content:counter(s);font:800 18px var(--f-display);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--bg);box-shadow:0 0 18px 2px rgba(223,234,232,.25)}
+.step{display:grid;gap:12px;min-width:0}
+.step p{max-width:65ch}
+.step .hint{font-size:14px;color:var(--muted)}
+kbd,.ui{font-family:var(--f-body);font-weight:700;background:var(--surface);border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;font-size:.92em;white-space:nowrap}
+
+/* ---------- схемы экранов ---------- */
+.shot{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:linear-gradient(180deg,var(--surface),var(--surface-2));max-width:640px;font-size:13px;line-height:1.4;position:relative}
+.shot .cap{font-size:12px;color:var(--muted);padding:8px 12px;border-top:1px solid var(--line)}
+.chrome{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--ui-bar);border-bottom:1px solid var(--line)}
+.dots{display:flex;gap:5px}.dots i{width:9px;height:9px;border-radius:50%;background:var(--line);display:block}
+.url{flex:1;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:4px 10px;font-family:var(--f-mono);font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.screen{padding:14px;display:grid;gap:12px}
+.nav{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-weight:600;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:10px}
+.nav .me{margin-left:auto;font-family:var(--f-mono);font-size:12px;background:var(--ui-bar);padding:3px 8px;border-radius:20px;color:var(--ink)}
+.hl{position:relative;outline:3px solid var(--mark);outline-offset:3px;border-radius:6px;color:var(--ink)}
+.pin{position:absolute;top:-12px;right:-12px;width:22px;height:22px;border-radius:50%;background:var(--mark);color:#14171F;font:800 12px var(--f-display);display:grid;place-items:center;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.menu{border:1px solid var(--line);border-radius:8px;display:grid;width:min(240px,100%);background:var(--surface);box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.menu div{padding:7px 12px;color:var(--muted)}
+.menu div.hl{color:var(--ink);font-weight:700;outline-offset:-3px}
+.block{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;gap:8px}
+.block .bh{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;font-weight:700;color:var(--ink)}
+.row{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:12px;border-top:1px dashed var(--line);padding-top:6px}
+.ybtn{background:var(--ui-btn);color:var(--ui-btn-ink);font-weight:700;border-radius:6px;padding:5px 10px;font-size:12px;white-space:nowrap;display:inline-block}
+.gbtn{background:var(--ui-bar);color:var(--ink);font-weight:600;border-radius:6px;padding:5px 10px;font-size:12px;border:1px solid var(--line);display:inline-block}
+.dim{opacity:.45}
+.modal{border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:10px;max-width:380px;box-shadow:0 10px 30px rgba(0,0,0,.12);background:var(--surface)}
+.field{border:1px solid var(--line);border-radius:6px;padding:7px 10px;font-family:var(--f-mono);color:var(--ink)}
+.radio{display:flex;align-items:center;gap:8px;color:var(--muted)}
+.radio i{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);display:block;flex:none}
+.radio.on{color:var(--ink);font-weight:700}
+.radio.on i{border-color:var(--accent);background:radial-gradient(circle,var(--accent) 45%,transparent 50%)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+
+.phones{display:flex;flex-wrap:wrap;gap:16px}
+.phone{width:240px;max-width:100%;border:8px solid #1c2631;border-radius:28px;overflow:hidden;background:var(--surface);font-size:12px;line-height:1.35}
+.phone .pbar{display:flex;align-items:center;gap:6px;padding:8px;background:var(--ui-bar);border-bottom:1px solid var(--line)}
+.phone .purl{flex:1;min-width:0;font-family:var(--f-mono);font-size:10px;background:var(--surface);border-radius:12px;padding:4px 8px;color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.phone .ico{font-weight:800;color:var(--ink);padding:0 4px;position:relative}
+.phone .pmenu{display:grid;margin:8px;border:1px solid var(--line);border-radius:10px;box-shadow:0 6px 16px rgba(0,0,0,.1)}
+.phone .pmenu div{padding:8px 10px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.phone .pmenu div.hl{color:var(--ink);font-weight:700;outline-offset:-3px}
+.phone .ptitle{padding:6px 10px 0;font-weight:700;color:var(--ink);font-size:11px}
+.chk{width:14px;height:14px;border-radius:3px;background:var(--accent);display:inline-block;flex:none}
+
+/* ---------- проблемы ---------- */
+.faq{display:grid;gap:10px}
+details{background:linear-gradient(180deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+summary{cursor:pointer;font-weight:700;font-size:16px}
+details p{margin-top:8px;color:var(--muted);max-width:68ch}
+details[open] summary{color:var(--accent)}
+
+footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;display:grid;gap:6px}
+
+@media (max-width:560px){
+  ol.steps>li{grid-template-columns:1fr}
+  ol.steps>li::before{width:36px;height:36px;font-size:16px}
+  .wrap{padding-block:24px 64px}
+}
+@media (prefers-reduced-motion:no-preference){.tab{transition:background .15s,color .15s}}
+.back{display:inline-flex;align-items:center;gap:8px;font-weight:500;font-size:13px;letter-spacing:.04em;color:var(--muted);text-decoration:none;width:fit-content}
+.back:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+
+<header class="top">
+  <a class="back" href="../">← Все инструкции</a>
+  <div class="brand"><i></i>HDR GROUP</div>
+  <h1>Как выдать нам доступ к рекламному кабинету Яндекс Директа</h1>
+  <p class="lead">Вы добавляете наш логин как «управляющий аккаунт». Пароль передавать не нужно, деньги на счёте остаются под вашим контролем, а доступ можно отключить в любой момент.</p>
+
+  <div class="login" aria-label="Наш логин">
+    <span class="lbl">Наш логин для добавления</span>
+    <code id="login">hdrgroup2026</code>
+    <button class="btn" id="copy" type="button">Скопировать</button>
+    <span class="alt">Если система не примет, введите полностью: <b>hdrgroup2026@yandex.ru</b></span>
+  </div>
+</header>
+
+<section aria-labelledby="h-know">
+  <h2 id="h-know">Что важно знать до начала</h2>
+  <div class="facts">
+    <div class="fact"><b>Пароль не нужен</b><span>Мы входим под своим логином и видим ваш кабинет в списке доступных.</span></div>
+    <div class="fact"><b>Деньги остаются у вас</b><span>Управляющий аккаунт не может пополнять счёт и распоряжаться бюджетом.</span></div>
+    <div class="fact"><b>Отключить можно в 1 клик</b><span>В том же разделе, где вы выдаёте доступ.</span></div>
+    <div class="fact"><b>Нужен правильный логин</b><span>Входите под тем логином, на котором заведён рекламный кабинет: владельца или главного представителя.</span></div>
+  </div>
+  <div class="note warn"><b>В мобильном приложении «Яндекс Директ» этого сделать нельзя</b>Там нет раздела для выдачи доступа. Используйте компьютер или браузер на телефоне в режиме полной версии сайта.</div>
+</section>
+
+<section aria-labelledby="h-how">
+  <h2 id="h-how">Выберите, с чего будете делать</h2>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="t-pc" aria-selected="true" aria-controls="p-pc" type="button">💻 С компьютера</button>
+    <button class="tab" role="tab" id="t-ph" aria-selected="false" aria-controls="p-ph" type="button">📱 С телефона</button>
+  </div>
+
+  <!-- ===================== КОМПЬЮТЕР ===================== -->
+  <div id="p-pc" role="tabpanel" aria-labelledby="t-pc">
+  <ol class="steps">
+    <li><div class="step">
+      <h3>Откройте Директ и войдите в кабинет</h3>
+      <p>Перейдите на <b>direct.yandex.ru</b> и войдите под логином, на котором работает ваша реклама. Проверьте логин в правом верхнем углу: если там личная почта, а реклама заведена на другой логин, выйдите и войдите заново.</p>
+      <div class="shot">
+        <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url">direct.yandex.ru/dna/grid/campaigns</div></div>
+        <div class="screen">
+          <div class="nav"><span>Кампании</span><span>Статистика</span><span>Инструменты</span><span>Оплата</span><span class="me hl">ваш-логин<span class="pin">1</span></span></div>
+          <div class="block dim"><div class="bh">Кампании</div><div class="row"><span>Поиск · Москва</span><span>Идут показы</span></div><div class="row"><span>РСЯ · Ретаргетинг</span><span>Остановлена</span></div></div>
+        </div>
+        <div class="cap">Схема экрана. Справа вверху отображается логин, под которым вы вошли.</div>
+      </div>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Откройте раздел «Ваши представители»</h3>
+      <p>В верхнем меню нажмите <span class="ui">Инструменты</span>, затем выберите <span class="ui">Ваши представители</span>.</p>
+      <div class="shot">
+        <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url">direct.yandex.ru</div></div>
+        <div class="screen">
+          <div class="nav"><span>Кампании</span><span>Статистика</span><span class="hl">Инструменты<span class="pin">1</span></span><span>Оплата</span><span class="me">ваш-логин</span></div>
+          <div class="menu">
+            <div>Прогноз бюджета</div>
+            <div>Подбор слов</div>
+            <div>Минус-фразы</div>
+            <div class="hl" style="position:relative">Ваши представители<span class="pin">2</span></div>
+            <div>Мои уведомления</div>
+          </div>
+        </div>
+        <div class="cap">Схема экрана. Состав пунктов меню может немного отличаться.</div>
+      </div>
+      <p class="hint">Не нашли пункт? Интерфейс Директа иногда меняется. Попробуйте нажать на логин в правом верхнем углу: раздел «Представители» бывает и там.</p>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Нажмите «Добавить управляющий аккаунт»</h3>
+      <p>На странице два блока. Нам нужен нижний, <b>«Управляющие аккаунты»</b>. Блок «Представители» не трогайте: он для сотрудников с отдельным чистым логином.</p>
+      <div class="shot">
+        <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url">direct.yandex.ru/…/representatives</div></div>
+        <div class="screen">
+          <div class="block dim"><div class="bh">Представители <span class="gbtn">Добавить представителя</span></div><div class="row"><span>ваш-логин</span><span>Главный представитель</span></div></div>
+          <div class="block"><div class="bh">Управляющие аккаунты <span class="ybtn hl">Добавить управляющий аккаунт<span class="pin">1</span></span></div><div class="row"><span>Пока нет управляющих аккаунтов</span><span></span></div></div>
+        </div>
+        <div class="cap">Схема экрана. Кнопка находится в блоке «Управляющие аккаунты».</div>
+      </div>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Введите наш логин и выберите «Редактирование»</h3>
+      <p>В поле логина вставьте <b>hdrgroup2026</b>. Уровень доступа выберите <b>«Редактирование»</b>: так мы сможем настраивать кампании и смотреть статистику, но не сможем управлять вашими представителями. Нажмите <span class="ui">Добавить</span>.</p>
+      <div class="shot">
+        <div class="screen">
+          <div class="modal">
+            <b>Добавить управляющий аккаунт</b>
+            <div class="field hl" style="position:relative">hdrgroup2026<span class="pin">1</span></div>
+            <div class="radio"><i></i>Администрирование</div>
+            <div class="radio on hl" style="position:relative;width:fit-content;padding-right:10px"><i></i>Редактирование<span class="pin">2</span></div>
+            <div class="radio"><i></i>Чтение</div>
+            <div class="actions"><span class="ybtn hl" style="position:relative">Добавить<span class="pin">3</span></span><span class="gbtn">Отмена</span></div>
+          </div>
+        </div>
+        <div class="cap">Схема окна добавления.</div>
+      </div>
+      <p class="hint">Уровни доступа: «Администрирование» даёт ещё и управление представителями, «Чтение» позволяет только смотреть. Для ведения рекламы достаточно «Редактирования».</p>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Напишите нам «Готово»</h3>
+      <p>Нам придёт приглашение, мы примем его со своей стороны. В блоке «Управляющие аккаунты» у вас появится строка с логином <b>hdrgroup2026</b>.</p>
+      <div class="shot">
+        <div class="screen">
+          <div class="block"><div class="bh">Управляющие аккаунты <span class="gbtn">Добавить управляющий аккаунт</span></div><div class="row hl" style="position:relative"><span style="color:var(--ink);font-weight:700">hdrgroup2026</span><span>Редактирование · ⋯</span><span class="pin">✓</span></div></div>
+        </div>
+        <div class="cap">Так выглядит выданный доступ.</div>
+      </div>
+    </div></li>
+  </ol>
+  </div>
+
+  <!-- ===================== ТЕЛЕФОН ===================== -->
+  <div id="p-ph" role="tabpanel" aria-labelledby="t-ph" hidden>
+  <ol class="steps">
+    <li><div class="step">
+      <h3>Откройте браузер, а не приложение Директа</h3>
+      <p>Запустите Chrome, Яндекс Браузер или Safari. Наберите в адресной строке вручную: <b>direct.yandex.ru</b>. Если телефон сам открывает приложение Директа, закройте его и снова введите адрес в браузере.</p>
+      <p class="hint">На Android можно зажать ссылку и выбрать «Открыть в браузере».</p>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Войдите и включите полную версию сайта</h3>
+      <p>Войдите под логином рекламного кабинета. Затем включите режим «Версия для ПК»: без него нужный раздел на телефоне не появится.</p>
+      <div class="phones">
+        <div class="phone" aria-label="Chrome на Android">
+          <div class="pbar"><div class="purl">direct.yandex.ru</div><span class="ico hl">⋮<span class="pin">1</span></span></div>
+          <div class="ptitle">Chrome, Android</div>
+          <div class="pmenu"><div>Новая вкладка</div><div>История</div><div>Найти на странице</div><div class="hl" style="position:relative">Версия для ПК <span class="chk"></span><span class="pin">2</span></div><div>Настройки</div></div>
+        </div>
+        <div class="phone" aria-label="Safari на iPhone">
+          <div class="pbar"><span class="ico hl">аА<span class="pin">1</span></span><div class="purl">direct.yandex.ru</div></div>
+          <div class="ptitle">Safari, iPhone</div>
+          <div class="pmenu"><div>Увеличить текст</div><div>Скрыть панель</div><div class="hl" style="position:relative">Запросить настольный веб-сайт<span class="pin">2</span></div><div>Настройки веб-сайта</div></div>
+        </div>
+        <div class="phone" aria-label="Яндекс Браузер">
+          <div class="pbar"><div class="purl">direct.yandex.ru</div><span class="ico hl">≡<span class="pin">1</span></span></div>
+          <div class="ptitle">Яндекс Браузер</div>
+          <div class="pmenu"><div>Новая вкладка</div><div>Закладки</div><div class="hl" style="position:relative">Версия для ПК <span class="chk"></span><span class="pin">2</span></div><div>Настройки</div></div>
+        </div>
+      </div>
+      <p class="hint">Схемы меню. В новых версиях браузеров пункт может стоять в другом месте списка, но называется так же.</p>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Дальше всё как на компьютере</h3>
+      <p><span class="ui">Инструменты</span> → <span class="ui">Ваши представители</span> → блок «Управляющие аккаунты» → <span class="ui">Добавить управляющий аккаунт</span> → логин <b>hdrgroup2026</b> → уровень <b>«Редактирование»</b> → <span class="ui">Добавить</span>.</p>
+      <p class="hint">Страница будет мелкой: её можно увеличить двумя пальцами. Удобнее повернуть телефон горизонтально. Схемы экранов для этих шагов есть на вкладке «С компьютера».</p>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Напишите нам «Готово»</h3>
+      <p>Мы примем приглашение, и доступ заработает.</p>
+    </div></li>
+  </ol>
+  </div>
+</section>
+
+<section aria-labelledby="h-faq">
+  <h2 id="h-faq">Если что-то не получается</h2>
+  <div class="faq">
+    <details><summary>Нет кнопки «Добавить управляющий аккаунт»</summary><p>Скорее всего, вы вошли не под тем логином или у него нет прав на выдачу доступа. Добавлять управляющие аккаунты может владелец кабинета или главный представитель. Проверьте логин в правом верхнем углу и при необходимости войдите под другим.</p></details>
+    <details><summary>Нет пункта «Ваши представители»</summary><p>На телефоне это почти всегда значит, что не включена «Версия для ПК». Включите её и обновите страницу. На компьютере попробуйте поискать раздел в меню под вашим логином в правом верхнем углу.</p></details>
+    <details><summary>Ошибка при вводе логина</summary><p>Попробуйте другой формат: <b>hdrgroup2026</b> или <b>hdrgroup2026@yandex.ru</b>. Проверьте, что в начале и в конце нет пробелов. Удобнее всего скопировать логин кнопкой вверху страницы.</p></details>
+    <details><summary>Пишет, что достигнут лимит</summary><p>К одному кабинету можно подключить не больше 20 управляющих аккаунтов. Удалите старые доступы, например бывших подрядчиков: в строке нажмите «⋯» → «Удалить».</p></details>
+    <details><summary>Открывается приложение вместо сайта</summary><p>Наберите адрес вручную в адресной строке браузера, а не переходите по ссылке. Если не помогает, временно откройте сайт в другом браузере.</p></details>
+  </div>
+</section>
+
+<section aria-labelledby="h-off">
+  <h2 id="h-off">Как отключить доступ</h2>
+  <p style="max-width:65ch">Откройте <span class="ui">Инструменты</span> → <span class="ui">Ваши представители</span>, в блоке «Управляющие аккаунты» нажмите <span class="ui">⋯</span> рядом с нашим логином и выберите «Удалить». Доступ пропадёт сразу.</p>
+  <div class="note ok"><b>Не получилось за 5 минут?</b>Пришлите скриншот экрана вашему менеджеру. Подскажем, куда нажать, или созвонимся и пройдём шаги вместе с демонстрацией экрана.</div>
+</section>
+
+<footer>
+  <span>HDR Group · инструкция по выдаче доступа к Яндекс Директу</span>
+  <span>Названия разделов соответствуют интерфейсу Директа на октябрь 2026 года.</span>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var tabs=[document.getElementById('t-pc'),document.getElementById('t-ph')];
+  function show(t){tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',on);document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});}
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t)});});
+  if(location.hash==='#phone'){show(tabs[1]);}
+  var b=document.getElementById('copy'),c=document.getElementById('login');
+  b.addEventListener('click',function(){
+    function sel(){var r=document.createRange();r.selectNodeContents(c);var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Выделено, нажмите Копировать';}
+    try{navigator.clipboard.writeText('hdrgroup2026').then(function(){b.textContent='Скопировано';setTimeout(function(){b.textContent='Скопировать'},1800)},sel);}catch(e){sel();}
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Старт работы с HDR Group</title>
+<title>Доступы для HDR Group</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
 <style>
-/* Layout: стартовая страница клиента — hero с radar ping, затем две крупные стеклянные карточки: доступы и брифы */
+/* Layout: тот же язык, что у хаба брифов OBM — тёмный фон со световыми пятнами, hero с radar ping, сетка стеклянных карточек */
 :root{
   --black-1:#050308; --black-3:#0a0f16; --panel:#0d141c; --panel-2:#0f1720;
   --border:rgba(255,255,255,.09); --border-hover:rgba(223,234,232,.32);
@@ -54,7 +54,7 @@ h1 b{font-weight:600;color:var(--platinum)}
 section.cards{max-width:1180px;margin:0 auto;padding:20px 24px 120px}
 .section-head{text-align:center;margin-bottom:44px}
 .section-head h2{margin-top:14px;font-size:22px;font-weight:300;color:var(--text-1)}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:980px;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 @media (max-width:860px){.grid{grid-template-columns:1fr}}
 
 .card{--mx:50%;--my:0%;position:relative;display:flex;flex-direction:column;text-decoration:none;color:inherit;background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--border);border-radius:var(--radius);padding:32px 26px 28px;overflow:hidden;isolation:isolate;transition:transform 420ms cubic-bezier(.2,.7,.2,1),border-color 420ms ease,box-shadow 420ms ease}
@@ -93,81 +93,73 @@ footer{max-width:1180px;margin:0 auto;padding:30px 24px 40px;display:flex;align-
   section.cards{padding:10px 18px 90px}
   footer{padding:24px 18px 30px}
 }
-.card{padding:36px 30px 30px}
-.card h3{font-size:clamp(26px,3.4vw,32px)}
-.why{font-size:15px;color:var(--text-0);line-height:1.4;margin-bottom:18px;max-width:42ch}
-.inside{list-style:none;display:grid;gap:8px;margin-bottom:30px;font-size:14px;color:var(--text-1);line-height:1.35}
-.inside li{display:flex;gap:10px;align-items:baseline}
-.inside li::before{content:"";flex:none;width:4px;height:4px;border-radius:50%;background:var(--platinum);transform:translateY(-3px)}
-.label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-2);font-weight:500;margin-bottom:10px}
-.cta{font-size:14px}
-.order{max-width:980px;margin:28px auto 0;display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:center;font-size:13px;color:var(--text-2);text-align:center}
-.order b{color:var(--text-1);font-weight:500}
 </style>
 </head>
 <body>
+
 
 <div class="bg"></div>
 
 <div class="wrap">
   <header class="topbar">
-    <div class="brand-left">HDR GROUP</div>
-    <div class="brand-right"><span class="dot"></span>Старт работы<span class="long"> · Ресурсы для клиентов</span></div>
+    <a class="brand-left" href="../" style="text-decoration:none">← HDR GROUP</a>
+    <div class="brand-right"><span class="dot"></span>Доступы<span class="long"> · Инструкции для клиентов</span></div>
   </header>
 
   <main>
     <section class="hero">
       <div class="ping"><div class="ring"></div><div class="ring"></div><div class="ring"></div><i></i></div>
-      <div class="eyebrow">Ресурсы для клиентов HDR Group</div>
-      <h1>Всё, что нужно <br><b>для старта работы с нами</b></h1>
-      <p class="lead">Здесь собраны два ресурса, с которых начинается наша совместная работа. В первом вы найдёте пошаговые инструкции, как выдать нам доступ к вашим площадкам. Во втором — бриф-формы, по которым мы знакомимся с вашей компанией.</p>
+      <div class="eyebrow">Доступ к площадкам</div>
+      <h1>Как выдать нам доступ <br><b>к вашим площадкам</b></h1>
+      <p class="lead">Пошаговые инструкции для клиентов HDR Group: куда нажать, чтобы дать нам доступ к рекламному кабинету или карточке компании. В каждой есть схемы экранов, шаги для компьютера и телефона и ответы на частые проблемы.</p>
+      <ul class="facts">
+        <li>Пароли передавать не нужно</li>
+        <li>Права владельца остаются у вас</li>
+        <li>Доступ можно отключить в любой момент</li>
+      </ul>
+      <div class="login"><span>Наш логин</span><code id="login">hdrgroup2026</code><button class="btn" id="copy" type="button">Скопировать</button></div>
     </section>
 
     <section class="cards" aria-labelledby="h-list">
       <div class="section-head">
-        <div class="eyebrow">Выберите раздел</div>
-        <h2 id="h-list">Два шага до запуска работы</h2>
+        <div class="eyebrow">Выберите площадку</div>
+        <h2 id="h-list">Три площадки — одна логика доступа</h2>
       </div>
 
       <div class="grid">
-        <a class="card" href="access/" data-card>
+        <a class="card" href="direct/" data-card>
           <span class="tag">01</span>
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/></svg></div>
-          <h3>Доступы</h3>
-          <div class="label">Зачем</div>
-          <p class="why">Чтобы мы могли начать работу и взаимодействовать с вашими площадками: вести карточку компании, настраивать рекламу, отвечать на отзывы. Без передачи паролей, права владельца остаются у вас.</p>
-          <div class="label">Что внутри</div>
-          <ul class="inside">
-            <li>Пошаговые инструкции для Яндекс Директа, Яндекс Бизнеса и 2ГИС</li>
-            <li>Схемы экранов и отдельные шаги для компьютера и телефона</li>
-            <li>Ответы на частые проблемы и как отключить доступ</li>
-          </ul>
-          <div class="cta">Перейти к инструкциям <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4a1 1 0 0 0 1 1h2l5 4V5L7 9H5a1 1 0 0 0-1 1z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg></div>
+          <h3>Яндекс Директ</h3>
+          <p>Доступ к рекламному кабинету через управляющий аккаунт.</p>
+          <div class="meta">5 шагов · компьютер и телефон</div>
+          <div class="cta">Открыть инструкцию <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
         </a>
 
-        <a class="card" href="https://hdrgrouporm.ru/" data-card>
+        <a class="card" href="yandex-business/" data-card>
           <span class="tag">02</span>
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2.4"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4"/></svg></div>
-          <h3>Бриф-формы</h3>
-          <div class="label">Зачем</div>
-          <p class="why">Чтобы детальнее познакомиться с вашей компанией: услугами, клиентами, стилем общения и целями. На основе брифа мы составляем контент-план и стратегию, которые подходят именно вам.</p>
-          <div class="label">Что внутри</div>
-          <ul class="inside">
-            <li>Бриф по ведению группы ВКонтакте</li>
-            <li>Бриф по карточкам на Яндекс Картах и 2ГИС</li>
-            <li>Бриф на разработку сайта</li>
-          </ul>
-          <div class="cta">Перейти к брифам <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg></div>
+          <h3>Яндекс Бизнес</h3>
+          <p>Доступ к карточке компании на Яндекс Картах через роль «Представитель».</p>
+          <div class="meta">6 шагов · компьютер и телефон</div>
+          <div class="cta">Открыть инструкцию <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a>
+
+        <a class="card" href="2gis/" data-card>
+          <span class="tag">03</span>
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V9l8-5 8 5v11"/><path d="M9 20v-6h6v6"/><path d="M3 20h18"/></svg></div>
+          <h3>2ГИС</h3>
+          <p>Доступ к личному кабинету 2ГИС через приглашение на нашу почту.</p>
+          <div class="meta">5 шагов · компьютер и телефон</div>
+          <div class="cta">Открыть инструкцию <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
         </a>
       </div>
-
-      <p class="order"><span><b>Удобный порядок:</b> сначала выдайте доступы, затем заполните бриф по нужному направлению.</span></p>
     </section>
   </main>
 
   <footer>
     <div>© 2026 HDR Group</div>
-    <div>Вопросы по заполнению — вашему менеджеру</div>
+    <div>Не получается? Пришлите скриншот вашему менеджеру</div>
   </footer>
 </div>
 
@@ -179,6 +171,11 @@ footer{max-width:1180px;margin:0 auto;padding:30px 24px 40px;display:flex;align-
       card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
       card.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
     });
+  });
+  var b=document.getElementById('copy'),c=document.getElementById('login');
+  b.addEventListener('click',function(){
+    function sel(){var r=document.createRange();r.selectNodeContents(c);var x=getSelection();x.removeAllRanges();x.addRange(r);b.textContent='Выделено';}
+    try{navigator.clipboard.writeText('hdrgroup2026').then(function(){b.textContent='Скопировано';setTimeout(function(){b.textContent='Скопировать'},1800)},sel);}catch(e){sel();}
   });
 })();
 </script>
