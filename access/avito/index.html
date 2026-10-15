@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Доступ к профилю Авито</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: одна колонка-инструкция, слева номер шага, справа текст + схема экрана; переключатель «Авито Pro / обычный профиль» */
+:root{
+  --bg:#050308; --surface:#0f1720; --surface-2:#0d141c; --ink:#f3f6f5; --muted:rgba(243,246,245,.62); --line:rgba(255,255,255,.10);
+  --accent:#dfeae8; --accent-soft:rgba(223,234,232,.09); --mark:#FFD84D; --warn:#F5B35A; --warn-soft:rgba(245,179,90,.09); --ok:#9fdcbb; --ok-soft:rgba(159,220,187,.08);
+  --ui-bar:#141d27; --ui-btn:#f3f6f5; --ui-btn-ink:#050308;
+  --f-display:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(ellipse 60% 40% at 50% 0%,rgba(120,165,255,.16),transparent 60%),
+  radial-gradient(ellipse 45% 35% at 85% 25%,rgba(184,217,199,.08),transparent 65%),
+  radial-gradient(ellipse 55% 45% at 10% 85%,rgba(120,150,255,.07),transparent 65%),
+  linear-gradient(180deg,#050308 0%,#0a0f16 55%,#070a10 100%)}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;font-weight:300;line-height:1.6;margin:0;-webkit-font-smoothing:antialiased;position:relative}
+.wrap{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,50px);line-height:1.14;font-weight:300;letter-spacing:-.01em}
+h2{font-size:clamp(22px,3.4vw,28px);line-height:1.2;font-weight:400}
+h3{font-size:19px;line-height:1.3;font-weight:600}
+p{margin:0}
+.eyebrow{font-size:12px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:var(--accent)}
+.lead{font-size:18px;color:var(--muted);max-width:62ch}
+section{display:grid;gap:20px;margin-top:56px}
+
+header.top{display:grid;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:500;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.brand i{width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px 1px rgba(223,234,232,.7);display:block}
+
+.login{display:flex;flex-wrap:wrap;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.login .lbl{font-size:13px;color:var(--muted);width:100%}
+.login code{font-family:var(--f-mono);font-size:clamp(18px,4vw,24px);font-weight:600;background:var(--accent-soft);color:var(--ink);padding:6px 12px;border-radius:8px;user-select:all;word-break:break-all}
+.btn{font:600 14px var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:10px 14px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn:focus-visible,.tab:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.login .alt{font-size:13px;color:var(--muted)}
+
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.fact{background:linear-gradient(180deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:4px}
+.fact b{font-size:15px}
+.fact span{font-size:14px;color:var(--muted)}
+
+.note{display:grid;gap:4px;border-radius:14px;padding:16px 18px;font-size:15px}
+.note.warn{background:var(--warn-soft);color:var(--ink)}
+.note.warn b{color:var(--warn)}
+.note.ok{background:var(--ok-soft)}
+.note.ok b{color:var(--ok)}
+
+.tabs{display:flex;flex-wrap:wrap;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px;width:fit-content;max-width:100%;position:sticky;top:calc(env(safe-area-inset-top,0px) + 10px);z-index:5}
+.tab{font:700 15px var(--f-body);border:0;background:transparent;color:var(--muted);padding:10px 16px;border-radius:10px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:28px;counter-reset:s}
+ol.steps>li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px;counter-increment:s}
+ol.steps>li::before{content:counter(s);font:800 18px var(--f-display);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--bg);box-shadow:0 0 18px 2px rgba(223,234,232,.25)}
+.step{display:grid;gap:12px;min-width:0}
+.step p{max-width:65ch}
+.step .hint{font-size:14px;color:var(--muted)}
+kbd,.ui{font-family:var(--f-body);font-weight:700;background:var(--surface);border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;font-size:.92em;white-space:nowrap}
+
+/* ---------- схемы экранов ---------- */
+.shot{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:linear-gradient(180deg,var(--surface),var(--surface-2));max-width:640px;font-size:13px;line-height:1.4;position:relative}
+.shot .cap{font-size:12px;color:var(--muted);padding:8px 12px;border-top:1px solid var(--line)}
+.chrome{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--ui-bar);border-bottom:1px solid var(--line)}
+.dots{display:flex;gap:5px}.dots i{width:9px;height:9px;border-radius:50%;background:var(--line);display:block}
+.url{flex:1;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:4px 10px;font-family:var(--f-mono);font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.screen{padding:14px;display:grid;gap:12px}
+.nav{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-weight:600;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:10px}
+.nav .me{margin-left:auto;font-family:var(--f-mono);font-size:12px;background:var(--ui-bar);padding:3px 8px;border-radius:20px;color:var(--ink)}
+.hl{position:relative;outline:3px solid var(--mark);outline-offset:3px;border-radius:6px;color:var(--ink)}
+.pin{position:absolute;top:-12px;right:-12px;width:22px;height:22px;border-radius:50%;background:var(--mark);color:#14171F;font:800 12px var(--f-display);display:grid;place-items:center;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.menu{border:1px solid var(--line);border-radius:8px;display:grid;width:min(240px,100%);background:var(--surface);box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.menu div{padding:7px 12px;color:var(--muted)}
+.menu div.hl{color:var(--ink);font-weight:700;outline-offset:-3px}
+.block{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;gap:8px}
+.block .bh{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;font-weight:700;color:var(--ink)}
+.row{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:12px;border-top:1px dashed var(--line);padding-top:6px}
+.ybtn{background:var(--ui-btn);color:var(--ui-btn-ink);font-weight:700;border-radius:6px;padding:5px 10px;font-size:12px;white-space:nowrap;display:inline-block}
+.gbtn{background:var(--ui-bar);color:var(--ink);font-weight:600;border-radius:6px;padding:5px 10px;font-size:12px;border:1px solid var(--line);display:inline-block}
+.dim{opacity:.45}
+.modal{border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:10px;max-width:380px;box-shadow:0 10px 30px rgba(0,0,0,.12);background:var(--surface)}
+.field{border:1px solid var(--line);border-radius:6px;padding:7px 10px;font-family:var(--f-mono);color:var(--ink)}
+.radio{display:flex;align-items:center;gap:8px;color:var(--muted)}
+.radio i{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);display:block;flex:none}
+.radio.on{color:var(--ink);font-weight:700}
+.radio.on i{border-color:var(--accent);background:radial-gradient(circle,var(--accent) 45%,transparent 50%)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+
+.phones{display:flex;flex-wrap:wrap;gap:16px}
+.phone{width:240px;max-width:100%;border:8px solid #1c2631;border-radius:28px;overflow:hidden;background:var(--surface);font-size:12px;line-height:1.35}
+.phone .pbar{display:flex;align-items:center;gap:6px;padding:8px;background:var(--ui-bar);border-bottom:1px solid var(--line)}
+.phone .purl{flex:1;min-width:0;font-family:var(--f-mono);font-size:10px;background:var(--surface);border-radius:12px;padding:4px 8px;color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.phone .ico{font-weight:800;color:var(--ink);padding:0 4px;position:relative}
+.phone .pmenu{display:grid;margin:8px;border:1px solid var(--line);border-radius:10px;box-shadow:0 6px 16px rgba(0,0,0,.1)}
+.phone .pmenu div{padding:8px 10px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.phone .pmenu div.hl{color:var(--ink);font-weight:700;outline-offset:-3px}
+.phone .ptitle{padding:6px 10px 0;font-weight:700;color:var(--ink);font-size:11px}
+.chk{width:14px;height:14px;border-radius:3px;background:var(--accent);display:inline-block;flex:none}
+
+/* ---------- проблемы ---------- */
+.faq{display:grid;gap:10px}
+details{background:linear-gradient(180deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+summary{cursor:pointer;font-weight:700;font-size:16px}
+details p{margin-top:8px;color:var(--muted);max-width:68ch}
+details[open] summary{color:var(--accent)}
+
+footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;display:grid;gap:6px}
+
+@media (max-width:560px){
+  ol.steps>li{grid-template-columns:1fr}
+  ol.steps>li::before{width:36px;height:36px;font-size:16px}
+  .wrap{padding-block:24px 64px}
+}
+@media (prefers-reduced-motion:no-preference){.tab{transition:background .15s,color .15s}}
+.back{display:inline-flex;align-items:center;gap:8px;font-weight:500;font-size:13px;letter-spacing:.04em;color:var(--muted);text-decoration:none;width:fit-content}
+.back:hover{color:var(--accent)}
+</style>
+<style>
+/* Дополнения для схем Авито: шапка с аватаркой, меню профиля, окно «Что вы хотите сделать?», раздел «Сотрудники» */
+.atop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.alogo{font-weight:800;font-size:15px;letter-spacing:-.02em;color:var(--ink)}
+.alogo i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#00AAFF;margin-right:2px;vertical-align:middle;box-shadow:9px -3px 0 -1px #97CF26,4px 5px 0 0 #FF4053}
+.aicons{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px}
+.aava{width:30px;height:30px;border-radius:50%;background:#8E44C9;color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none;position:relative}
+.amenu{margin:10px 12px 12px auto;width:min(260px,100%);border:1px solid var(--line);border-radius:14px;display:grid;box-shadow:0 10px 26px rgba(0,0,0,.12);background:var(--surface)}
+.amenu .head{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.aplus{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-weight:600;font-size:16px;color:var(--ink);position:relative}
+.amenu div.it{padding:7px 14px;color:var(--muted)}
+.amenu div.it:last-child{padding-bottom:12px}
+.choice{display:grid;gap:8px;max-width:380px}
+.choice .ttl{font-size:17px;font-weight:700;color:var(--ink)}
+.opt{border-radius:12px;background:var(--ui-bar);padding:12px 14px;display:grid;gap:2px;position:relative}
+.opt b{color:var(--ink);font-size:14px}
+.opt span{color:var(--muted);font-size:12px}
+.opt.hl{outline-offset:2px}
+.emp{display:grid;grid-template-columns:150px minmax(0,1fr);gap:0;min-height:170px}
+.emp .side{border-right:1px solid var(--line);padding:12px;display:grid;align-content:start;gap:6px;color:var(--muted)}
+.emp .side div.hl{color:var(--ink);font-weight:700;position:relative;outline-offset:2px}
+.emp .main{padding:12px 14px;display:grid;align-content:start;gap:10px}
+.emp .main h4{margin:0;font-size:17px;font-weight:500;color:var(--ink)}
+.perm{display:grid;gap:6px}
+.perm .radio i{border-radius:4px}
+.perm .radio.on i{background:var(--accent);border-color:var(--accent)}
+.lim{display:flex;flex-wrap:wrap;gap:6px}
+.lim span{font-family:var(--f-mono);font-size:11px;border:1px solid var(--line);border-radius:6px;padding:4px 8px;color:var(--muted)}
+.cando{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.cando .col{background:linear-gradient(180deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:10px;align-content:start}
+.cando h3{font-size:16px}
+.cando ul{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:15px}
+.cando li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:6px}
+.cando li::before{content:"✓";color:var(--ok);font-weight:700}
+.cando li.no::before{content:"✕";color:var(--warn)}
+.cando li.no{color:var(--muted)}
+.where{display:grid;gap:4px;font-size:15px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="top">
+  <a class="back" href="../">← Все инструкции</a>
+  <div class="brand"><i></i>HDR GROUP</div>
+  <h1>Как выдать нам доступ к профилю на Авито</h1>
+  <p class="lead">Вы отправляете нам ссылку-приглашение из своего профиля Авито. Так мы сможем размещать и вести ваши объявления и отвечать покупателям. Пароль и коды из SMS передавать не нужно, профиль остаётся вашим.</p>
+
+  <div class="login" aria-label="Куда отправить приглашение">
+    <span class="lbl">Куда отправить ссылку-приглашение</span>
+    <code>Вашему менеджеру HDR Group</code>
+    <span class="alt">В тот же чат, где мы обсуждаем работу. Ссылку получаете вы в Авито на шаге «Пригласить».</span>
+  </div>
+</header>
+
+<section aria-labelledby="h-know">
+  <h2 id="h-know">Что важно знать до начала</h2>
+  <div class="facts">
+    <div class="fact"><b>Пароль не нужен</b><span>Мы входим под своим профилем Авито и работаем в вашем.</span></div>
+    <div class="fact"><b>Профиль остаётся вашим</b><span>Вы видите все наши действия и можете отключить доступ в любой момент.</span></div>
+    <div class="fact"><b>Приглашает владелец профиля</b><span>Входите в Авито под тем аккаунтом, где размещаются объявления компании.</span></div>
+    <div class="fact"><b>Способ зависит от тарифа</b><span>Есть Авито Pro — подключаете нас как сотрудника. Нет тарифа — даёте доступ к профилю.</span></div>
+  </div>
+</section>
+
+<section aria-labelledby="h-can">
+  <h2 id="h-can">Что мы сможем делать после доступа</h2>
+  <div class="cando">
+    <div class="col">
+      <h3>Через доступ</h3>
+      <ul>
+        <li>Создавать, редактировать и снимать объявления</li>
+        <li>Отвечать покупателям в сообщениях</li>
+        <li>Продвигать объявления в пределах лимитов, которые вы зададите</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>Только вы, как владелец</h3>
+      <ul>
+        <li class="no">Менять название, описание, логотип и контакты профиля</li>
+        <li class="no">Проходить проверку и менять реквизиты</li>
+        <li class="no">Менять пароль, выводить деньги, удалять профиль</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note warn"><b>Изменения в профиле вносите вы</b>Авито не даёт другим людям доступ к настройкам профиля ни одним из способов. Когда нужно обновить описание или логотип, мы пришлём готовые тексты и файлы, а вы вставите их за пару минут. Как это сделать, смотрите <a href="#h-profile" style="color:inherit">ниже</a>.</div>
+</section>
+
+<section aria-labelledby="h-how">
+  <h2 id="h-how">Выберите свой вариант</h2>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="t-pro" aria-selected="true" aria-controls="p-pro" type="button">Есть Авито Pro</button>
+    <button class="tab" role="tab" id="t-free" aria-selected="false" aria-controls="p-free" type="button">Обычный профиль</button>
+  </div>
+
+  <!-- ===================== АВИТО PRO: СОТРУДНИКИ ===================== -->
+  <div id="p-pro" role="tabpanel" aria-labelledby="t-pro">
+  <ol class="steps">
+    <li><div class="step">
+      <h3>Войдите в Авито с компьютера</h3>
+      <p>Откройте <b>avito.ru</b> и войдите в профиль компании. У профиля должен быть подключён любой тариф Авито Pro: без него раздел сотрудников не откроется.</p>
+      <p class="hint">Не уверены, есть ли тариф? Сделайте шаги 2 и 3. Если Авито предложит «Подключить тариф и начать», значит тарифа нет: перейдите на вкладку «Обычный профиль».</p>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Нажмите на аватарку, затем на «+»</h3>
+      <p>Аватарка с вашей буквой находится в правом верхнем углу. В открывшемся меню нажмите кружок <span class="ui">+</span> рядом с ней.</p>
+      <div class="shot">
+        <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url">avito.ru/profile</div></div>
+        <div class="atop">
+          <span class="alogo"><i></i> Авито</span>
+          <span class="aicons"><span>♡</span><span>🔔</span><span>💬</span><span class="aava hl">В<span class="pin">1</span></span></span>
+        </div>
+        <div class="amenu">
+          <div class="head"><span class="aava">В</span><span class="aplus hl">+<span class="pin">2</span></span></div>
+          <div class="it">Мои объявления</div>
+          <div class="it">Сообщения</div>
+          <div class="it">Кошелёк</div>
+          <div class="it">Управление профилем</div>
+          <div class="it">Настройки</div>
+        </div>
+        <div class="cap">Схема экрана. Первая буква на аватарке будет вашей.</div>
+      </div>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Выберите «Подключить сотрудников»</h3>
+      <p>Авито покажет окно «Что вы хотите сделать?». Нажмите третий пункт.</p>
+      <div class="shot">
+        <div class="screen">
+          <div class="choice">
+            <div class="ttl">Что вы хотите сделать?</div>
+            <div class="opt dim"><b>Добавить свой профиль</b><span>Создать новый или привязать существующий</span></div>
+            <div class="opt dim"><b>Дать доступ к профилю</b><span>Если хотите, чтобы близкий вам помог</span></div>
+            <div class="opt hl"><b>Подключить сотрудников</b><span>Чтобы они могли работать с клиентами и объявлениями</span><span class="pin">1</span></div>
+          </div>
+        </div>
+        <div class="cap">Схема окна выбора.</div>
+      </div>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Нажмите «Пригласить сотрудников» и скопируйте ссылку</h3>
+      <p>Откроется раздел <span class="ui">Сотрудники</span> в кабинете Авито Pro. Нажмите <span class="ui">Пригласить сотрудников</span>: Авито создаст ссылку-приглашение. Скопируйте её.</p>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Отправьте ссылку вашему менеджеру</h3>
+      <p>Мы примем приглашение под своим профилем Авито. После этого наш сотрудник появится у вас в списке.</p>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Разрешите нам размещать и продвигать объявления</h3>
+      <p>По умолчанию сотрудник только отвечает покупателям. Откройте нашего сотрудника в разделе <span class="ui">Сотрудники</span> и включите размещение и продвижение объявлений. Для продвижения Авито попросит задать лимиты на месяц: сколько денег из кошелька, бонусов и размещений можно потратить.</p>
+      <div class="shot">
+        <div class="emp">
+          <div class="side"><div>Объявления</div><div>Сообщения</div><div>Статистика</div><div class="hl">Сотрудники<span class="pin">1</span></div><div>Кошелёк</div></div>
+          <div class="main">
+            <h4>HDR Group</h4>
+            <div class="perm">
+              <div class="radio on"><i></i>Отвечать покупателям</div>
+              <div class="radio on hl" style="position:relative;outline-offset:2px"><i></i>Размещать объявления<span class="pin">2</span></div>
+              <div class="radio on hl" style="position:relative;outline-offset:2px"><i></i>Продвигать объявления<span class="pin">3</span></div>
+            </div>
+            <div class="lim"><span>Кошелёк: ___ ₽/мес</span><span>Бонусы: ___</span><span>Размещения: ___</span></div>
+          </div>
+        </div>
+        <div class="cap">Упрощённая схема настроек сотрудника. Сумму лимитов согласуем с вами заранее.</div>
+      </div>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Напишите нам «Готово»</h3>
+      <p>Мы проверим доступ со своей стороны и возьмёмся за объявления.</p>
+    </div></li>
+  </ol>
+  </div>
+
+  <!-- ===================== ОБЫЧНЫЙ ПРОФИЛЬ: СОВМЕСТНЫЙ ДОСТУП ===================== -->
+  <div id="p-free" role="tabpanel" aria-labelledby="t-free" hidden>
+  <ol class="steps">
+    <li><div class="step">
+      <h3>Войдите в Авито</h3>
+      <p>На сайте <b>avito.ru</b> или в приложении Авито войдите в профиль, где размещаются объявления компании. Приложение должно быть обновлено до последней версии.</p>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Нажмите на аватарку, затем на «+»</h3>
+      <p>На сайте аватарка в правом верхнем углу. В приложении откройте вкладку <span class="ui">Профиль</span>. Рядом с вашей аватаркой нажмите кружок <span class="ui">+</span>.</p>
+      <p class="hint">Схема меню такая же, как на вкладке «Есть Авито Pro», шаг 2.</p>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Выберите «Дать доступ к профилю»</h3>
+      <div class="shot">
+        <div class="screen">
+          <div class="choice">
+            <div class="ttl">Что вы хотите сделать?</div>
+            <div class="opt dim"><b>Добавить свой профиль</b><span>Создать новый или привязать существующий</span></div>
+            <div class="opt hl"><b>Дать доступ к профилю</b><span>Если хотите, чтобы близкий вам помог</span><span class="pin">1</span></div>
+            <div class="opt dim"><b>Подключить сотрудников</b><span>Чтобы они могли работать с клиентами и объявлениями</span></div>
+          </div>
+        </div>
+        <div class="cap">Схема окна выбора.</div>
+      </div>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Если Авито попросит, пройдите проверку профиля</h3>
+      <p>Доступ можно выдавать только из проверенного профиля. Если появится окно «Пройдите проверку, чтобы приглашать близких», нажмите <span class="ui">Перейти к проверке</span>. Это занимает пару минут, потом вернитесь к шагу 2.</p>
+      <div class="shot">
+        <div class="screen">
+          <div class="modal">
+            <b style="color:var(--ink);font-size:16px">Пройдите проверку, чтобы приглашать близких</b>
+            <span style="color:var(--muted)">Это нужно для защиты профиля. Проверка займёт пару минут.</span>
+            <div class="actions"><span class="ybtn hl" style="position:relative">Перейти к проверке<span class="pin">1</span></span><span class="gbtn">Не сейчас</span></div>
+          </div>
+        </div>
+        <div class="cap">Схема окна. Если профиль уже проверен, оно не появится.</div>
+      </div>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Отправьте ссылку-приглашение вашему менеджеру</h3>
+      <p>Авито создаст ссылку-приглашение. Скопируйте её или нажмите «Поделиться» и отправьте менеджеру HDR Group.</p>
+    </div></li>
+
+    <li><div class="step">
+      <h3>Подтвердите заявку и напишите нам «Готово»</h3>
+      <p>Когда мы примем приглашение, Авито может попросить вас подтвердить заявку. Подтвердите её. Наша связь появится в разделе <span class="ui">Связи</span> вашего профиля.</p>
+    </div></li>
+  </ol>
+  </div>
+</section>
+
+<section aria-labelledby="h-profile">
+  <h2 id="h-profile">Как обновить информацию профиля по нашему ТЗ</h2>
+  <p style="max-width:65ch">Когда нужно поменять описание, логотип, адрес или контакты, мы присылаем короткое ТЗ: что заменить и готовые тексты или файлы. Вставьте их сами:</p>
+  <ol class="steps">
+    <li><div class="step">
+      <h3>Откройте «Управление профилем»</h3>
+      <p>На сайте пункт находится в меню слева на странице профиля и в меню под аватаркой. В приложении: вкладка <span class="ui">Профиль</span> → <span class="ui">Управление профилем</span>.</p>
+    </div></li>
+    <li><div class="step">
+      <h3>Замените то, что указано в ТЗ</h3>
+      <div class="where">
+        <span>Описание, название, логотип и обложку меняют в разделе оформления профиля.</span>
+        <span class="hint" style="color:var(--muted);font-size:14px">Адреса и телефоны у Авито вынесены в отдельные пункты меню: <span class="ui">Адреса</span> и настройки контактов.</span>
+      </div>
+    </div></li>
+    <li><div class="step">
+      <h3>Сохраните и пришлите скриншот</h3>
+      <p>Новые данные могут пройти проверку Авито. Пришлите менеджеру скриншот, и мы сверим всё с ТЗ.</p>
+    </div></li>
+  </ol>
+</section>
+
+<section aria-labelledby="h-faq">
+  <h2 id="h-faq">Если что-то не получается</h2>
+  <div class="faq">
+    <details><summary>Вместо раздела «Сотрудники» открылась страница про тарифы</summary><p>У профиля не подключён тариф Авито Pro, а без него приглашать сотрудников нельзя. Подключите любой тариф или воспользуйтесь вкладкой «Обычный профиль».</p></details>
+    <details><summary>Не вижу кружок «+» рядом с аватаркой</summary><p>Обновите приложение Авито до последней версии или откройте avito.ru в браузере на компьютере. Функция работает в актуальных версиях сайта и приложений.</p></details>
+    <details><summary>Авито просит пройти проверку</summary><p>Это защита профиля: давать доступ можно только из проверенного аккаунта. Пройдите проверку по подсказкам на экране и вернитесь к инструкции.</p></details>
+    <details><summary>Можно просто прислать логин и пароль?</summary><p>Не нужно. Авито может заблокировать профиль, если в нём резко меняется поведение, а ответственность за действия под паролем остаётся на владельце. Через приглашение безопаснее для вас, и нам хватает этого для работы с объявлениями.</p></details>
+    <details><summary>Мы никогда не попросим коды из SMS</summary><p>Если кто-то от имени HDR Group просит код из SMS или пароль от Авито, не отправляйте его и сообщите вашему менеджеру.</p></details>
+  </div>
+</section>
+
+<section aria-labelledby="h-off">
+  <h2 id="h-off">Если нужно отключить доступ</h2>
+  <p style="max-width:65ch">Вы отключаете доступ сами, без обращения в поддержку. Если подключали нас как сотрудника, заблокируйте его в разделе <span class="ui">Сотрудники</span>. Если давали доступ к профилю, отключите связь в разделе <span class="ui">Связи</span>. Все наши действия в профиле вам видны.</p>
+  <div class="note ok"><b>Не получилось за 5 минут?</b>Пришлите скриншот экрана вашему менеджеру. Подскажем, куда нажать, или созвонимся и пройдём шаги вместе с демонстрацией экрана.</div>
+</section>
+
+<footer>
+  <span>HDR Group · инструкция по выдаче доступа к профилю на Авито</span>
+  <span>Названия разделов соответствуют интерфейсу Авито на октябрь 2026 года.</span>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var tabs=[document.getElementById('t-pro'),document.getElementById('t-free')];
+  function show(t){tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',on);document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});}
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t)});});
+  if(location.hash==='#free'){show(tabs[1]);}
+})();
+</script>
+
+</body>
+</html>
