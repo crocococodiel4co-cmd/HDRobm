@@ -217,8 +217,11 @@
 
   .grid{
     display:grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap:20px;
+  }
+  @media (max-width: 1100px){
+    .grid{ grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 860px){
     .grid{ grid-template-columns: 1fr; }
@@ -384,7 +387,7 @@
     <section class="cards" id="directions">
       <div class="section-head">
         <div class="eyebrow">Начните с брифа</div>
-        <h2>Три направления — один стандарт работы</h2>
+        <h2>Четыре направления — один стандарт работы</h2>
       </div>
 
       <div class="grid">
@@ -435,6 +438,22 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </div>
         </a>
+
+        <a class="card" href="../tz-avito/" data-card>
+          <span class="tag">04</span>
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3.8 12.6V5.3a1.5 1.5 0 0 1 1.5-1.5h7.3l7.6 7.6a1.5 1.5 0 0 1 0 2.1l-7.2 7.2a1.5 1.5 0 0 1-2.1 0z"/>
+              <circle cx="8.3" cy="8.3" r="1.5"/>
+            </svg>
+          </div>
+          <h3>Профиль на Авито</h3>
+          <p>Бриф на ведение профиля и объявлений: ассортимент, фото, ответы покупателям, продвижение.</p>
+          <div class="cta">Заполнить бриф
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </a>
+
 
       </div>
     </section>

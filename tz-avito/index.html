@@ -1,0 +1,1326 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Старт проекта — ведение профиля на Авито</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --h-cream:#F1E6D2;
+    --ink:#EEF5FF; --ink-soft:#9CB4D2; --line:rgba(126,178,255,.17);
+    --accent:#82BB2C; --accent-soft:#ABDB63;
+    --bg:#07101E;
+    --font-display:"Bricolage Grotesque","Arial Black",sans-serif;
+    --font-body:"Public Sans",-apple-system,"Segoe UI",sans-serif;
+    --font-mono:"IBM Plex Mono","SFMono-Regular",monospace;
+  }
+  *{box-sizing:border-box;}
+  html{ overflow-x:hidden; width:100%; }
+  body{
+    margin:0; color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1100px 520px at 12% -10%, rgba(130,187,44,.16), transparent 62%),
+      radial-gradient(760px 420px at 92% 4%, rgba(99,143,32,.12), transparent 64%),
+      radial-gradient(900px 620px at 62% 106%, rgba(84,122,28,.11), transparent 62%),
+      linear-gradient(163deg,
+        rgba(107,153,37,.10) 0%,
+        rgba(31,41,15,.04) 34%,
+        rgba(16,20,9,0) 58%,
+        rgba(78,112,26,.08) 100%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+  img,svg{ max-width:100%; }
+  h1,h2,h3,h4{ font-family:var(--font-display); font-weight:700; color:var(--h-cream); margin:0; text-wrap:balance; }
+  a{ color:var(--accent-soft); }
+  .mono{ font-family:var(--font-mono); }
+
+  /* ---------- закреплённая шапка со шкалой заполнения ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    padding:0; color:#EAF2FF;
+    background:linear-gradient(180deg,#0C1F26,#08161C);
+    border-bottom:1px solid rgba(162,209,91,.20);
+    box-shadow:0 8px 22px -14px rgba(0,0,0,.9);
+  }
+  .topbar-row{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px 26px; flex-wrap:wrap; padding:14px 34px 12px;
+  }
+  .topbar .brand{
+    font-family:var(--font-display); font-weight:800; font-size:22px;
+    color:#fff; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; min-width:0;
+  }
+  .topbar .brand small{ font-family:var(--font-mono); font-weight:500; font-size:11px; color:#8FB2D8; letter-spacing:.07em; }
+  .topbar-progress{
+    display:flex; align-items:baseline; gap:8px 16px; flex-wrap:wrap;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.03em;
+  }
+  .tp-main{ color:#9FBEDD; }
+  .tp-req{ color:#E0A33C; }
+  .tp-req.done{ color:#6FCF97; }
+  /* навигация по разделам */
+  .section-nav{
+    display:flex; gap:2px; overflow-x:auto; padding:0 34px 10px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  }
+  .section-nav::-webkit-scrollbar{ display:none; }
+  .section-nav a{
+    flex:0 0 auto; display:inline-flex; align-items:baseline; gap:6px;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.03em;
+    color:#8FA9C6; text-decoration:none; padding:6px 11px;
+    border:1px solid transparent; white-space:nowrap;
+    transition:color .15s, background .15s, border-color .15s;
+  }
+  .section-nav a i{ font-style:normal; color:#5D7B9C; font-size:10px; }
+  .section-nav a:hover{ color:#DCE9F8; border-color:rgba(162,209,91,.30); }
+  .section-nav a:focus-visible{ outline:2px solid var(--accent-soft); outline-offset:-2px; }
+  .section-nav a.active{ color:#07101E; background:var(--accent-soft); border-color:var(--accent-soft); }
+  .section-nav a.active i{ color:rgba(7,16,30,.55); }
+
+  /* шкала заполнения: цвет меняется по мере продвижения */
+  .progress-bar{ height:4px; background:rgba(162,209,91,.13); overflow:hidden; }
+  .progress-fill{
+    height:100%; width:0%; background:#678E2C;
+    transition:width .25s ease, background-color .4s ease, box-shadow .4s ease;
+    box-shadow:0 0 9px 1px rgba(103,142,44,.5);
+  }
+  .progress-fill.stage-red{    background:#C4736E; box-shadow:0 0 9px 1px rgba(196,115,110,.45); }
+  .progress-fill.stage-orange{ background:#D2A05E; box-shadow:0 0 9px 1px rgba(210,160,94,.45); }
+  .progress-fill.stage-green{  background:#7FB894; box-shadow:0 0 9px 1px rgba(127,184,148,.45); }
+
+  @media (max-width:820px){
+    .topbar-row{ padding:11px 16px 8px; gap:7px 14px; }
+    .topbar .brand{ flex-direction:column; align-items:flex-start; gap:2px; font-size:17px; }
+    .topbar .brand small{ letter-spacing:.04em; font-size:10px; }
+    .topbar-progress{ font-size:10.5px; gap:6px 12px; }
+    .section-nav{ padding:0 16px 8px; }
+    .section-nav a{ font-size:10.5px; padding:5px 9px; }
+  }
+
+  .wrap{ max-width:880px; margin:0 auto; padding:44px 28px 40px; width:100%; }
+  section.hpanel--flow{ scroll-margin-top:calc(var(--head-h, 128px) + 14px); }
+
+  /* ---------- flow sections ---------- */
+  section.hpanel--flow{ margin-bottom:46px; }
+  main.wrap section.hpanel--flow:last-of-type{ margin-bottom:0; }
+  .hflow-tag{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.24em; text-transform:uppercase;
+    color:var(--accent-soft); margin-bottom:16px;
+  }
+  .hflow-tag::before{ content:""; width:26px; height:1px; background:var(--accent); display:block; flex:0 0 auto; }
+  .hflow-tag::after{ content:""; flex:1 1 auto; height:1px; background:linear-gradient(90deg, rgba(130,187,44,.40), transparent); }
+
+  /* заголовок блока: 38px, межстрочное и отступ до описания сокращены на 25% */
+  h2.block-title{
+    font-size:clamp(27px, 5vw, 38px);
+    line-height:1.16;
+    margin-bottom:15px;
+    letter-spacing:-.01em;
+  }
+  .block-hint{ font-size:14px; color:var(--ink-soft); margin:0 0 22px; max-width:60ch; }
+
+  /* ---------- hero ---------- */
+  .hero-title{ font-size:clamp(26px,3.6vw,36px); line-height:1.15; margin-bottom:18px; max-width:22ch; }
+  .hero-text{ color:#C3D6EE; font-size:15.5px; max-width:64ch; margin:0; }
+  .hero-points{ margin:0; padding:0; list-style:none; max-width:62ch; }
+  .hero-points li{
+    position:relative; padding-left:20px; color:#C3D6EE; font-size:15px; line-height:1.45; margin-bottom:8px;
+  }
+  .hero-points li:last-child{ margin-bottom:0; }
+  .hero-points li::before{
+    content:""; position:absolute; left:0; top:.62em; width:8px; height:1px; background:var(--accent);
+  }
+  .hero-facts{
+    position:relative; display:grid; grid-template-columns:repeat(3,1fr);
+    margin-top:28px; border:1px solid var(--line); background:rgba(160,205,255,.025);
+  }
+  .hero-facts::before, .hero-facts::after{ content:""; position:absolute; width:14px; height:14px; pointer-events:none; }
+  .hero-facts::before{ left:0; top:0; border-left:2px solid var(--accent); border-top:2px solid var(--accent); }
+  .hero-facts::after{ right:0; bottom:0; border-right:2px solid var(--accent); border-bottom:2px solid var(--accent); }
+  .hero-facts div{ padding:16px 18px; border-right:1px solid var(--line); }
+  .hero-facts div:last-child{ border-right:0; }
+  .hero-facts b{ display:block; color:var(--h-cream); font-size:14.5px; font-weight:600; margin-bottom:4px; text-transform:uppercase; letter-spacing:.02em; }
+  .hero-facts span{ color:#9FB9D8; font-size:13px; }
+  @media (max-width:720px){
+    .hero-facts{ grid-template-columns:1fr; }
+    .hero-facts div{ border-right:0; border-bottom:1px solid var(--line); }
+    .hero-facts div:last-child{ border-bottom:0; }
+  }
+  .hnote{
+    border:1px solid var(--line); border-left:2px solid var(--accent);
+    padding:16px 18px; color:#A9C2DE; font-size:13.5px; background:rgba(162,209,91,.04); margin-top:18px;
+  }
+  .hnote b{ color:var(--h-cream); }
+  .hnote p{ margin:0; }
+  .hnote p + p{ margin-top:9px; }
+
+  /* ---------- question cards ---------- */
+  .q{
+    position:relative; overflow:hidden;
+    background:linear-gradient(160deg, rgba(97,143,27,.20), rgba(8,17,32,.72));
+    border:1px solid rgba(162,209,91,.26);
+    padding:18px 20px; margin-bottom:14px;
+  }
+  .q::after{ content:""; position:absolute; left:0; right:0; top:0; height:1px; background:linear-gradient(90deg, transparent, rgba(171,219,99,.55), transparent); }
+  .q.req{ border-left:3px solid var(--accent); }
+  .req-chip{
+    display:inline-block; font-family:var(--font-mono); font-size:9.5px; font-weight:600;
+    letter-spacing:.09em; text-transform:uppercase; color:#07101E; background:var(--accent-soft);
+    padding:2px 7px; margin-left:9px; vertical-align:1px; white-space:nowrap;
+  }
+  .q label.qtitle{ display:block; font-size:14.5px; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .q .qnum{ font-family:var(--font-mono); color:var(--accent-soft); margin-right:6px; }
+  .q .qhint{ font-size:12.5px; color:var(--ink-soft); margin-bottom:10px; }
+  .q input[type=text], .q textarea{
+    width:100%; border:1px solid rgba(162,209,91,.32); background:rgba(6,15,28,.7);
+    font-family:var(--font-body); font-size:14px; color:#EEF5FF; padding:11px 13px; border-radius:0; resize:vertical;
+  }
+  .q textarea{ min-height:72px; }
+  .q input::placeholder, .q textarea::placeholder{ color:#7B905B; }
+  .q input:focus, .q textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(130,187,44,.20); }
+  .choice-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .choice-btn{
+    font-family:var(--font-mono); font-size:12px; padding:8px 14px;
+    border:1px solid rgba(162,209,91,.34); background:rgba(6,15,28,.5); color:var(--ink);
+    cursor:pointer; transition:.15s; letter-spacing:.02em;
+  }
+  .choice-btn.active{ background:var(--accent); border-color:var(--accent); color:#07101E; font-weight:600; }
+
+  /* ---------- поле с приёмом файлов ---------- */
+  .dropzone{ position:relative; }
+  .dropzone textarea{ min-height:110px; }
+  .dropzone.is-over textarea{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(130,187,44,.20); }
+  .drop-overlay{
+    position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+    background:rgba(19,26,9,.88); border:1px dashed var(--accent);
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent-soft); pointer-events:none;
+  }
+  .dropzone.is-over .drop-overlay{ display:flex; }
+  .drop-actions{ display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; margin-top:9px; }
+  .file-pick{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase;
+    padding:7px 13px; border:1px solid rgba(162,209,91,.34); background:rgba(6,15,28,.5);
+    color:var(--ink); cursor:pointer; transition:.15s;
+  }
+  .file-pick:hover{ border-color:var(--accent); color:#fff; }
+  .drop-note{ font-size:11.5px; color:var(--ink-faint,#7C97B8); }
+  .file-list{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:7px; }
+  .file-list li{
+    display:flex; align-items:center; gap:8px;
+    font-family:var(--font-mono); font-size:11.5px; color:var(--ink);
+    border:1px solid rgba(162,209,91,.32); background:rgba(6,15,28,.55); padding:6px 8px 6px 11px;
+  }
+  .file-list button{
+    background:none; border:0; color:#8FA9C6; cursor:pointer; font-size:15px; line-height:1; padding:0 3px;
+  }
+  .file-list button:hover{ color:var(--accent-soft); }
+
+  /* ---------- submit block ---------- */
+  .hsubmit-panel{
+    position:relative; overflow:hidden; text-align:center;
+    background:linear-gradient(160deg, rgba(97,143,27,.32), rgba(8,17,32,.82));
+    border:1px solid rgba(162,209,91,.32); padding:30px 24px;
+  }
+  .hsubmit-panel::before{ content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(220px 150px at 88% -14%, rgba(171,219,99,.32), transparent 68%); }
+  .hsubmit-panel > *{ position:relative; z-index:1; }
+  .hsubmit-panel h3{ font-size:18px; margin-bottom:8px; }
+  .hsubmit-panel p{ font-size:13.5px; color:var(--ink-soft); margin:0 0 18px; max-width:52ch; margin-left:auto; margin-right:auto; }
+
+  /* кнопки: матовое стекло, градиентная обводка с отблеском, слабое лайм-свечение */
+  .btn-row{
+    display:flex; flex-wrap:wrap; justify-content:center;
+    gap:10px; margin:0;
+  }
+  .btn{
+    position:relative; isolation:isolate;
+    font-family:var(--font-mono); font-weight:700; font-size:12.5px; cursor:pointer;
+    padding:10px 18px; border-radius:0; letter-spacing:.05em; text-transform:uppercase;
+    border:1px solid transparent; color:#F4F9FF;
+    text-shadow:0 1px 2px rgba(4,10,20,.75);
+    background:rgba(153,203,77,.06);
+    -webkit-backdrop-filter:blur(10px) saturate(125%);
+    backdrop-filter:blur(10px) saturate(125%);
+    box-shadow:0 0 20px -8px rgba(130,187,44,.42), inset 0 1px 0 rgba(224,241,199,.10);
+    transition:background .18s ease, box-shadow .18s ease, color .18s ease;
+    max-width:100%;
+  }
+  .btn::before{
+    content:""; position:absolute; inset:0; padding:1px; pointer-events:none; z-index:-1;
+    background:linear-gradient(115deg,
+      rgba(170,212,108,.18) 0%,
+      rgba(231,245,209,.72) 22%,
+      rgba(160,208,87,.20) 46%,
+      rgba(231,245,209,.66) 72%,
+      rgba(170,212,108,.18) 100%);
+    background-size:300% 100%;
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    animation:btnSheen 7s linear infinite;
+  }
+  @keyframes btnSheen{ from{ background-position:0 0; } to{ background-position:-300% 0; } }
+  .btn:hover{
+    background:rgba(153,203,77,.11);
+    box-shadow:0 0 26px -7px rgba(130,187,44,.58), inset 0 1px 0 rgba(224,241,199,.15);
+    color:#fff;
+  }
+  .btn:focus-visible{ outline:2px solid var(--accent-soft); outline-offset:2px; }
+  .btn-primary{ color:#FFFFFF; background:rgba(153,203,77,.11); }
+  .btn-secondary{ color:#EAF3FF; }
+  .btn-secondary::before{ animation-duration:9s; opacity:.8; }
+  @media (prefers-reduced-motion:reduce){ .btn::before{ animation:none; } }
+  @media (max-width:420px){
+    .btn-row{ flex-direction:column; }
+    .btn{ width:100%; }
+  }
+
+  .btn[disabled]{ cursor:not-allowed; color:#A9B992; background:rgba(153,203,77,.03); box-shadow:none; }
+  .btn[disabled]::before{ animation:none; opacity:.35; }
+  .btn[disabled]:hover{ background:rgba(153,203,77,.03); box-shadow:none; color:#A9B992; }
+
+  /* ---------- согласие на обработку персональных данных ---------- */
+  .consent{
+    display:flex; align-items:flex-start; gap:11px; text-align:left;
+    border:1px solid rgba(162,209,91,.30); border-left:2px solid var(--accent);
+    background:rgba(6,15,28,.45); padding:14px 16px; margin:0 auto 18px; max-width:56ch;
+  }
+  .consent input[type=checkbox]{
+    appearance:none; -webkit-appearance:none; flex:0 0 auto;
+    width:18px; height:18px; margin:1px 0 0; border:1px solid rgba(174,218,107,.55);
+    background:rgba(6,15,28,.8); cursor:pointer; position:relative;
+  }
+  .consent input[type=checkbox]:checked{ background:var(--accent); border-color:var(--accent); }
+  .consent input[type=checkbox]:checked::after{
+    content:""; position:absolute; left:5px; top:1px; width:5px; height:10px;
+    border:solid #07101E; border-width:0 2px 2px 0; transform:rotate(42deg);
+  }
+  .consent input[type=checkbox]:focus-visible{ outline:2px solid var(--accent-soft); outline-offset:2px; }
+  .consent label{ font-size:13px; color:#B7CCE6; line-height:1.5; cursor:pointer; }
+
+  .aux-row{
+    display:flex; flex-wrap:wrap; justify-content:center; align-items:center;
+    gap:10px 12px; margin-top:22px; padding-top:18px; border-top:1px solid rgba(178,158,255,.16);
+  }
+  .aux-link{
+    font-family:var(--font-mono); font-size:12.5px; letter-spacing:.02em; color:#C9BEEB;
+    background:rgba(6,15,28,.5); border:1px solid rgba(178,158,255,.30); cursor:pointer;
+    padding:10px 18px; transition:.15s;
+  }
+  .aux-link:hover{ border-color:var(--accent); color:#fff; }
+  .aux-link:focus-visible{ outline:2px solid var(--accent-soft); outline-offset:2px; }
+  .aux-link--quiet{ color:#9C8FC0; border-color:rgba(178,158,255,.18); }
+  .aux-link--quiet:hover{ border-color:#FF9B9B; color:#FFC4C4; }
+  @media (max-width:560px){ .aux-link{ flex:1 1 100%; } }
+  .aux-note{ font-size:11.5px; color:#7C97B8; margin:16px auto 0; max-width:560px; line-height:1.55; }
+
+  .status-msg.is-error{ color:#FF9B9B; }
+  .status-msg.is-ok{ color:#9BE8B4; }
+  .status-msg{ font-size:12.5px; color:var(--accent-soft); margin-top:14px; min-height:16px; }
+  textarea#exportOut{
+    width:100%; min-height:160px; margin-top:14px; font-family:var(--font-mono); font-size:12px;
+    border:1px solid rgba(162,209,91,.32); padding:12px; background:rgba(6,15,28,.7); color:var(--ink); display:none;
+  }
+
+  footer.doc-footer{ margin-top:0; text-align:center; padding:0 24px 22px; }
+  footer.doc-footer p{ font-size:12px; color:#7C97B8; margin:0; }
+  footer.doc-footer p + p{ margin-top:5px; }
+  footer.doc-footer a{ color:#8FB2D8; text-decoration:underline; text-underline-offset:3px; }
+  footer.doc-footer a:hover{ color:var(--accent-soft); }
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-row">
+    <span class="brand">СТАРТ ПРОЕКТА <small>ЗНАКОМСТВО С КОМПАНИЕЙ ПЕРЕД ВЕДЕНИЕМ ПРОФИЛЯ НА АВИТО</small></span>
+    <div class="topbar-progress">
+      <span class="tp-main"><span id="progressCount">0</span> / <span id="progressTotal">46</span> заполнено</span>
+      <span class="tp-req" id="reqBadge">обязательных <span id="reqCount">0</span> / <span id="reqTotal">19</span></span>
+    </div>
+  </div>
+  <nav class="section-nav" id="sectionNav" aria-label="Разделы анкеты">
+    <a href="#s1"><i>01</i> Компания</a>
+    <a href="#s2"><i>02</i> Профиль</a>
+    <a href="#s3"><i>03</i> Ассортимент</a>
+    <a href="#s4"><i>04</i> Цены и условия</a>
+    <a href="#s5"><i>05</i> Фото и оформление</a>
+    <a href="#s6"><i>06</i> Тексты</a>
+    <a href="#s7"><i>07</i> Покупатели</a>
+    <a href="#s8"><i>08</i> Продвижение</a>
+    <a href="#s9"><i>09</i> Согласование</a>
+  </nav>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</header>
+
+<main class="wrap">
+
+  <section class="hpanel--flow">
+    <h1 class="hero-title">Чем лучше мы узнаем ваш бизнес, тем больше обращений принесёт Авито</h1>
+    <ul class="hero-points">
+      <li>Анкета заполняется один раз, до начала работ.</li>
+      <li>Ваши ответы становятся основой технического задания.</li>
+      <li>В работу входят: создание и обновление объявлений, тексты и фото, ответы покупателям, продвижение в рамках согласованного бюджета.</li>
+      <li>Название, описание, логотип и контакты профиля меняет только владелец — мы подготовим готовые тексты и файлы.</li>
+      <li>Точная формулировка не нужна — достаточно сути, остальное уточним при согласовании.</li>
+    </ul>
+    <div class="hero-facts">
+      <div><b>9 разделов</b><span>46 вопросов, 19 из них обязательные</span></div>
+      <div><b>15–20 минут</b><span>ориентировочное время заполнения</span></div>
+      <div><b>Меньше правок</b><span>чем подробнее ответы, тем ближе первая версия к тому, что вы ждёте</span></div>
+    </div>
+    <div class="hnote">
+      <p><b>Состав работ.</b> Объявления на Авито (тексты, фотографии, цены, категории и параметры), ответы покупателям в чате, продвижение объявлений, подготовка материалов для оформления профиля компании.</p>
+      <p><b>Требования площадки.</b> Материалы готовятся с учётом правил Авито: одно объявление — на один товар или услугу в одном городе, без дублей; в текстах и на фотографиях нельзя указывать телефоны, ссылки и другие контакты; цена и наличие должны быть достоверными на дату публикации. Публикуются только изображения, права на которые принадлежат компании либо получены законным образом. Для отдельных категорий Авито запрашивает лицензии или документы — просим отметить это в разделе 09.</p>
+      <p><b>Доступ к профилю.</b> Пароль передавать не нужно — доступ выдаётся ссылкой-приглашением, профиль остаётся вашим. <a href="../access/avito/" target="_blank" rel="noopener">Как выдать доступ</a></p>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s1">
+    <span class="hflow-tag">Раздел 01 / 09 — компания</span>
+    <h2 class="block-title">Сведения о компании</h2>
+    <p class="block-hint">Базовые данные для объявлений и описания профиля. Раздел подходит для компании любой сферы и любого масштаба.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">1.</span>Наименование компании<span class="req-chip">обязательно</span></label>
+      <div class="qhint">В том виде, в котором оно должно отображаться в профиле Авито</div>
+      <input type="text" data-req="1" data-q="1. Наименование компании">
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">2.</span>Сфера деятельности и краткое описание работы компании<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Достаточно двух-трёх предложений</div>
+      <textarea data-req="1" data-q="2. Сфера деятельности"></textarea>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">3.</span>Ключевые преимущества компании перед конкурентами<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Что покупатель должен понять из объявления в первую очередь: опыт, гарантия, сроки, наличие, цена</div>
+      <textarea data-req="1" data-q="3. Преимущества компании"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">4.</span>Режим работы</label>
+      <div class="qhint">В том числе время, когда вы готовы принимать звонки с Авито</div>
+      <input type="text" data-q="4. Режим работы">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">5.</span>Адреса: офис, склад, точки самовывоза или выезда</label>
+      <div class="qhint">Если работаете без физического адреса — укажите, где оказываете услуги</div>
+      <textarea data-q="5. Адреса"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">6.</span>Сайт и другие ресурсы компании</label>
+      <div class="qhint">Сайт, карточки на картах, соцсети. При отсутствии — укажите «нет»</div>
+      <textarea data-q="6. Сайт и ресурсы"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s2">
+    <span class="hflow-tag">Раздел 02 / 09 — профиль</span>
+    <h2 class="block-title">Профиль на Авито</h2>
+    <p class="block-hint">Что уже есть на площадке и где нужно размещаться.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">7.</span>Ссылка на профиль Авито<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Откройте свой профиль и скопируйте адрес страницы. Если профиля ещё нет — укажите «нет», поможем завести</div>
+      <input type="text" data-req="1" data-q="7. Ссылка на профиль Авито">
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">8.</span>Тип профиля<span class="req-chip">обязательно</span></label>
+      <div class="qhint">От этого зависит способ выдачи доступа и возможности продвижения</div>
+      <div class="choice-row" data-req="1" data-group="8">
+        <button class="choice-btn" type="button">Компания с тарифом Авито Pro</button>
+        <button class="choice-btn" type="button">Компания без тарифа</button>
+        <button class="choice-btn" type="button">Частное лицо</button>
+        <button class="choice-btn" type="button">Профиля пока нет</button>
+        <button class="choice-btn" type="button">Не знаю</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">9.</span>Сколько объявлений активно сейчас</label>
+      <div class="choice-row" data-group="9">
+        <button class="choice-btn" type="button">Нет объявлений</button>
+        <button class="choice-btn" type="button">До 10</button>
+        <button class="choice-btn" type="button">От 10 до 50</button>
+        <button class="choice-btn" type="button">Больше 50</button>
+      </div>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">10.</span>Города и регионы, где нужны объявления<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Объявление привязано к одному городу. Для продаж в нескольких городах нужны отдельные объявления — перечислите все, где принимаете заказы</div>
+      <textarea data-req="1" data-q="10. География размещения"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">11.</span>Что не устраивает в текущей работе с Авито</label>
+      <div class="qhint">Например: мало просмотров и сообщений, дорогие контакты, объявления отклоняют, некогда отвечать покупателям. Если площадку только запускаете — укажите «новый запуск»</div>
+      <textarea data-q="11. Текущие проблемы"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">12.</span>Были ли отклонения объявлений или блокировки профиля</label>
+      <div class="qhint">Поможет не повторить старые ошибки</div>
+      <div class="choice-row" data-group="12">
+        <button class="choice-btn" type="button">Нет</button>
+        <button class="choice-btn" type="button">Отклоняли объявления</button>
+        <button class="choice-btn" type="button">Блокировали профиль</button>
+        <button class="choice-btn" type="button">Не знаю</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">13.</span>Доступ к профилю для нашей команды</label>
+      <div class="qhint">Пароль не нужен: доступ выдаётся ссылкой-приглашением. Пошаговая инструкция — <a href="../access/avito/" target="_blank" rel="noopener">по ссылке</a></div>
+      <div class="choice-row" data-group="13">
+        <button class="choice-btn" type="button">Уже выдан</button>
+        <button class="choice-btn" type="button">Выдадим по инструкции</button>
+        <button class="choice-btn" type="button">Нужна помощь с выдачей</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s3">
+    <span class="hflow-tag">Раздел 03 / 09 — ассортимент</span>
+    <h2 class="block-title">Что размещаем</h2>
+    <p class="block-hint">Товары и услуги, под которые будут созданы объявления.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">14.</span>Что продаёте на Авито<span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-req="1" data-group="14">
+        <button class="choice-btn" type="button">Товары</button>
+        <button class="choice-btn" type="button">Услуги</button>
+        <button class="choice-btn" type="button">Товары и услуги</button>
+      </div>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">15.</span>Перечень товаров или услуг для объявлений с ценами<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Впишите позиции текстом, укажите ссылку или перетащите файл прямо в поле: прайс, выгрузку из 1С или МойСклад, таблицу. Файлы TXT и CSV подставятся текстом автоматически, остальные — запомнятся списком</div>
+      <div class="dropzone" id="dropzone15">
+        <textarea data-req="1" data-q="15. Ассортимент и цены" placeholder="Начните печатать или перетащите сюда файл"></textarea>
+        <div class="drop-overlay">Отпустите файл</div>
+      </div>
+      <div class="drop-actions">
+        <label class="file-pick">Выбрать файл<input type="file" id="filePick15" multiple hidden></label>
+        <span class="drop-note">TXT, CSV, XLSX, PDF, изображения · до 15 файлов, каждый до 25 МБ</span>
+      </div>
+      <ul class="file-list" id="fileList15" hidden></ul>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">16.</span>Позиции, которые нужно продвигать в первую очередь<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Самые маржинальные, ходовые или те, что нужно быстро распродать</div>
+      <textarea data-req="1" data-q="16. Приоритетные позиции"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">17.</span>Состояние товаров</label>
+      <div class="choice-row" data-group="17">
+        <button class="choice-btn" type="button">Новые</button>
+        <button class="choice-btn" type="button">Б/у</button>
+        <button class="choice-btn" type="button">Новые и б/у</button>
+        <button class="choice-btn" type="button">Не относится, продаём услуги</button>
+      </div>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">18.</span>Откуда и как часто мы получаем актуальные наличие и цены<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Неактуальная цена или проданный товар в объявлении — частая причина жалоб и отклонений. Например: выгрузка из 1С раз в неделю, таблица на Google Диске, сотрудник присылает изменения в чат</div>
+      <textarea data-req="1" data-q="18. Источник наличия и цен"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s4">
+    <span class="hflow-tag">Раздел 04 / 09 — цены и условия</span>
+    <h2 class="block-title">Цены и условия покупки</h2>
+    <p class="block-hint">Что увидит покупатель в объявлении, кроме самого товара или услуги.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">19.</span>Формат указания цены<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Цена в объявлении должна соответствовать реальной стоимости на дату публикации</div>
+      <div class="choice-row" data-req="1" data-group="19">
+        <button class="choice-btn" type="button">Точная цена</button>
+        <button class="choice-btn" type="button">Цена «от»</button>
+        <button class="choice-btn" type="button">Договорная, для услуг</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">20.</span>Готовы ли вы к торгу</label>
+      <div class="choice-row" data-group="20">
+        <button class="choice-btn" type="button">Да</button>
+        <button class="choice-btn" type="button">Нет</button>
+        <button class="choice-btn" type="button">Только при крупном заказе</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">21.</span>Доставка</label>
+      <div class="choice-row" data-group="21">
+        <button class="choice-btn" type="button">Подключена Авито Доставка</button>
+        <button class="choice-btn" type="button">Своя доставка</button>
+        <button class="choice-btn" type="button">Только самовывоз</button>
+        <button class="choice-btn" type="button">Не относится, продаём услуги</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">22.</span>Способы оплаты, гарантия, возврат</label>
+      <div class="qhint">Наличные, карта, безнал для юрлиц, рассрочка; срок гарантии; условия возврата</div>
+      <textarea data-q="22. Оплата, гарантия, возврат"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">23.</span>Действующие акции и специальные предложения</label>
+      <div class="qhint">Условия и срок действия. При отсутствии — укажите «нет»</div>
+      <textarea data-q="23. Акции и предложения"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s5">
+    <span class="hflow-tag">Раздел 05 / 09 — фото и оформление</span>
+    <h2 class="block-title">Фотографии и оформление профиля</h2>
+    <p class="block-hint">Фото — главный фактор, по которому покупатель открывает объявление. Здесь же — всё для оформления профиля.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">24.</span>Ссылка на архив фотографий товаров, работ, помещения<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Авито отклоняет фото с чужими водяными знаками, контактами и ссылками. Укажите ссылку на облако либо «нет»</div>
+      <input type="text" data-req="1" data-q="24. Архив фотографий">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">25.</span>Кто и с какой периодичностью присылает новые фотографии</label>
+      <div class="qhint">Например: менеджер склада, при каждом поступлении товара</div>
+      <input type="text" data-q="25. Порядок передачи фотографий">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">26.</span>Можно ли использовать фотографии производителя или поставщика</label>
+      <div class="choice-row" data-group="26">
+        <button class="choice-btn" type="button">Да, можно</button>
+        <button class="choice-btn" type="button">Только наши собственные фото</button>
+        <button class="choice-btn" type="button">Обсудим отдельно</button>
+      </div>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">27.</span>Имеется ли логотип в векторном формате или PNG на прозрачном фоне<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Нужен для аватара профиля и единого оформления фото объявлений</div>
+      <div class="choice-row" data-req="1" data-group="27">
+        <button class="choice-btn" type="button">Да, предоставим файл</button>
+        <button class="choice-btn" type="button">Нет, требуется адаптация</button>
+        <button class="choice-btn" type="button">Логотипа нет</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">28.</span>Фирменные цвета и шрифты</label>
+      <div class="qhint">Коды в формате HEX, при их отсутствии — словесное описание</div>
+      <input type="text" data-q="28. Фирменные цвета и шрифты">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">29.</span>Оформление фото объявлений в едином стиле</label>
+      <div class="qhint">Рамка, плашка с преимуществом, логотип на обложке объявления. Контакты и ссылки на фото размещать нельзя</div>
+      <div class="choice-row" data-group="29">
+        <button class="choice-btn" type="button">Да, нужно</button>
+        <button class="choice-btn" type="button">Нет, только чистые фото</button>
+        <button class="choice-btn" type="button">На усмотрение исполнителя</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s6">
+    <span class="hflow-tag">Раздел 06 / 09 — тексты</span>
+    <h2 class="block-title">Тексты объявлений</h2>
+    <p class="block-hint">Как должны звучать объявления и описание профиля.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">30.</span>Форма обращения к покупателю<span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-req="1" data-group="30">
+        <button class="choice-btn" type="button">На «вы»</button>
+        <button class="choice-btn" type="button">На «ты»</button>
+        <button class="choice-btn" type="button">Без прямого обращения</button>
+      </div>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">31.</span>Тон текстов<span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-req="1" data-group="31">
+        <button class="choice-btn" type="button">Деловой и сдержанный</button>
+        <button class="choice-btn" type="button">Дружелюбный, простым языком</button>
+        <button class="choice-btn" type="button">Экспертный, с подробностями</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">32.</span>Что обязательно сказать в каждом объявлении</label>
+      <div class="qhint">Например: гарантия 2 года, собственное производство, работаем с юрлицами, выезд в день обращения</div>
+      <textarea data-q="32. Обязательные тезисы"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">33.</span>Слова, обещания и темы, которых нужно избегать</label>
+      <div class="qhint">Например: «самые дешёвые», сравнение с конкурентами, сроки, которые не всегда соблюдаются</div>
+      <textarea data-q="33. Недопустимые формулировки"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">34.</span>Конкуренты на Авито</label>
+      <div class="qhint">Ссылки на объявления или профили конкурентов и чем вы от них отличаетесь</div>
+      <textarea data-q="34. Конкуренты на Авито"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s7">
+    <span class="hflow-tag">Раздел 07 / 09 — покупатели</span>
+    <h2 class="block-title">Общение с покупателями</h2>
+    <p class="block-hint">Сообщения в чате Авито — основной источник заявок. Определим, кто и как на них отвечает.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">35.</span>Кто отвечает покупателям в чате Авито<span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-req="1" data-group="35">
+        <button class="choice-btn" type="button">Отвечаем мы полностью</button>
+        <button class="choice-btn" type="button">Мы отвечаем первично, затем передаём вам</button>
+        <button class="choice-btn" type="button">Отвечаете вы, мы ведём объявления</button>
+      </div>
+    </div>
+    <div class="q req"><label class="qtitle"><span class="qnum">36.</span>Куда передавать заявки и готовых к покупке клиентов<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Телефон или мессенджер ответственного менеджера, CRM. Укажите имя ответственного</div>
+      <input type="text" data-req="1" data-q="36. Передача заявок">
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">37.</span>Частые вопросы покупателей и ответы на них</label>
+      <div class="qhint">Наличие, сроки, доставка, торг, гарантия, комплектация. Это основа для быстрых ответов в чате</div>
+      <textarea data-q="37. Частые вопросы и ответы" style="min-height:120px;"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">38.</span>Когда нужно отвечать в чате</label>
+      <div class="choice-row" data-group="38">
+        <button class="choice-btn" type="button">В режиме работы компании</button>
+        <button class="choice-btn" type="button">Ежедневно, включая выходные</button>
+        <button class="choice-btn" type="button">Обсудим отдельно</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">39.</span>Ответы на отзывы в профиле</label>
+      <div class="choice-row" data-group="39">
+        <button class="choice-btn" type="button">Отвечаем мы</button>
+        <button class="choice-btn" type="button">Отвечаем мы, с согласованием</button>
+        <button class="choice-btn" type="button">Не требуется</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s8">
+    <span class="hflow-tag">Раздел 08 / 09 — продвижение</span>
+    <h2 class="block-title">Продвижение и бюджет</h2>
+    <p class="block-hint">Деньги на размещения и продвижение списываются с кошелька Авито — это не стоимость наших работ. Кошелёк пополняете вы, лимиты на месяц задаются при выдаче доступа.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">40.</span>Ежемесячный бюджет кошелька Авито<span class="req-chip">обязательно</span></label>
+      <div class="qhint">Ориентир для плана продвижения, сумму лимитов согласуем заранее</div>
+      <div class="choice-row" data-req="1" data-group="40">
+        <button class="choice-btn" type="button">До 10 000 ₽</button>
+        <button class="choice-btn" type="button">10 000–30 000 ₽</button>
+        <button class="choice-btn" type="button">30 000–100 000 ₽</button>
+        <button class="choice-btn" type="button">Более 100 000 ₽</button>
+        <button class="choice-btn" type="button">Определим вместе</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">41.</span>Какой результат для вас главный</label>
+      <div class="choice-row" data-group="41">
+        <button class="choice-btn" type="button">Звонки</button>
+        <button class="choice-btn" type="button">Сообщения в чате</button>
+        <button class="choice-btn" type="button">Заказы с доставкой</button>
+        <button class="choice-btn" type="button">Все обращения одинаково</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">42.</span>Сезонность и пиковые периоды продаж</label>
+      <div class="qhint">Когда спрос растёт и падает, плановые распродажи, поступления новых партий</div>
+      <textarea data-q="42. Сезонность"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s9">
+    <span class="hflow-tag">Раздел 09 / 09 — согласование</span>
+    <h2 class="block-title">Порядок согласования и обратная связь</h2>
+    <p class="block-hint">Как будет организовано взаимодействие в ходе работы.</p>
+
+    <div class="q req"><label class="qtitle"><span class="qnum">43.</span>Удобный мессенджер для создания рабочей группы<span class="req-chip">обязательно</span></label>
+      <div class="qhint">В выбранном мессенджере будет создан общий чат для оперативной связи и согласования материалов</div>
+      <div class="choice-row" data-req="1" data-group="43">
+        <button class="choice-btn" type="button">Telegram</button>
+        <button class="choice-btn" type="button">MAX</button>
+        <button class="choice-btn" type="button">WhatsApp</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">44.</span>Порядок согласования объявлений</label>
+      <div class="qhint">Определяет, как часто вы будете подключаться к работе</div>
+      <div class="choice-row" data-group="44">
+        <button class="choice-btn" type="button">Согласование первых объявлений, далее еженедельный отчёт</button>
+        <button class="choice-btn" type="button">Согласование каждого объявления</button>
+        <button class="choice-btn" type="button">Согласование каждого объявления и еженедельный отчёт</button>
+      </div>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">45.</span>Документы, лицензии и обязательные сведения</label>
+      <div class="qhint">Для части категорий Авито требует подтверждающие документы или лицензию: медицина, финансы, стройматериалы с сертификацией и другие. При отсутствии требований укажите «нет»</div>
+      <textarea data-q="45. Документы и лицензии"></textarea>
+    </div>
+    <div class="q"><label class="qtitle"><span class="qnum">46.</span>Иные пожелания и ограничения</label>
+      <textarea data-q="46. Иные пожелания"></textarea>
+    </div>
+
+    <div class="hsubmit-panel">
+      <h3>Анкета заполнена?</h3>
+      <p>Нажмите «Отправить анкету» — ответы и приложенные файлы сразу придут нам.</p>
+
+      <div class="consent">
+        <input type="checkbox" id="consentBox">
+        <label for="consentBox">Я даю согласие на обработку персональных данных, указанных в настоящей анкете, на условиях <a href="#" id="policyLink" target="_blank" rel="noopener">Политики обработки персональных данных</a>. Согласие предоставляется в целях организации взаимодействия при оказании услуг и может быть отозвано.</label>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="sendFormBtn" type="button" disabled>Отправить анкету</button>
+      </div>
+      <div class="status-msg" id="statusMsg"></div>
+      <textarea id="exportOut" readonly></textarea>
+
+      <div class="aux-row">
+        <button class="aux-link" id="downloadBtn" type="button">Скачать PDF с ответами</button>
+        <button class="aux-link aux-link--quiet" id="clearBtn" type="button">Очистить анкету и удалить черновик</button>
+      </div>
+      <p class="aux-note">Анкета и файлы передаются напрямую, ничего открывать не нужно. Копию ответов можно сохранить себе в PDF.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="doc-footer">
+  <p>Старт проекта · ведение профиля и объявлений на Авито</p>
+  <p><span id="footerCopy">© 2026</span> · <a href="#" id="policyLinkFooter" target="_blank" rel="noopener">Политика обработки персональных данных</a></p>
+  <p>Черновик анкеты сохраняется только в браузере вашего устройства и не передаётся до момента отправки.</p>
+</footer>
+
+
+<script>
+  document.querySelectorAll('.choice-row').forEach(function(row){
+    row.querySelectorAll('.choice-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        row.querySelectorAll('.choice-btn').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        row.dataset.selected = btn.textContent;
+        updateProgress();
+        saveDraft();
+      });
+    });
+  });
+
+  var fields = Array.prototype.slice.call(document.querySelectorAll('[data-q]'));
+  var choiceGroups = Array.prototype.slice.call(document.querySelectorAll('.choice-row'));
+
+  /* ---------- приём файлов в поле прайс-листа ---------- */
+  var attachedFiles = [];
+  var dz = document.getElementById('dropzone15');
+  var dzArea = dz.querySelector('textarea');
+  var dzList = document.getElementById('fileList15');
+
+  function isTextFile(file){
+    return /^text\//.test(file.type) || /\.(txt|csv|tsv|md)$/i.test(file.name);
+  }
+  function humanSize(bytes){
+    if(bytes < 1024) return bytes + ' Б';
+    if(bytes < 1048576) return Math.round(bytes/1024) + ' КБ';
+    return (bytes/1048576).toFixed(1) + ' МБ';
+  }
+  function renderFileList(){
+    dzList.innerHTML = '';
+    dzList.hidden = attachedFiles.length === 0;
+    attachedFiles.forEach(function(f, i){
+      var li = document.createElement('li');
+      li.appendChild(document.createTextNode(f.name + ' · ' + f.size));
+      var x = document.createElement('button');
+      x.type = 'button';
+      x.textContent = '×';
+      x.setAttribute('aria-label', 'Убрать файл ' + f.name);
+      x.addEventListener('click', function(){
+        attachedFiles.splice(i, 1);
+        renderFileList();
+      });
+      li.appendChild(x);
+      dzList.appendChild(li);
+    });
+  }
+  function handleFiles(list){
+    Array.prototype.forEach.call(list, function(file){
+      if(isTextFile(file)){
+        var reader = new FileReader();
+        reader.onload = function(){
+          var prefix = dzArea.value.trim() ? dzArea.value.replace(/\s+$/, '') + '\n\n' : '';
+          dzArea.value = prefix + '— из файла «' + file.name + '» —\n' + reader.result;
+          updateProgress();
+          saveDraft();
+        };
+        reader.readAsText(file, 'UTF-8');
+      } else {
+        if(!attachedFiles.some(function(f){ return f.name === file.name; })){
+          attachedFiles.push({ name: file.name, size: humanSize(file.size), bytes: file.size, file: file });
+        }
+        renderFileList();
+      }
+    });
+  }
+
+  ['dragenter','dragover'].forEach(function(ev){
+    dz.addEventListener(ev, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.add('is-over'); });
+  });
+  ['dragleave','dragend'].forEach(function(ev){
+    dz.addEventListener(ev, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.remove('is-over'); });
+  });
+  dz.addEventListener('drop', function(e){
+    e.preventDefault(); e.stopPropagation();
+    dz.classList.remove('is-over');
+    if(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+  });
+  document.getElementById('filePick15').addEventListener('change', function(e){
+    if(e.target.files && e.target.files.length) handleFiles(e.target.files);
+    e.target.value = '';
+  });
+  ['dragover','drop'].forEach(function(ev){
+    window.addEventListener(ev, function(e){ if(!dz.contains(e.target)) e.preventDefault(); });
+  });
+
+  function requiredState(){
+    var reqFields = fields.filter(function(f){ return f.dataset.req; });
+    var reqGroups = choiceGroups.filter(function(g){ return g.dataset.req; });
+    var total = reqFields.length + reqGroups.length;
+    var done = reqFields.filter(function(f){ return f.value && f.value.trim().length > 0; }).length
+             + reqGroups.filter(function(g){ return !!g.dataset.selected; }).length;
+    return { total: total, done: done };
+  }
+
+  function updateProgress(){
+    var total = fields.length + choiceGroups.length;
+    var filled = fields.filter(function(f){ return f.value && f.value.trim().length > 0; }).length
+               + choiceGroups.filter(function(g){ return !!g.dataset.selected; }).length;
+    var pct = filled / total;
+    var fill = document.getElementById('progressFill');
+    fill.style.width = (pct * 100) + '%';
+    document.getElementById('progressCount').textContent = filled;
+    document.getElementById('progressTotal').textContent = total;
+
+    var req = requiredState();
+    document.getElementById('reqCount').textContent = req.done;
+    document.getElementById('reqTotal').textContent = req.total;
+    document.getElementById('reqBadge').classList.toggle('done', req.done === req.total);
+
+    /* цвет шкалы: пока не закрыты обязательные — приглушённый лайм,
+       дальше мягкий красный → оранжевый → зелёный */
+    fill.classList.remove('stage-red', 'stage-orange', 'stage-green');
+    if(req.done >= req.total){
+      if(pct >= 0.75)      fill.classList.add('stage-green');
+      else if(pct >= 0.60) fill.classList.add('stage-orange');
+      else                 fill.classList.add('stage-red');
+    }
+  }
+
+  /* ---------- навигация по разделам ---------- */
+  (function(){
+    var header = document.querySelector('.topbar');
+    var links = Array.prototype.slice.call(document.querySelectorAll('.section-nav a'));
+    var nav = document.getElementById('sectionNav');
+    var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+
+    function syncHeadHeight(){
+      document.documentElement.style.setProperty('--head-h', header.offsetHeight + 'px');
+    }
+    syncHeadHeight();
+    window.addEventListener('resize', syncHeadHeight);
+
+    var ticking = false;
+    function syncActive(){
+      var line = header.offsetHeight + 40;
+      var current = 0;
+      sections.forEach(function(sec, i){
+        if(sec && sec.getBoundingClientRect().top <= line) current = i;
+      });
+      links.forEach(function(a, i){
+        var on = i === current;
+        if(a.classList.contains('active') !== on) a.classList.toggle('active', on);
+        if(on){
+          var r = a.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+          if(r.left < nr.left || r.right > nr.right){
+            nav.scrollTo({ left: a.offsetLeft - nav.clientWidth / 2 + a.offsetWidth / 2, behavior: 'smooth' });
+          }
+        }
+      });
+      ticking = false;
+    }
+    window.addEventListener('scroll', function(){
+      if(!ticking){ ticking = true; window.requestAnimationFrame(syncActive); }
+    }, { passive: true });
+    syncActive();
+  })();
+
+  function saveDraft(){
+    try{
+      var data = {};
+      fields.forEach(function(f){ data[f.dataset.q] = f.value; });
+      choiceGroups.forEach(function(g){ data['choice:'+g.dataset.group] = g.dataset.selected || ''; });
+      localStorage.setItem('client_brief_avito_draft_v1', JSON.stringify(data));
+    }catch(e){}
+  }
+
+  function loadDraft(){
+    try{
+      var raw = localStorage.getItem('client_brief_avito_draft_v1');
+      if(!raw) return;
+      var data = JSON.parse(raw);
+      fields.forEach(function(f){ if(data[f.dataset.q]) f.value = data[f.dataset.q]; });
+      choiceGroups.forEach(function(g){
+        var val = data['choice:'+g.dataset.group];
+        if(val){
+          g.dataset.selected = val;
+          g.querySelectorAll('.choice-btn').forEach(function(b){
+            if(b.textContent === val) b.classList.add('active');
+          });
+        }
+      });
+    }catch(e){}
+  }
+
+  fields.forEach(function(f){
+    f.addEventListener('input', function(){ updateProgress(); saveDraft(); });
+  });
+
+  /* ============================================================
+     НАСТРОЙКИ — заполнить перед публикацией страницы
+     ============================================================ */
+  var COMPANY_NAME       = 'HDR Group';   // владелец страницы, выводится в подвале
+  var POLICY_URL         = '';            // ССЫЛКА НА ПОЛИТИКУ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ — обязательна к заполнению
+
+  /* ---------- куда уходят ответы ---------- */
+  // Веб-приложение Google Apps Script: пишет ответы в Google Таблицу,
+  // файлы — в папку на Google Диске, и шлёт уведомление в Telegram (см. apps-script.gs).
+  var API_URL   = 'https://script.google.com/macros/s/AKfycbyIj70GSaOepbivioyGsYPhy8cezGgzwqGUiGCpSO3yMIyGIVNDMlMvPWh3ReJzfZOd/exec';
+  var BRIEF_KEY = 'avito';           // лист в таблице: site / maps / vk / avito
+  var FILES_UPLOAD_URL = API_URL;
+  var MAX_FILES = 15, MAX_FILE_BYTES = 25 * 1024 * 1024, MAX_TOTAL_BYTES = 100 * 1024 * 1024;
+
+  /* ============================================================ */
+
+
+  document.getElementById('footerCopy').textContent = '© ' + new Date().getFullYear() + ' ' + COMPANY_NAME;
+  ['policyLink','policyLinkFooter'].forEach(function(id){
+    var a = document.getElementById(id);
+    if(POLICY_URL){ a.href = POLICY_URL; }
+    else { a.removeAttribute('href'); a.removeAttribute('target'); a.style.textDecoration = 'none'; a.style.cursor = 'default'; }
+  });
+
+  var consentBox = document.getElementById('consentBox');
+  var sendFormBtn = document.getElementById('sendFormBtn');
+  var sendButtons = [sendFormBtn];
+
+  function syncConsent(){
+    var ok = consentBox.checked;
+    sendButtons.forEach(function(b){ b.disabled = !ok; });
+    if(!ok) document.getElementById('statusMsg').textContent = '';
+  }
+  consentBox.addEventListener('change', syncConsent);
+  syncConsent();
+
+  document.getElementById('clearBtn').addEventListener('click', function(){
+    if(!confirm('Очистить все ответы и удалить сохранённый черновик из браузера?')) return;
+    fields.forEach(function(f){ f.value = ''; });
+    choiceGroups.forEach(function(g){
+      delete g.dataset.selected;
+      g.querySelectorAll('.choice-btn').forEach(function(b){ b.classList.remove('active'); });
+    });
+    consentBox.checked = false;
+    attachedFiles.length = 0;
+    renderFileList();
+    syncConsent();
+    var out = document.getElementById('exportOut');
+    out.value = ''; out.style.display = 'none';
+    try{ localStorage.removeItem('client_brief_avito_draft_v1'); }catch(e){}
+    updateProgress();
+    document.getElementById('statusMsg').textContent = 'Анкета очищена, сохранённый черновик удалён.';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function questionTitle(el){
+    var card = el.closest('.q');
+    if(!card) return '';
+    var label = card.querySelector('.qtitle');
+    if(!label) return '';
+    var clone = label.cloneNode(true);
+    clone.querySelectorAll('.req-chip, .qnum').forEach(function(el){ el.remove(); });
+    return clone.textContent.replace(/\s+/g, ' ').trim();
+  }
+
+  function collectAnswers(){
+    var all = [];
+    fields.forEach(function(f){
+      all.push({
+        n: parseInt(f.dataset.q, 10),
+        label: f.dataset.q,
+        title: questionTitle(f),
+        required: !!f.dataset.req,
+        value: f.value.trim()
+      });
+    });
+    choiceGroups.forEach(function(g){
+      all.push({
+        n: parseInt(g.dataset.group, 10),
+        label: g.dataset.group + '. (выбор варианта)',
+        title: questionTitle(g),
+        required: !!g.dataset.req,
+        value: g.dataset.selected || ''
+      });
+    });
+    all.sort(function(a,b){ return a.n - b.n; });
+    return all;
+  }
+
+  function companyName(){
+    var f = fields.filter(function(x){ return x.dataset.q.indexOf('1. Наименование') === 0; })[0];
+    return (f && f.value.trim()) || 'компания не указана';
+  }
+
+  function buildExportText(){
+    var lines = ['АНКЕТА КЛИЕНТА — ведение профиля и объявлений на Авито', ''];
+    var all = collectAnswers();
+    all.forEach(function(item){
+      lines.push(item.label + ':');
+      lines.push(item.value || '(не заполнено)');
+      lines.push('');
+    });
+    if(attachedFiles.length){
+      lines.push('---');
+      lines.push('ПРИЛОЖЕННЫЕ ФАЙЛЫ (передаются вместе с анкетой, в этот текст не входят):');
+      attachedFiles.forEach(function(f){ lines.push('· ' + f.name + ' (' + f.size + ')'); });
+      lines.push('');
+    }
+    lines.push('---');
+    lines.push('Согласие на обработку персональных данных: предоставлено ' + new Date().toLocaleString('ru-RU'));
+    return lines.join('\n');
+  }
+
+  function showExportText(text){
+    var out = document.getElementById('exportOut');
+    out.value = text;
+    out.style.display = 'block';
+  }
+
+  var statusMsg = document.getElementById('statusMsg');
+
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(c){
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c];
+    });
+  }
+
+  function requiredWarning(){
+    var r = requiredState();
+    return r.done < r.total
+      ? ' Обратите внимание: не заполнено обязательных вопросов — ' + (r.total - r.done) + '.'
+      : '';
+  }
+
+  /* ---------- сборка PDF с ответами ---------- */
+  function buildPdfNode(){
+    var node = document.createElement('div');
+    node.style.cssText = 'position:fixed; left:-10000px; top:0; width:760px; background:#ffffff; color:#141414;'
+      + 'font-family:Arial,"Helvetica Neue",Helvetica,sans-serif; font-size:13px; line-height:1.5; padding:38px 42px;';
+
+    var head = '<div style="border-bottom:2px solid #141414; padding-bottom:14px; margin-bottom:22px;">'
+      + '<div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#777;">Старт проекта · анкета клиента</div>'
+      + '<div style="font-size:21px; font-weight:bold; margin-top:7px;">Ведение профиля и объявлений на Авито</div>'
+      + '<div style="font-size:12px; color:#555; margin-top:8px;">' + esc(companyName())
+      + ' &nbsp;·&nbsp; ' + esc(new Date().toLocaleString('ru-RU')) + '</div></div>';
+
+    var body = '';
+    collectAnswers().forEach(function(item){
+      var filled = !!item.value;
+      body += '<div style="margin-bottom:16px; page-break-inside:avoid;">'
+        + '<div style="font-size:12.5px; font-weight:bold; color:#141414;">'
+        + item.n + '. ' + esc(item.title || item.label)
+        + (item.required ? ' <span style="font-size:9px; font-weight:normal; color:#4E7F12;">[обязательный]</span>' : '')
+        + '</div>'
+        + '<div style="font-size:13px; color:' + (filled ? '#222' : '#999') + '; white-space:pre-wrap; '
+        + 'border-left:3px solid ' + (filled ? '#4E7F12' : '#DDD') + '; padding-left:11px; margin-top:5px;">'
+        + esc(filled ? item.value : 'не заполнено') + '</div></div>';
+    });
+
+    var tail = '';
+    if(attachedFiles.length){
+      tail += '<div style="margin-top:22px; padding-top:14px; border-top:1px solid #DDD;">'
+        + '<div style="font-size:12px; font-weight:bold;">Приложенные файлы</div>'
+        + '<div style="font-size:11.5px; color:#555; margin-top:4px;">Не входят в этот PDF — направляются отдельно:</div>';
+      attachedFiles.forEach(function(f){
+        tail += '<div style="font-size:12px; margin-top:3px;">· ' + esc(f.name) + ' (' + esc(f.size) + ')</div>';
+      });
+      tail += '</div>';
+    }
+    tail += '<div style="margin-top:22px; padding-top:14px; border-top:1px solid #DDD; font-size:11px; color:#666;">'
+      + 'Согласие на обработку персональных данных предоставлено ' + esc(new Date().toLocaleString('ru-RU')) + '.</div>';
+
+    node.innerHTML = head + body + tail;
+    return node;
+  }
+
+  function pdfFileName(){
+    var name = companyName().replace(/[^\wА-Яа-яЁё\- ]+/g, '').trim().replace(/\s+/g, '-').slice(0, 40);
+    return 'anketa-' + (name || 'klient') + '.pdf';
+  }
+
+  function makePdf(){
+    return new Promise(function(resolve, reject){
+      if(typeof html2canvas !== 'function' || !window.jspdf || !window.jspdf.jsPDF){
+        reject(new Error('libs')); return;
+      }
+      var node = buildPdfNode();
+      document.body.appendChild(node);
+      html2canvas(node, { scale: 2, backgroundColor: '#ffffff', logging: false }).then(function(canvas){
+        document.body.removeChild(node);
+        var pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
+        var margin = 10, imgW = 190, pageH = 297 - margin * 2;
+        var imgH = canvas.height * imgW / canvas.width;
+        var img = canvas.toDataURL('image/jpeg', 0.85);
+        var position = margin, heightLeft = imgH;
+        pdf.addImage(img, 'JPEG', margin, position, imgW, imgH);
+        heightLeft -= pageH;
+        while(heightLeft > 0){
+          position = margin - (imgH - heightLeft);
+          pdf.addPage();
+          pdf.addImage(img, 'JPEG', margin, position, imgW, imgH);
+          heightLeft -= pageH;
+        }
+        var name = pdfFileName();
+        pdf.save(name);
+        resolve(name);
+      }).catch(function(err){
+        if(node.parentNode) document.body.removeChild(node);
+        reject(err);
+      });
+    });
+  }
+
+  /* ---------- отправка в Google Форму ---------- */
+  var FILE_QUESTION = 15;           // номер вопроса, куда вписываются ссылки на файлы (0 — нет файлов)
+
+  function setStatus(text, kind){
+    statusMsg.textContent = text;
+    statusMsg.classList.toggle('is-error', kind === 'error');
+    statusMsg.classList.toggle('is-ok', kind === 'ok');
+  }
+
+  function hasFiles(){ return typeof attachedFiles !== 'undefined' && attachedFiles.length > 0; }
+
+  function missingRequired(){
+    return collectAnswers().filter(function(a){
+      if(a.n === FILE_QUESTION && hasFiles()) return false; // приложенные файлы заполняют вопрос
+      return a.required && !a.value;
+    });
+  }
+
+  function readAsBase64(file){
+    return new Promise(function(resolve, reject){
+      var r = new FileReader();
+      r.onload = function(){ resolve(String(r.result).split(',')[1] || ''); };
+      r.onerror = function(){ reject(r.error); };
+      r.readAsDataURL(file);
+    });
+  }
+
+  // загружает файлы через Apps Script по одному (так быстрее и надёжнее, чем одним запросом);
+  // возвращает { note, failed } — note вписывается в вопрос с материалами
+  function uploadFiles(onProgress){
+    if(!attachedFiles.length) return Promise.resolve({ note: '', failed: [] });
+    if(!FILES_UPLOAD_URL){
+      return Promise.resolve({ failed: [], note: 'Клиент приложил файлы (не загружены автоматически, запросите отдельно):\n'
+        + attachedFiles.map(function(f){ return '· ' + f.name + ' (' + f.size + ')'; }).join('\n') });
+    }
+    var folder = null, saved = [], failed = [], total = 0;
+    var queue = attachedFiles.filter(function(f, i){
+      if(i >= MAX_FILES){ failed.push(f.name + ' — больше ' + MAX_FILES + ' файлов'); return false; }
+      if(f.bytes > MAX_FILE_BYTES){ failed.push(f.name + ' — файл больше ' + Math.round(MAX_FILE_BYTES / 1048576) + ' МБ'); return false; }
+      if(total + f.bytes > MAX_TOTAL_BYTES){ failed.push(f.name + ' — превышен общий объём ' + Math.round(MAX_TOTAL_BYTES / 1048576) + ' МБ'); return false; }
+      total += f.bytes; return true;
+    });
+
+    var chain = Promise.resolve();
+    queue.forEach(function(f, i){
+      chain = chain.then(function(){
+        if(onProgress) onProgress(i + 1, queue.length, f);
+        return readAsBase64(f.file).then(function(data){
+          // text/plain — чтобы браузер не делал preflight-запрос, Apps Script его не поддерживает
+          return fetch(FILES_UPLOAD_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              company: companyName(),
+              folderId: folder ? folder.id : '',
+              files: [{ name: f.name, type: f.file.type || 'application/octet-stream', data: data }]
+            })
+          });
+        }).then(function(res){ return res.json(); }).then(function(json){
+          if(!json || !json.ok) throw new Error(json && json.error || 'нет ответа');
+          if(!folder) folder = { id: json.folderId, url: json.folder };
+          saved.push(json.files[0]);
+        }).catch(function(err){
+          failed.push(f.name + ' — ' + (err && err.message ? err.message : 'ошибка загрузки'));
+        });
+      });
+    });
+
+    return chain.then(function(){
+      var lines = [];
+      if(saved.length){
+        lines.push('Файлы клиента (Google Диск): ' + folder.url);
+        saved.forEach(function(s){ lines.push('· ' + s.name + ' — ' + s.url); });
+      }
+      if(failed.length){
+        if(lines.length) lines.push('');
+        lines.push('Не загрузились, запросите у клиента:');
+        failed.forEach(function(x){ lines.push('· ' + x); });
+      }
+      return { note: lines.join('\n'), failed: failed };
+    });
+  }
+
+  function sendToSheet(filesNote){
+    var payload = {
+      kind: 'brief',
+      brief: BRIEF_KEY,
+      company: companyName(),
+      answers: collectAnswers().map(function(a){
+        var value = a.value;
+        if(a.n === FILE_QUESTION && filesNote) value = value ? value + '\n\n' + filesNote : filesNote;
+        return { n: a.n, title: a.n + '. ' + a.title, value: value };
+      })
+    };
+    // text/plain — чтобы браузер не делал preflight-запрос, Apps Script его не поддерживает
+    return fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).then(function(res){ return res.json(); }).then(function(json){
+      if(!json || !json.ok) throw new Error(json && json.error || 'ответ не сохранён');
+      return json;
+    });
+  }
+
+  sendFormBtn.addEventListener('click', function(){
+    if(!consentBox.checked) return;
+    var missing = missingRequired();
+    if(missing.length){
+      setStatus('Заполните обязательные вопросы: ' + missing.map(function(m){ return m.n; }).join(', ') + '. Без них анкета не примется.', 'error');
+      var first = document.querySelector('[data-q^="' + missing[0].n + '."], .choice-row[data-group="' + missing[0].n + '"]');
+      if(first){
+        first.closest('.q').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if(first.focus && first.tagName !== 'DIV') setTimeout(function(){ first.focus({ preventScroll: true }); }, 400);
+      }
+      return;
+    }
+    sendButtons.forEach(function(b){ b.disabled = true; });
+    setStatus('Отправляем анкету…');
+
+    var failedFiles = [];
+    uploadFiles(function(i, n, f){
+      setStatus('Загружаем файл ' + i + ' из ' + n + ' («' + f.name + '», ' + f.size + ')… Не закрывайте страницу, крупные файлы загружаются до минуты.');
+    }).then(function(r){
+      failedFiles = r.failed;
+      setStatus('Отправляем анкету…');
+      return sendToSheet(r.note);
+    }).then(function(){
+      if(failedFiles.length){
+        setStatus('Анкета отправлена, но часть файлов не загрузилась: '
+          + failedFiles.join('; ') + '. Мы свяжемся с вами в выбранном мессенджере и попросим прислать их.', 'error');
+      } else {
+        setStatus('Анкета отправлена. Спасибо! Мы свяжемся с вами в выбранном мессенджере.', 'ok');
+      }
+      sendFormBtn.textContent = 'Анкета отправлена';
+    }).catch(function(){
+      setStatus('Не удалось отправить анкету — проверьте интернет и попробуйте ещё раз. Ответы сохранены в браузере, заново заполнять не нужно.', 'error');
+      syncConsent();
+    });
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', function(){
+    setStatus('Готовим PDF с ответами…');
+    makePdf().then(function(fileName){
+      setStatus('PDF «' + fileName + '» сохранён в загрузки.' + requiredWarning());
+    }).catch(function(){
+      var text = buildExportText();
+      try{
+        var blob = new Blob(['﻿' + text], { type: 'text/plain;charset=utf-8' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url; a.download = 'anketa-klienta.txt';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+        setStatus('PDF собрать не удалось — сохранён текстовый файл с ответами.');
+      }catch(e){
+        showExportText(text);
+        setStatus('Скачивание недоступно в этом браузере. Текст ответов показан ниже.');
+      }
+    });
+  });
+
+  loadDraft();
+  updateProgress();
+</script>
+
+</body>
+</html>
