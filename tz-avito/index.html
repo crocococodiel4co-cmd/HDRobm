@@ -839,16 +839,20 @@
 
     <div class="hsubmit-panel">
       <h3>Анкета заполнена?</h3>
-      <p>Скачайте PDF с ответами и отправьте его вашему менеджеру HDR Group в рабочий чат.</p>
+      <p>Скачайте PDF с ответами — копия автоматически придёт вашему менеджеру HDR Group.</p>
+      <div class="consent">
+        <input type="checkbox" id="consentBox">
+        <label for="consentBox">Я даю согласие на обработку персональных данных, указанных в настоящей анкете, на условиях <a href="#" id="policyLink" target="_blank" rel="noopener">Политики обработки персональных данных</a>. Согласие предоставляется в целях организации взаимодействия при оказании услуг и может быть отозвано.</label>
+      </div>
       <div class="btn-row">
-        <button class="btn btn-primary" id="pdfBtn" type="button">Скачать PDF с ответами</button>
+        <button class="btn btn-primary" id="pdfBtn" type="button" disabled>Скачать PDF с ответами</button>
       </div>
       <div class="status-msg" id="statusMsg"></div>
       <textarea id="exportOut" readonly></textarea>
       <div class="aux-row">
         <button class="aux-link aux-link--quiet" id="clearBtn" type="button">Очистить анкету и удалить черновик</button>
       </div>
-      <p class="aux-note">Ответы никуда не отправляются со страницы — PDF формируется на вашем устройстве. Черновик хранится в этом браузере, к анкете можно вернуться позже.</p>
+      <p class="aux-note">PDF формируется на вашем устройстве, при скачивании его копия передаётся HDR Group. Черновик хранится в этом браузере, к анкете можно вернуться позже.</p>
     </div>
   </section>
 
@@ -867,6 +871,10 @@
   var COMPANY_NAME = 'HDR Group';
   var POLICY_URL   = '';
   var DRAFT_KEY = 'client_brief_avito_v2';
+  // Посредник Google Apps Script (tools/brief-telegram.gs): пересылает копию PDF в Telegram HDR Group.
+  // Пусто — копия не отправляется, клиент просто скачивает PDF.
+  var RELAY_URL = '';
+  var BRIEF_KEY = 'avito';
   /* ============================================================ */
 
   var $ = function(s, r){ return (r || document).querySelector(s); };
@@ -1179,7 +1187,15 @@
     if(POLICY_URL){ a.href = POLICY_URL; }
     else { a.removeAttribute('href'); a.removeAttribute('target'); a.style.textDecoration = 'none'; a.style.cursor = 'default'; }
   })();
-  var statusMsg = $('#statusMsg'), pdfBtn = $('#pdfBtn');
+  var statusMsg = $('#statusMsg'), pdfBtn = $('#pdfBtn'), consentBox = $('#consentBox');
+  (function(){
+    var a = document.getElementById('policyLink');
+    if(POLICY_URL){ a.href = POLICY_URL; }
+    else { a.removeAttribute('href'); a.removeAttribute('target'); a.style.textDecoration = 'none'; a.style.cursor = 'default'; }
+  })();
+  function syncConsent(){ pdfBtn.disabled = !consentBox.checked; }
+  consentBox.addEventListener('change', syncConsent);
+  syncConsent();
   function setStatus(text, kind){
     statusMsg.textContent = text;
     statusMsg.classList.toggle('is-error', kind === 'error');
@@ -1192,7 +1208,8 @@
     $$('.choice-row').forEach(function(r){ setChoice(r, ''); });
     slotData = []; renderedTier = -1;
     attachedFiles.length = 0; renderFileList();
-    try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
+    consentBox.checked = false; syncConsent();
+    try{ localStorage.removeItem(DRAFT_KEY); localStorage.removeItem(DRAFT_KEY + '_sent'); }catch(e){}
     refresh();
     setStatus('Анкета очищена, сохранённый черновик удалён.');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1342,6 +1359,41 @@
       ? ' Отправьте его вашему менеджеру HDR Group в рабочий чат вместе с файлами: ' + attachedFiles.map(function(f){ return f.name; }).join(', ') + '.'
       : ' Отправьте его вашему менеджеру HDR Group в рабочий чат.';
   }
+  /* ---------- копия PDF в Telegram HDR Group ---------- */
+  function answerLabel(id){ var row = $('.choice-row[data-choice="' + id + '"]'); return row ? choiceLabel(row) : ''; }
+  function relayMeta(){
+    var vis = visibleQs(), req = vis.filter(isRequired);
+    return {
+      company: companyName(),
+      package: answerLabel('tier'), kind: answerLabel('kind'), mode: answerLabel('mode'),
+      required: req.filter(hasAnswer).length + ' из ' + req.length,
+      files: attachedFiles.map(function(f){ return f.name; }).join(', ')
+    };
+  }
+  function signature(){
+    var str = JSON.stringify([collectAnswers().map(function(a){ return a.value; }), attachedFiles.map(function(f){ return f.name; })]);
+    var h = 0; for(var i = 0; i < str.length; i++){ h = (h * 31 + str.charCodeAt(i)) | 0; }
+    return String(h);
+  }
+  function sendCopy(doc, fileName){
+    if(!RELAY_URL) return Promise.resolve('off');
+    var sig = signature(), prev = '';
+    try{ prev = localStorage.getItem(DRAFT_KEY + '_sent') || ''; }catch(e){}
+    if(prev === sig) return Promise.resolve('same');
+    return new Promise(function(resolve){ doc.getBase64(resolve); }).then(function(b64){
+      // text/plain — без preflight-запроса, Apps Script его не поддерживает
+      return fetch(RELAY_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ brief: BRIEF_KEY, fileName: fileName, pdf: b64, meta: relayMeta(), update: !!prev }) });
+    }).then(function(r){ return r.json(); }).then(function(j){
+      if(!j || !j.ok) throw new Error(j && j.error || 'relay');
+      try{ localStorage.setItem(DRAFT_KEY + '_sent', sig); }catch(e){}
+      return 'sent';
+    });
+  }
+  function filesNote(){
+    return attachedFiles.length ? ' Файлы ' + attachedFiles.map(function(f){ return f.name; }).join(', ') + ' пришлите менеджеру в рабочий чат.' : '';
+  }
+
   var warnedFor = '';
   pdfBtn.addEventListener('click', function(){
     var missing = missingRequired();
@@ -1355,15 +1407,23 @@
     }
     pdfBtn.disabled = true;
     setStatus('Собираем PDF…');
+    var name = pdfFileName(), doc;
     loadPdfLibs().then(function(){
-      return new Promise(function(resolve){ window.pdfMake.createPdf(buildDoc()).download(pdfFileName(), resolve); });
+      doc = window.pdfMake.createPdf(buildDoc());
+      return new Promise(function(resolve){ doc.download(name, resolve); });
     }).then(function(){
-      setStatus('PDF «' + pdfFileName() + '» сохранён в загрузки.' + afterNote(), 'ok');
+      setStatus('PDF «' + name + '» сохранён в загрузки. Передаём копию менеджеру…');
+      return sendCopy(doc, name).then(function(state){
+        if(state === 'off') setStatus('PDF «' + name + '» сохранён в загрузки.' + afterNote(), 'ok');
+        else setStatus('PDF «' + name + '» сохранён в загрузки, копия уже у вашего менеджера HDR Group.' + filesNote(), 'ok');
+      }, function(){
+        setStatus('PDF «' + name + '» сохранён в загрузки. Автоматически передать копию не получилось —' + afterNote().replace(' Отправьте', ' отправьте'), 'ok');
+      });
     }).catch(function(){
       var text = buildExportText();
       try{
         var url = URL.createObjectURL(new Blob(['﻿' + text], { type: 'text/plain;charset=utf-8' }));
-        var a = document.createElement('a'); a.href = url; a.download = pdfFileName().replace(/\.pdf$/, '.txt');
+        var a = document.createElement('a'); a.href = url; a.download = name.replace(/\.pdf$/, '.txt');
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
         setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
         setStatus('PDF собрать не удалось — сохранён текстовый файл с ответами.' + afterNote(), 'error');
@@ -1371,7 +1431,7 @@
         var out = $('#exportOut'); out.value = text; out.style.display = 'block';
         setStatus('Скачивание недоступно в этом браузере. Скопируйте текст ответов ниже и отправьте менеджеру.', 'error');
       }
-    }).then(function(){ pdfBtn.disabled = false; });
+    }).then(function(){ syncConsent(); });
   });
 
   loadDraft();
