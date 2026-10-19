@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Старт проекта — ведение профиля на Авито</title>
+<title>Бриф Авито-профиля</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -333,33 +333,62 @@
   footer.doc-footer p + p{ margin-top:5px; }
   footer.doc-footer a{ color:#8FB2D8; text-decoration:underline; text-underline-offset:3px; }
   footer.doc-footer a:hover{ color:var(--accent-soft); }
-</style>
 
+  /* ---------- адаптивная анкета ---------- */
+  .is-hidden{ display:none !important; }
+  .choice-btn[hidden]{ display:none; }
+  .req-chip[hidden]{ display:none; }
+  .gate-note{
+    border:1px dashed rgba(162,209,91,.45); background:rgba(97,143,27,.08);
+    padding:16px 18px; margin:6px 0 0; font-size:14px; color:#C9DDB0;
+  }
+  .gate-note b{ color:var(--h-cream); }
+  .slot-counter{
+    display:inline-block; font-family:var(--font-mono); font-size:11px; letter-spacing:.05em;
+    color:#07101E; background:var(--accent-soft); padding:3px 9px; margin:2px 0 12px;
+  }
+  .slot-list{ display:grid; gap:10px; }
+  .slot{ border:1px solid rgba(162,209,91,.22); background:rgba(6,15,28,.45); padding:12px 14px 14px; }
+  .slot-head{ font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent-soft); margin-bottom:10px; }
+  .slot-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px 12px; }
+  .slot-field{ display:flex; flex-direction:column; gap:5px; min-width:0; }
+  .slot-field--wide{ grid-column:1 / -1; }
+  .slot-field span{ font-size:12px; color:var(--ink-soft); }
+  .slot-field input, .slot-field textarea{
+    width:100%; border:1px solid rgba(162,209,91,.26); background:rgba(6,15,28,.7);
+    font-family:var(--font-body); font-size:13.5px; color:#EEF5FF; padding:9px 11px; border-radius:0; resize:vertical;
+  }
+  .slot-field textarea{ min-height:58px; }
+  .slot-field input:focus, .slot-field textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(132,190,46,.18); }
+  .slot-field input::placeholder, .slot-field textarea::placeholder{ color:#61809F; }
+  @media (max-width:640px){ .slot-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-
-</head>
-<body>
 <header class="topbar">
   <div class="topbar-row">
     <span class="brand">СТАРТ ПРОЕКТА <small>ЗНАКОМСТВО С КОМПАНИЕЙ ПЕРЕД ВЕДЕНИЕМ ПРОФИЛЯ НА АВИТО</small></span>
     <div class="topbar-progress">
-      <span class="tp-main"><span id="progressCount">0</span> / <span id="progressTotal">46</span> заполнено</span>
-      <span class="tp-req" id="reqBadge">обязательных <span id="reqCount">0</span> / <span id="reqTotal">19</span></span>
+      <span class="tp-main"><span id="progressCount">0</span> / <span id="progressTotal">0</span> заполнено</span>
+      <span class="tp-req" id="reqBadge">обязательных <span id="reqCount">0</span> / <span id="reqTotal">0</span></span>
     </div>
   </div>
   <nav class="section-nav" id="sectionNav" aria-label="Разделы анкеты">
-    <a href="#s1"><i>01</i> Компания</a>
-    <a href="#s2"><i>02</i> Профиль</a>
-    <a href="#s3"><i>03</i> Ассортимент</a>
-    <a href="#s4"><i>04</i> Цены и условия</a>
-    <a href="#s5"><i>05</i> Фото и оформление</a>
-    <a href="#s6"><i>06</i> Тексты</a>
-    <a href="#s7"><i>07</i> Покупатели</a>
-    <a href="#s8"><i>08</i> Продвижение</a>
-    <a href="#s9"><i>09</i> Согласование</a>
+    <a href="#s1"><i>01</i> Пакет</a>
+    <a href="#s2"><i>02</i> Компания</a>
+    <a href="#s3"><i>03</i> Профиль</a>
+    <a href="#s4"><i>04</i> Объявления</a>
+    <a href="#s5"><i>05</i> Цены и условия</a>
+    <a href="#s6"><i>06</i> Фото и видео</a>
+    <a href="#s7"><i>07</i> Профиль компании</a>
+    <a href="#s8"><i>08</i> Тексты</a>
+    <a href="#s9"><i>09</i> Покупатели</a>
+    <a href="#s10"><i>10</i> Продвижение</a>
+    <a href="#s11"><i>11</i> Согласование</a>
   </nav>
   <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 </header>
@@ -370,355 +399,490 @@
     <h1 class="hero-title">Чем лучше мы узнаем ваш бизнес, тем больше обращений принесёт Авито</h1>
     <ul class="hero-points">
       <li>Анкета заполняется один раз, до начала работ.</li>
-      <li>Ваши ответы становятся основой технического задания.</li>
-      <li>В работу входят: создание и обновление объявлений, тексты и фото, ответы покупателям, продвижение в рамках согласованного бюджета.</li>
-      <li>Название, описание, логотип и контакты профиля меняет только владелец — мы подготовим готовые тексты и файлы.</li>
+      <li>Сначала выберите пакет: 5–7, до 15 или до 30 объявлений — вопросы подстроятся под него.</li>
+      <li>Объявления можно расписать самостоятельно или дать направления — темы соберём сами и согласуем с вами.</li>
       <li>Точная формулировка не нужна — достаточно сути, остальное уточним при согласовании.</li>
     </ul>
     <div class="hero-facts">
-      <div><b>9 разделов</b><span>46 вопросов, 19 из них обязательные</span></div>
-      <div><b>15–20 минут</b><span>ориентировочное время заполнения</span></div>
+      <div><b>11 разделов</b><span>состав вопросов зависит от пакета и вида объявлений</span></div>
+      <div><b>15–25 минут</b><span>ориентировочное время заполнения</span></div>
       <div><b>Меньше правок</b><span>чем подробнее ответы, тем ближе первая версия к тому, что вы ждёте</span></div>
     </div>
     <div class="hnote">
-      <p><b>Состав работ.</b> Объявления на Авито (тексты, фотографии, цены, категории и параметры), ответы покупателям в чате, продвижение объявлений, подготовка материалов для оформления профиля компании.</p>
-      <p><b>Требования площадки.</b> Материалы готовятся с учётом правил Авито: одно объявление — на один товар или услугу в одном городе, без дублей; в текстах и на фотографиях нельзя указывать телефоны, ссылки и другие контакты; цена и наличие должны быть достоверными на дату публикации. Публикуются только изображения, права на которые принадлежат компании либо получены законным образом. Для отдельных категорий Авито запрашивает лицензии или документы — просим отметить это в разделе 09.</p>
-      <p><b>Доступ к профилю.</b> Пароль передавать не нужно — доступ выдаётся ссылкой-приглашением, профиль остаётся вашим. <a href="../access/avito/" target="_blank" rel="noopener">Как выдать доступ</a></p>
+      <p><b>Состав работ.</b> Объявления на Авито: тексты, фотографии, цены, категории и параметры. Оформление профиля компании, ответы покупателям, продвижение объявлений.</p>
+      <p><b>Правила площадки.</b> Одно объявление — одна позиция, без повторов. В названиях, описаниях и на фото нельзя указывать телефоны, ссылки и другие контакты, в названиях — слова «акция» и «скидка». Цена и наличие должны быть достоверными. Публикуются только изображения, права на которые принадлежат компании. Для отдельных категорий Авито запрашивает лицензии и документы — отметьте их в разделе 11.</p>
+      <p><b>Доступ к профилю.</b> Пароль не нужен — доступ выдаётся приглашением, профиль остаётся вашим. <a href="../access/avito/" target="_blank" rel="noopener">Как выдать доступ</a></p>
     </div>
   </section>
 
   <section class="hpanel--flow" id="s1">
-    <span class="hflow-tag">Раздел 01 / 09 — компания</span>
-    <h2 class="block-title">Сведения о компании</h2>
-    <p class="block-hint">Базовые данные для объявлений и описания профиля. Раздел подходит для компании любой сферы и любого масштаба.</p>
+    <span class="hflow-tag">Раздел 01 / 11 — пакет</span>
+    <h2 class="block-title">Пакет и формат работы</h2>
+    <p class="block-hint">Три вопроса, от которых зависит остальная анкета: сколько объявлений ведём, что продаём и кто готовит тексты объявлений.</p>
 
-    <div class="q req"><label class="qtitle"><span class="qnum">1.</span>Наименование компании<span class="req-chip">обязательно</span></label>
-      <div class="qhint">В том виде, в котором оно должно отображаться в профиле Авито</div>
-      <input type="text" data-req="1" data-q="1. Наименование компании">
+    <div class="q" data-qid="tier" data-req="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Сколько объявлений нужно разместить в профиле компании</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Количество объявлений, которые мы создаём и ведём ежемесячно</div>
+      <div class="choice-row" data-choice="tier">
+        <button class="choice-btn" type="button" data-v="7">5–7 объявлений</button>
+        <button class="choice-btn" type="button" data-v="15">До 15 объявлений</button>
+        <button class="choice-btn" type="button" data-v="30">До 30 объявлений</button>
+      </div>
     </div>
-    <div class="q req"><label class="qtitle"><span class="qnum">2.</span>Сфера деятельности и краткое описание работы компании<span class="req-chip">обязательно</span></label>
-      <div class="qhint">Достаточно двух-трёх предложений</div>
-      <textarea data-req="1" data-q="2. Сфера деятельности"></textarea>
+    <div class="q" data-qid="kind" data-req="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что размещаем на Авито</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="kind">
+        <button class="choice-btn" type="button" data-v="goods">Товары</button>
+        <button class="choice-btn" type="button" data-v="services">Услуги</button>
+        <button class="choice-btn" type="button" data-v="both">Товары и услуги</button>
+      </div>
     </div>
-    <div class="q req"><label class="qtitle"><span class="qnum">3.</span>Ключевые преимущества компании перед конкурентами<span class="req-chip">обязательно</span></label>
-      <div class="qhint">Что покупатель должен понять из объявления в первую очередь: опыт, гарантия, сроки, наличие, цена</div>
-      <textarea data-req="1" data-q="3. Преимущества компании"></textarea>
+    <div class="q" data-qid="mode" data-req="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Как готовим объявления</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Можно расписать каждое объявление самостоятельно или дать направления — тогда темы объявлений соберём мы по спросу на Авито и согласуем с вами. Если распишете не все объявления, остальные соберём по направлениям</div>
+      <div class="choice-row" data-choice="mode">
+        <button class="choice-btn" type="button" data-v="self">Распишу объявления сам</button>
+        <button class="choice-btn" type="button" data-v="dirs">Задам направления, объявления соберёте вы</button>
+      </div>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">4.</span>Режим работы</label>
-      <div class="qhint">В том числе время, когда вы готовы принимать звонки с Авито</div>
-      <input type="text" data-q="4. Режим работы">
-    </div>
-    <div class="q"><label class="qtitle"><span class="qnum">5.</span>Адреса: офис, склад, точки самовывоза или выезда</label>
-      <div class="qhint">Если работаете без физического адреса — укажите, где оказываете услуги</div>
-      <textarea data-q="5. Адреса"></textarea>
-    </div>
-    <div class="q"><label class="qtitle"><span class="qnum">6.</span>Сайт и другие ресурсы компании</label>
-      <div class="qhint">Сайт, карточки на картах, соцсети. При отсутствии — укажите «нет»</div>
-      <textarea data-q="6. Сайт и ресурсы"></textarea>
-    </div>
+    <div class="gate-note" id="gateNote"><b>Ответьте на три вопроса выше</b> — после этого появятся остальные разделы, подобранные под ваш пакет.</div>
   </section>
 
   <section class="hpanel--flow" id="s2">
-    <span class="hflow-tag">Раздел 02 / 09 — профиль</span>
-    <h2 class="block-title">Профиль на Авито</h2>
-    <p class="block-hint">Что уже есть на площадке и где нужно размещаться.</p>
+    <span class="hflow-tag">Раздел 02 / 11 — компания</span>
+    <h2 class="block-title">Сведения о компании</h2>
+    <p class="block-hint">Базовые данные для объявлений и анкеты профиля.</p>
 
-    <div class="q req"><label class="qtitle"><span class="qnum">7.</span>Ссылка на профиль Авито<span class="req-chip">обязательно</span></label>
-      <div class="qhint">Откройте свой профиль и скопируйте адрес страницы. Если профиля ещё нет — укажите «нет», поможем завести</div>
-      <input type="text" data-req="1" data-q="7. Ссылка на профиль Авито">
+    <div class="q" data-qid="name" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Наименование компании</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Как должно называться в профиле Авито. ООО и ИП можно не указывать</div>
+      <input type="text" data-field="name">
     </div>
-    <div class="q req"><label class="qtitle"><span class="qnum">8.</span>Тип профиля<span class="req-chip">обязательно</span></label>
-      <div class="qhint">От этого зависит способ выдачи доступа и возможности продвижения</div>
-      <div class="choice-row" data-req="1" data-group="8">
-        <button class="choice-btn" type="button">Компания с тарифом Авито Pro</button>
-        <button class="choice-btn" type="button">Компания без тарифа</button>
-        <button class="choice-btn" type="button">Частное лицо</button>
-        <button class="choice-btn" type="button">Профиля пока нет</button>
-        <button class="choice-btn" type="button">Не знаю</button>
-      </div>
+    <div class="q" data-qid="about" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Сфера деятельности и краткое описание работы компании</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Достаточно двух-трёх предложений</div>
+      <textarea data-field="about"></textarea>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">9.</span>Сколько объявлений активно сейчас</label>
-      <div class="choice-row" data-group="9">
-        <button class="choice-btn" type="button">Нет объявлений</button>
-        <button class="choice-btn" type="button">До 10</button>
-        <button class="choice-btn" type="button">От 10 до 50</button>
-        <button class="choice-btn" type="button">Больше 50</button>
-      </div>
+    <div class="q" data-qid="advantages" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Ключевые преимущества перед конкурентами</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Опыт, гарантия, сроки, наличие, собственное производство. Первые 3–4 предложения объявления покупатель видит прямо в поиске — туда пойдут главные преимущества</div>
+      <textarea data-field="advantages"></textarea>
     </div>
-    <div class="q req"><label class="qtitle"><span class="qnum">10.</span>Города и регионы, где нужны объявления<span class="req-chip">обязательно</span></label>
-      <div class="qhint">Объявление привязано к одному городу. Для продаж в нескольких городах нужны отдельные объявления — перечислите все, где принимаете заказы</div>
-      <textarea data-req="1" data-q="10. География размещения"></textarea>
+    <div class="q" data-qid="hours" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Режим работы</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">В том числе время, когда принимаете звонки и сообщения с Авито</div>
+      <input type="text" data-field="hours">
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">11.</span>Что не устраивает в текущей работе с Авито</label>
-      <div class="qhint">Например: мало просмотров и сообщений, дорогие контакты, объявления отклоняют, некогда отвечать покупателям. Если площадку только запускаете — укажите «новый запуск»</div>
-      <textarea data-q="11. Текущие проблемы"></textarea>
+    <div class="q" data-qid="addresses" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Адреса: магазин, склад, пункт самовывоза, офис или откуда выезжаете</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Указывается в объявлении как место сделки. Пункты сторонних служб доставки не подходят</div>
+      <textarea data-field="addresses"></textarea>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">12.</span>Были ли отклонения объявлений или блокировки профиля</label>
-      <div class="qhint">Поможет не повторить старые ошибки</div>
-      <div class="choice-row" data-group="12">
-        <button class="choice-btn" type="button">Нет</button>
-        <button class="choice-btn" type="button">Отклоняли объявления</button>
-        <button class="choice-btn" type="button">Блокировали профиль</button>
-        <button class="choice-btn" type="button">Не знаю</button>
-      </div>
-    </div>
-    <div class="q"><label class="qtitle"><span class="qnum">13.</span>Доступ к профилю для нашей команды</label>
-      <div class="qhint">Пароль не нужен: доступ выдаётся ссылкой-приглашением. Пошаговая инструкция — <a href="../access/avito/" target="_blank" rel="noopener">по ссылке</a></div>
-      <div class="choice-row" data-group="13">
-        <button class="choice-btn" type="button">Уже выдан</button>
-        <button class="choice-btn" type="button">Выдадим по инструкции</button>
-        <button class="choice-btn" type="button">Нужна помощь с выдачей</button>
-      </div>
+    <div class="q" data-qid="site" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Сайт и другие ресурсы компании</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Сайт, карточки на картах, соцсети. При отсутствии — «нет»</div>
+      <textarea data-field="site"></textarea>
     </div>
   </section>
 
   <section class="hpanel--flow" id="s3">
-    <span class="hflow-tag">Раздел 03 / 09 — ассортимент</span>
-    <h2 class="block-title">Что размещаем</h2>
-    <p class="block-hint">Товары и услуги, под которые будут созданы объявления.</p>
+    <span class="hflow-tag">Раздел 03 / 11 — профиль</span>
+    <h2 class="block-title">Профиль на Авито</h2>
+    <p class="block-hint">Что уже есть на площадке и где размещаемся.</p>
 
-    <div class="q req"><label class="qtitle"><span class="qnum">14.</span>Что продаёте на Авито<span class="req-chip">обязательно</span></label>
-      <div class="choice-row" data-req="1" data-group="14">
-        <button class="choice-btn" type="button">Товары</button>
-        <button class="choice-btn" type="button">Услуги</button>
-        <button class="choice-btn" type="button">Товары и услуги</button>
+    <div class="q" data-qid="avito_link" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Ссылка на профиль Авито</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Если профиля ещё нет — укажите «нет», поможем завести</div>
+      <input type="text" data-field="avito_link">
+    </div>
+    <div class="q" data-qid="profile_type" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">На кого оформлен профиль</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">От этого зависит способ выдачи доступа и доступные тарифы</div>
+      <div class="choice-row" data-choice="profile_type">
+        <button class="choice-btn" type="button" data-v="org">Компания: ИП или ООО</button>
+        <button class="choice-btn" type="button" data-v="self_emp">Самозанятый</button>
+        <button class="choice-btn" type="button" data-v="person">Частное лицо</button>
+        <button class="choice-btn" type="button" data-v="none">Профиля пока нет</button>
       </div>
     </div>
-    <div class="q req"><label class="qtitle"><span class="qnum">15.</span>Перечень товаров или услуг для объявлений с ценами<span class="req-chip">обязательно</span></label>
-      <div class="qhint">Впишите позиции текстом, укажите ссылку или перетащите файл прямо в поле: прайс, выгрузку из 1С или МойСклад, таблицу. Файлы TXT и CSV подставятся текстом автоматически, остальные — запомнятся списком</div>
-      <div class="dropzone" id="dropzone15">
-        <textarea data-req="1" data-q="15. Ассортимент и цены" placeholder="Начните печатать или перетащите сюда файл"></textarea>
-        <div class="drop-overlay">Отпустите файл</div>
-      </div>
-      <div class="drop-actions">
-        <label class="file-pick">Выбрать файл<input type="file" id="filePick15" multiple hidden></label>
-        <span class="drop-note">TXT, CSV, XLSX, PDF, изображения · до 15 файлов, каждый до 25 МБ</span>
-      </div>
-      <ul class="file-list" id="fileList15" hidden></ul>
-    </div>
-    <div class="q req"><label class="qtitle"><span class="qnum">16.</span>Позиции, которые нужно продвигать в первую очередь<span class="req-chip">обязательно</span></label>
-      <div class="qhint">Самые маржинальные, ходовые или те, что нужно быстро распродать</div>
-      <textarea data-req="1" data-q="16. Приоритетные позиции"></textarea>
-    </div>
-    <div class="q"><label class="qtitle"><span class="qnum">17.</span>Состояние товаров</label>
-      <div class="choice-row" data-group="17">
-        <button class="choice-btn" type="button">Новые</button>
-        <button class="choice-btn" type="button">Б/у</button>
-        <button class="choice-btn" type="button">Новые и б/у</button>
-        <button class="choice-btn" type="button">Не относится, продаём услуги</button>
+    <div class="q" data-qid="plan" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Тариф и подписка Авито сейчас</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Подписка определяет оформление профиля: баннер и группы объявлений — с Расширенной, логотип, витрина и страница бренда — с Максимальной</div>
+      <div class="choice-row" data-choice="plan">
+        <button class="choice-btn" type="button" data-v="no">Тарифа нет</button>
+        <button class="choice-btn" type="button" data-v="base">Тариф без подписки</button>
+        <button class="choice-btn" type="button" data-v="ext">Расширенная</button>
+        <button class="choice-btn" type="button" data-v="max">Максимальная или Ультра</button>
+        <button class="choice-btn" type="button" data-v="unk">Не знаю</button>
       </div>
     </div>
-    <div class="q req"><label class="qtitle"><span class="qnum">18.</span>Откуда и как часто мы получаем актуальные наличие и цены<span class="req-chip">обязательно</span></label>
-      <div class="qhint">Неактуальная цена или проданный товар в объявлении — частая причина жалоб и отклонений. Например: выгрузка из 1С раз в неделю, таблица на Google Диске, сотрудник присылает изменения в чат</div>
-      <textarea data-req="1" data-q="18. Источник наличия и цен"></textarea>
+    <div class="q" data-qid="cities" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Города и регионы размещения</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Услуги можно размещать отдельными объявлениями в каждом городе, где вы их реально оказываете. Товар размещается в одном городе, а в другие регионы продаётся с доставкой</div>
+      <textarea data-field="cities"></textarea>
+    </div>
+    <div class="q" data-qid="problems" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что не устраивает в текущей работе с Авито</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Мало просмотров и сообщений, дорогие контакты, отклонения объявлений. Если площадку только запускаете — «новый запуск»</div>
+      <textarea data-field="problems"></textarea>
+    </div>
+    <div class="q" data-qid="blocks" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Были ли отклонения объявлений или блокировки профиля</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="blocks">
+        <button class="choice-btn" type="button" data-v="no">Нет</button>
+        <button class="choice-btn" type="button" data-v="rej">Отклоняли объявления</button>
+        <button class="choice-btn" type="button" data-v="ban">Блокировали профиль</button>
+        <button class="choice-btn" type="button" data-v="unk">Не знаю</button>
+      </div>
+    </div>
+    <div class="q" data-qid="access" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Доступ к профилю для нашей команды</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Пароль не нужен — доступ выдаётся приглашением, профиль остаётся вашим. <a href="../access/avito/" target="_blank" rel="noopener">Как выдать доступ</a></div>
+      <div class="choice-row" data-choice="access">
+        <button class="choice-btn" type="button" data-v="done">Уже выдан</button>
+        <button class="choice-btn" type="button" data-v="will">Выдадим по инструкции</button>
+        <button class="choice-btn" type="button" data-v="help">Нужна помощь</button>
+      </div>
     </div>
   </section>
 
   <section class="hpanel--flow" id="s4">
-    <span class="hflow-tag">Раздел 04 / 09 — цены и условия</span>
-    <h2 class="block-title">Цены и условия покупки</h2>
-    <p class="block-hint">Что увидит покупатель в объявлении, кроме самого товара или услуги.</p>
+    <span class="hflow-tag">Раздел 04 / 11 — объявления</span>
+    <h2 class="block-title">Объявления</h2>
+    <p class="block-hint">Одно объявление — одна позиция. Одинаковые и похожие объявления Авито блокирует или прячет, поэтому у каждого должна быть своя суть и свои фотографии.</p>
 
-    <div class="q req"><label class="qtitle"><span class="qnum">19.</span>Формат указания цены<span class="req-chip">обязательно</span></label>
-      <div class="qhint">Цена в объявлении должна соответствовать реальной стоимости на дату публикации</div>
-      <div class="choice-row" data-req="1" data-group="19">
-        <button class="choice-btn" type="button">Точная цена</button>
-        <button class="choice-btn" type="button">Цена «от»</button>
-        <button class="choice-btn" type="button">Договорная, для услуг</button>
+    <div class="q" data-qid="slots" data-show="{&quot;mode&quot;: [&quot;self&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Объявления, которые вы распишете сами</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Заполните карточку на каждое объявление. Достаточно сути — название, цена и что важно сказать покупателю, формулировки подготовим мы</div>
+      <span class="slot-counter" id="slotCounter"></span>
+      <div class="slot-list" id="slotList"></div>
+    </div>
+    <div class="q" data-qid="directions" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Направления для объявлений</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Категории товаров или виды услуг. Например: «межкомнатные двери в эмали», «установка дверей с выездом». Мы подберём темы по спросу на Авито и пришлём список на согласование</div>
+      <textarea data-field="directions" placeholder="Направление и что в него входит — по строке на каждое" style="min-height:120px;"></textarea>
+    </div>
+    <div class="q" data-qid="price_file" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Прайс-лист, ассортимент или выгрузка</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Впишите позиции, дайте ссылку или перетащите файл в поле: прайс, выгрузку из 1С или МойСклад, таблицу. TXT и CSV подставятся текстом, остальные файлы приложатся к анкете</div>
+      <div class="dropzone" id="dropzone">
+        <textarea data-field="price_file" placeholder="Начните печатать или перетащите сюда файл"></textarea>
+        <div class="drop-overlay">Отпустите файл</div>
+      </div>
+      <div class="drop-actions">
+        <label class="file-pick">Выбрать файл<input type="file" id="filePick" multiple hidden></label>
+        <span class="drop-note">TXT, CSV, XLSX, PDF, изображения · до 15 файлов, каждый до 25 МБ</span>
+      </div>
+      <ul class="file-list" id="fileList" hidden></ul>
+    </div>
+    <div class="q" data-qid="priority" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что продвигать в первую очередь</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Самые маржинальные, ходовые или те, что нужно быстро продать</div>
+      <textarea data-field="priority"></textarea>
+    </div>
+    <div class="q" data-qid="exclude" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что не размещаем на Авито</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Позиции, услуги или направления, которые не нужно публиковать</div>
+      <textarea data-field="exclude"></textarea>
+    </div>
+    <div class="q" data-qid="competitors" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Конкуренты на Авито</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Ссылки на объявления или профили конкурентов и чем вы от них отличаетесь</div>
+      <textarea data-field="competitors"></textarea>
+    </div>
+    <div class="q" data-qid="condition" data-show="{&quot;kind&quot;: [&quot;goods&quot;, &quot;both&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Состояние товаров</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="condition">
+        <button class="choice-btn" type="button" data-v="new">Новые</button>
+        <button class="choice-btn" type="button" data-v="used">Б/у</button>
+        <button class="choice-btn" type="button" data-v="mix">Новые и б/у</button>
       </div>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">20.</span>Готовы ли вы к торгу</label>
-      <div class="choice-row" data-group="20">
-        <button class="choice-btn" type="button">Да</button>
-        <button class="choice-btn" type="button">Нет</button>
-        <button class="choice-btn" type="button">Только при крупном заказе</button>
+    <div class="q" data-qid="stock_source" data-req="1" data-show="{&quot;kind&quot;: [&quot;goods&quot;, &quot;both&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Откуда и как часто получаем актуальные наличие и цены</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Неверная цена или проданный товар в объявлении снижают уровень сервиса, и объявления опускаются в поиске. Например: выгрузка из 1С раз в неделю, таблица на Google Диске, сотрудник присылает изменения в чат</div>
+      <textarea data-field="stock_source"></textarea>
+    </div>
+    <div class="q" data-qid="variants" data-show="{&quot;kind&quot;: [&quot;goods&quot;, &quot;both&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Есть ли варианты одного товара: размер, цвет, объём</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Варианты можно объединить в одно мультиобъявление</div>
+      <div class="choice-row" data-choice="variants">
+        <button class="choice-btn" type="button" data-v="yes">Да, есть варианты</button>
+        <button class="choice-btn" type="button" data-v="no">Нет</button>
+        <button class="choice-btn" type="button" data-v="unk">Не знаю</button>
       </div>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">21.</span>Доставка</label>
-      <div class="choice-row" data-group="21">
-        <button class="choice-btn" type="button">Подключена Авито Доставка</button>
-        <button class="choice-btn" type="button">Своя доставка</button>
-        <button class="choice-btn" type="button">Только самовывоз</button>
-        <button class="choice-btn" type="button">Не относится, продаём услуги</button>
+    <div class="q" data-qid="service_format" data-show="{&quot;kind&quot;: [&quot;services&quot;, &quot;both&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Где оказываете услуги</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="service_format">
+        <button class="choice-btn" type="button" data-v="office">У себя</button>
+        <button class="choice-btn" type="button" data-v="visit">С выездом к клиенту</button>
+        <button class="choice-btn" type="button" data-v="online">Онлайн</button>
+        <button class="choice-btn" type="button" data-v="mix">Несколько форматов</button>
       </div>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">22.</span>Способы оплаты, гарантия, возврат</label>
-      <div class="qhint">Наличные, карта, безнал для юрлиц, рассрочка; срок гарантии; условия возврата</div>
-      <textarea data-q="22. Оплата, гарантия, возврат"></textarea>
-    </div>
-    <div class="q"><label class="qtitle"><span class="qnum">23.</span>Действующие акции и специальные предложения</label>
-      <div class="qhint">Условия и срок действия. При отсутствии — укажите «нет»</div>
-      <textarea data-q="23. Акции и предложения"></textarea>
+    <div class="q" data-qid="booking" data-show="{&quot;kind&quot;: [&quot;services&quot;, &quot;both&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Нужна ли онлайн-запись из объявления</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Доступна в категориях «Красота» и «Здоровье»: клиент выбирает услугу из прайса и время</div>
+      <div class="choice-row" data-choice="booking">
+        <button class="choice-btn" type="button" data-v="yes">Да</button>
+        <button class="choice-btn" type="button" data-v="no">Нет</button>
+        <button class="choice-btn" type="button" data-v="na">Не относится к нашей сфере</button>
+      </div>
     </div>
   </section>
 
   <section class="hpanel--flow" id="s5">
-    <span class="hflow-tag">Раздел 05 / 09 — фото и оформление</span>
-    <h2 class="block-title">Фотографии и оформление профиля</h2>
-    <p class="block-hint">Фото — главный фактор, по которому покупатель открывает объявление. Здесь же — всё для оформления профиля.</p>
+    <span class="hflow-tag">Раздел 05 / 11 — цены и условия</span>
+    <h2 class="block-title">Цены и условия покупки</h2>
+    <p class="block-hint">Что увидит покупатель в объявлении кроме самой позиции.</p>
 
-    <div class="q req"><label class="qtitle"><span class="qnum">24.</span>Ссылка на архив фотографий товаров, работ, помещения<span class="req-chip">обязательно</span></label>
-      <div class="qhint">Авито отклоняет фото с чужими водяными знаками, контактами и ссылками. Укажите ссылку на облако либо «нет»</div>
-      <input type="text" data-req="1" data-q="24. Архив фотографий">
-    </div>
-    <div class="q"><label class="qtitle"><span class="qnum">25.</span>Кто и с какой периодичностью присылает новые фотографии</label>
-      <div class="qhint">Например: менеджер склада, при каждом поступлении товара</div>
-      <input type="text" data-q="25. Порядок передачи фотографий">
-    </div>
-    <div class="q"><label class="qtitle"><span class="qnum">26.</span>Можно ли использовать фотографии производителя или поставщика</label>
-      <div class="choice-row" data-group="26">
-        <button class="choice-btn" type="button">Да, можно</button>
-        <button class="choice-btn" type="button">Только наши собственные фото</button>
-        <button class="choice-btn" type="button">Обсудим отдельно</button>
+    <div class="q" data-qid="price_format" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Формат цены</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Одна цена в рублях на одну позицию, без диапазонов. Цена должна быть актуальной на дату публикации</div>
+      <div class="choice-row" data-choice="price_format">
+        <button class="choice-btn" type="button" data-v="exact">Точная цена</button>
+        <button class="choice-btn" type="button" data-v="from">Цена «от» для услуг</button>
+        <button class="choice-btn" type="button" data-v="deal">Договорная для услуг</button>
       </div>
     </div>
-    <div class="q req"><label class="qtitle"><span class="qnum">27.</span>Имеется ли логотип в векторном формате или PNG на прозрачном фоне<span class="req-chip">обязательно</span></label>
-      <div class="qhint">Нужен для аватара профиля и единого оформления фото объявлений</div>
-      <div class="choice-row" data-req="1" data-group="27">
-        <button class="choice-btn" type="button">Да, предоставим файл</button>
-        <button class="choice-btn" type="button">Нет, требуется адаптация</button>
-        <button class="choice-btn" type="button">Логотипа нет</button>
+    <div class="q" data-qid="haggle" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Готовы ли вы к торгу</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="haggle">
+        <button class="choice-btn" type="button" data-v="yes">Да</button>
+        <button class="choice-btn" type="button" data-v="no">Нет</button>
+        <button class="choice-btn" type="button" data-v="big">Только при крупном заказе</button>
       </div>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">28.</span>Фирменные цвета и шрифты</label>
-      <div class="qhint">Коды в формате HEX, при их отсутствии — словесное описание</div>
-      <input type="text" data-q="28. Фирменные цвета и шрифты">
-    </div>
-    <div class="q"><label class="qtitle"><span class="qnum">29.</span>Оформление фото объявлений в едином стиле</label>
-      <div class="qhint">Рамка, плашка с преимуществом, логотип на обложке объявления. Контакты и ссылки на фото размещать нельзя</div>
-      <div class="choice-row" data-group="29">
-        <button class="choice-btn" type="button">Да, нужно</button>
-        <button class="choice-btn" type="button">Нет, только чистые фото</button>
-        <button class="choice-btn" type="button">На усмотрение исполнителя</button>
+    <div class="q" data-qid="delivery" data-show="{&quot;kind&quot;: [&quot;goods&quot;, &quot;both&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Доставка товаров</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">С Авито Доставкой товар видят покупатели из всех регионов, а не только вашего города</div>
+      <div class="choice-row" data-choice="delivery">
+        <button class="choice-btn" type="button" data-v="avito">Подключить Авито Доставку</button>
+        <button class="choice-btn" type="button" data-v="own">Своя доставка</button>
+        <button class="choice-btn" type="button" data-v="pickup">Только самовывоз</button>
+        <button class="choice-btn" type="button" data-v="consult">Нужна консультация</button>
       </div>
+    </div>
+    <div class="q" data-qid="payment" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Способы оплаты, гарантия, возврат</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Наличные, карта, безнал, рассрочка, срок гарантии, условия возврата</div>
+      <textarea data-field="payment"></textarea>
+    </div>
+    <div class="q" data-qid="promos" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Действующие акции и спецпредложения</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Условия и срок действия. Об акциях пишем только в описании — в названии объявления Авито их запрещает. При отсутствии — «нет»</div>
+      <textarea data-field="promos"></textarea>
     </div>
   </section>
 
   <section class="hpanel--flow" id="s6">
-    <span class="hflow-tag">Раздел 06 / 09 — тексты</span>
-    <h2 class="block-title">Тексты объявлений</h2>
-    <p class="block-hint">Как должны звучать объявления и описание профиля.</p>
+    <span class="hflow-tag">Раздел 06 / 11 — фото и видео</span>
+    <h2 class="block-title">Фотографии и видео</h2>
+    <p class="block-hint">Первое фото — обложка объявления в поиске. Авито принимает только собственные снимки: без контактов, рамок, рекламных надписей и чужих логотипов.</p>
 
-    <div class="q req"><label class="qtitle"><span class="qnum">30.</span>Форма обращения к покупателю<span class="req-chip">обязательно</span></label>
-      <div class="choice-row" data-req="1" data-group="30">
-        <button class="choice-btn" type="button">На «вы»</button>
-        <button class="choice-btn" type="button">На «ты»</button>
-        <button class="choice-btn" type="button">Без прямого обращения</button>
+    <div class="q" data-qid="photos" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Ссылка на папку с фотографиями</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Товары, работы, процесс, помещение, команда. Удобнее всего — подпапка на каждую позицию. Если фото нет — «нет»</div>
+      <input type="text" data-field="photos">
+    </div>
+    <div class="q" data-qid="photo_gap" data-req="1" data-show="{&quot;tier&quot;: [&quot;15&quot;, &quot;30&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Если своих фото не хватит на все объявления</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="photo_gap">
+        <button class="choice-btn" type="button" data-v="enough">Фото хватает</button>
+        <button class="choice-btn" type="button" data-v="self">Доснимем сами по вашему списку</button>
+        <button class="choice-btn" type="button" data-v="shoot">Нужна съёмка от вас</button>
       </div>
     </div>
-    <div class="q req"><label class="qtitle"><span class="qnum">31.</span>Тон текстов<span class="req-chip">обязательно</span></label>
-      <div class="choice-row" data-req="1" data-group="31">
-        <button class="choice-btn" type="button">Деловой и сдержанный</button>
-        <button class="choice-btn" type="button">Дружелюбный, простым языком</button>
-        <button class="choice-btn" type="button">Экспертный, с подробностями</button>
+    <div class="q" data-qid="photo_who" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Кто и как часто присылает новые фото</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Например: менеджер склада при каждом поступлении</div>
+      <input type="text" data-field="photo_who">
+    </div>
+    <div class="q" data-qid="maker_photos" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Можно ли использовать фото производителя или поставщика</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Только если у вас есть права на эти изображения</div>
+      <div class="choice-row" data-choice="maker_photos">
+        <button class="choice-btn" type="button" data-v="yes">Да, права есть</button>
+        <button class="choice-btn" type="button" data-v="own">Только наши фото</button>
+        <button class="choice-btn" type="button" data-v="discuss">Обсудим</button>
       </div>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">32.</span>Что обязательно сказать в каждом объявлении</label>
-      <div class="qhint">Например: гарантия 2 года, собственное производство, работаем с юрлицами, выезд в день обращения</div>
-      <textarea data-q="32. Обязательные тезисы"></textarea>
+    <div class="q" data-qid="cover_style" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Оформление первого фото объявления</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Короткие надписи и иконки с преимуществами допустимы, если не перекрывают товар. Скидки, «акция», «срочно» на фото запрещены</div>
+      <div class="choice-row" data-choice="cover_style">
+        <button class="choice-btn" type="button" data-v="info">Инфографика с преимуществами</button>
+        <button class="choice-btn" type="button" data-v="clean">Только чистые фото</button>
+        <button class="choice-btn" type="button" data-v="any">На усмотрение исполнителя</button>
+      </div>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">33.</span>Слова, обещания и темы, которых нужно избегать</label>
-      <div class="qhint">Например: «самые дешёвые», сравнение с конкурентами, сроки, которые не всегда соблюдаются</div>
-      <textarea data-q="33. Недопустимые формулировки"></textarea>
+    <div class="q" data-qid="watermark" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Логотип на фото</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Авито пропускает только полупрозрачный водяной знак — не плотнее 50% и не больше половины кадра</div>
+      <div class="choice-row" data-choice="watermark">
+        <button class="choice-btn" type="button" data-v="wm">Полупрозрачный водяной знак</button>
+        <button class="choice-btn" type="button" data-v="none">Без логотипа</button>
+        <button class="choice-btn" type="button" data-v="any">На усмотрение исполнителя</button>
+      </div>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">34.</span>Конкуренты на Авито</label>
-      <div class="qhint">Ссылки на объявления или профили конкурентов и чем вы от них отличаетесь</div>
-      <textarea data-q="34. Конкуренты на Авито"></textarea>
+    <div class="q" data-qid="video" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Видео для объявлений</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">От 5 секунд до 3 минут: обзор, работа мастера, отзыв клиента. Без музыки, контактов и чужой рекламы. Доступно не во всех категориях</div>
+      <div class="choice-row" data-choice="video">
+        <button class="choice-btn" type="button" data-v="have">Есть готовые видео</button>
+        <button class="choice-btn" type="button" data-v="can">Можем снять</button>
+        <button class="choice-btn" type="button" data-v="no">Видео не нужно</button>
+      </div>
     </div>
   </section>
 
   <section class="hpanel--flow" id="s7">
-    <span class="hflow-tag">Раздел 07 / 09 — покупатели</span>
-    <h2 class="block-title">Общение с покупателями</h2>
-    <p class="block-hint">Сообщения в чате Авито — основной источник заявок. Определим, кто и как на них отвечает.</p>
+    <span class="hflow-tag">Раздел 07 / 11 — оформление профиля</span>
+    <h2 class="block-title">Оформление профиля компании</h2>
+    <p class="block-hint">Название, описание, логотип и баннеры профиля Авито проверяет до трёх рабочих дней. Мы готовим тексты и макеты под размеры площадки.</p>
 
-    <div class="q req"><label class="qtitle"><span class="qnum">35.</span>Кто отвечает покупателям в чате Авито<span class="req-chip">обязательно</span></label>
-      <div class="choice-row" data-req="1" data-group="35">
-        <button class="choice-btn" type="button">Отвечаем мы полностью</button>
-        <button class="choice-btn" type="button">Мы отвечаем первично, затем передаём вам</button>
-        <button class="choice-btn" type="button">Отвечаете вы, мы ведём объявления</button>
+    <div class="q" data-qid="profile_text" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что рассказать в блоке «О компании»</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">История, опыт, цифры, условия работы и доставки. Контакты и ссылки в профиле запрещены</div>
+      <textarea data-field="profile_text"></textarea>
+    </div>
+    <div class="q" data-qid="logo" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Логотип</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Для аватара профиля нужен квадрат 1024 × 1024 или 256 × 256 px</div>
+      <div class="choice-row" data-choice="logo">
+        <button class="choice-btn" type="button" data-v="file">Предоставим файл</button>
+        <button class="choice-btn" type="button" data-v="adapt">Есть, нужна адаптация</button>
+        <button class="choice-btn" type="button" data-v="none">Логотипа нет</button>
       </div>
     </div>
-    <div class="q req"><label class="qtitle"><span class="qnum">36.</span>Куда передавать заявки и готовых к покупке клиентов<span class="req-chip">обязательно</span></label>
-      <div class="qhint">Телефон или мессенджер ответственного менеджера, CRM. Укажите имя ответственного</div>
-      <input type="text" data-req="1" data-q="36. Передача заявок">
+    <div class="q" data-qid="brand_colors" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Фирменные цвета и шрифты</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Коды HEX, при отсутствии — словесное описание</div>
+      <input type="text" data-field="brand_colors">
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">37.</span>Частые вопросы покупателей и ответы на них</label>
-      <div class="qhint">Наличие, сроки, доставка, торг, гарантия, комплектация. Это основа для быстрых ответов в чате</div>
-      <textarea data-q="37. Частые вопросы и ответы" style="min-height:120px;"></textarea>
+    <div class="q" data-qid="banner" data-show="{&quot;tier&quot;: [&quot;15&quot;, &quot;30&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что вынести на баннер профиля</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Баннер показывается над объявлениями в профиле: главное предложение, преимущества, ассортимент. Готовим версии для компьютера и смартфона</div>
+      <textarea data-field="banner"></textarea>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">38.</span>Когда нужно отвечать в чате</label>
-      <div class="choice-row" data-group="38">
-        <button class="choice-btn" type="button">В режиме работы компании</button>
-        <button class="choice-btn" type="button">Ежедневно, включая выходные</button>
-        <button class="choice-btn" type="button">Обсудим отдельно</button>
-      </div>
+    <div class="q" data-qid="groups" data-show="{&quot;tier&quot;: [&quot;15&quot;, &quot;30&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Как сгруппировать объявления в профиле</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Подборки внутри профиля: например, «Двери в наличии», «Монтаж под ключ». Перечислите группы</div>
+      <textarea data-field="groups"></textarea>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">39.</span>Ответы на отзывы в профиле</label>
-      <div class="choice-row" data-group="39">
-        <button class="choice-btn" type="button">Отвечаем мы</button>
-        <button class="choice-btn" type="button">Отвечаем мы, с согласованием</button>
-        <button class="choice-btn" type="button">Не требуется</button>
-      </div>
+    <div class="q" data-qid="showcase" data-show="{&quot;tier&quot;: [&quot;30&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Витрина профиля: какие объявления показать первыми</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Блок из 3–15 объявлений под баннером и его заголовок, например «Хиты продаж»</div>
+      <textarea data-field="showcase"></textarea>
+    </div>
+    <div class="q" data-qid="brand_facts" data-show="{&quot;tier&quot;: [&quot;30&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Цифры и факты для страницы бренда</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Годы на рынке, количество клиентов или проектов, гарантия, награды — 3–4 коротких факта</div>
+      <textarea data-field="brand_facts"></textarea>
+    </div>
+    <div class="q" data-qid="brand_url" data-show="{&quot;tier&quot;: [&quot;30&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Желаемый адрес профиля avito.ru/brands/…</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Латиница, цифры, дефис, до 20 символов</div>
+      <input type="text" data-field="brand_url">
     </div>
   </section>
 
   <section class="hpanel--flow" id="s8">
-    <span class="hflow-tag">Раздел 08 / 09 — продвижение</span>
-    <h2 class="block-title">Продвижение и бюджет</h2>
-    <p class="block-hint">Деньги на размещения и продвижение списываются с кошелька Авито — это не стоимость наших работ. Кошелёк пополняете вы, лимиты на месяц задаются при выдаче доступа.</p>
+    <span class="hflow-tag">Раздел 08 / 11 — тексты</span>
+    <h2 class="block-title">Тексты объявлений</h2>
+    <p class="block-hint">Как звучат объявления и ответы покупателям.</p>
 
-    <div class="q req"><label class="qtitle"><span class="qnum">40.</span>Ежемесячный бюджет кошелька Авито<span class="req-chip">обязательно</span></label>
-      <div class="qhint">Ориентир для плана продвижения, сумму лимитов согласуем заранее</div>
-      <div class="choice-row" data-req="1" data-group="40">
-        <button class="choice-btn" type="button">До 10 000 ₽</button>
-        <button class="choice-btn" type="button">10 000–30 000 ₽</button>
-        <button class="choice-btn" type="button">30 000–100 000 ₽</button>
-        <button class="choice-btn" type="button">Более 100 000 ₽</button>
-        <button class="choice-btn" type="button">Определим вместе</button>
+    <div class="q" data-qid="address_form" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Обращение к покупателю</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="address_form">
+        <button class="choice-btn" type="button" data-v="vy">На «вы»</button>
+        <button class="choice-btn" type="button" data-v="ty">На «ты»</button>
+        <button class="choice-btn" type="button" data-v="none">Без прямого обращения</button>
       </div>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">41.</span>Какой результат для вас главный</label>
-      <div class="choice-row" data-group="41">
-        <button class="choice-btn" type="button">Звонки</button>
-        <button class="choice-btn" type="button">Сообщения в чате</button>
-        <button class="choice-btn" type="button">Заказы с доставкой</button>
-        <button class="choice-btn" type="button">Все обращения одинаково</button>
+    <div class="q" data-qid="tone" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Тон текстов</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="tone">
+        <button class="choice-btn" type="button" data-v="biz">Деловой</button>
+        <button class="choice-btn" type="button" data-v="friendly">Дружелюбный, простым языком</button>
+        <button class="choice-btn" type="button" data-v="expert">Экспертный, с подробностями</button>
       </div>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">42.</span>Сезонность и пиковые периоды продаж</label>
-      <div class="qhint">Когда спрос растёт и падает, плановые распродажи, поступления новых партий</div>
-      <textarea data-q="42. Сезонность"></textarea>
+    <div class="q" data-qid="must_say" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что обязательно сказать в каждом объявлении</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Например: гарантия 2 года, работаем с юрлицами, выезд в день обращения</div>
+      <textarea data-field="must_say"></textarea>
+    </div>
+    <div class="q" data-qid="forbidden" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Слова, обещания и темы, которых нужно избегать</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Например: «самые дешёвые», сравнение с конкурентами, сроки, которые не всегда выполнимы</div>
+      <textarea data-field="forbidden"></textarea>
     </div>
   </section>
 
   <section class="hpanel--flow" id="s9">
-    <span class="hflow-tag">Раздел 09 / 09 — согласование</span>
-    <h2 class="block-title">Порядок согласования и обратная связь</h2>
-    <p class="block-hint">Как будет организовано взаимодействие в ходе работы.</p>
+    <span class="hflow-tag">Раздел 09 / 11 — покупатели</span>
+    <h2 class="block-title">Общение с покупателями</h2>
+    <p class="block-hint">Скорость ответа в чате влияет на уровень сервиса и место объявлений в поиске.</p>
 
-    <div class="q req"><label class="qtitle"><span class="qnum">43.</span>Удобный мессенджер для создания рабочей группы<span class="req-chip">обязательно</span></label>
-      <div class="qhint">В выбранном мессенджере будет создан общий чат для оперативной связи и согласования материалов</div>
-      <div class="choice-row" data-req="1" data-group="43">
-        <button class="choice-btn" type="button">Telegram</button>
-        <button class="choice-btn" type="button">MAX</button>
-        <button class="choice-btn" type="button">WhatsApp</button>
+    <div class="q" data-qid="who_answers" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Кто отвечает покупателям в чате Авито</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="who_answers">
+        <button class="choice-btn" type="button" data-v="us">Отвечаем мы полностью</button>
+        <button class="choice-btn" type="button" data-v="us_first">Мы отвечаем первично, затем передаём вам</button>
+        <button class="choice-btn" type="button" data-v="you">Отвечаете вы, мы ведём объявления</button>
       </div>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">44.</span>Порядок согласования объявлений</label>
-      <div class="qhint">Определяет, как часто вы будете подключаться к работе</div>
-      <div class="choice-row" data-group="44">
-        <button class="choice-btn" type="button">Согласование первых объявлений, далее еженедельный отчёт</button>
-        <button class="choice-btn" type="button">Согласование каждого объявления</button>
-        <button class="choice-btn" type="button">Согласование каждого объявления и еженедельный отчёт</button>
+    <div class="q" data-qid="lead_route" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Куда передавать заявки и готовых к покупке клиентов</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Телефон или мессенджер ответственного, CRM. Укажите имя ответственного</div>
+      <input type="text" data-field="lead_route">
+    </div>
+    <div class="q" data-qid="faq" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Частые вопросы покупателей и ответы на них</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Наличие, сроки, доставка, торг, гарантия. Ответы разместим прямо в объявлениях в блоке «Частые вопросы» и используем в чате</div>
+      <textarea data-field="faq" style="min-height:120px;"></textarea>
+    </div>
+    <div class="q" data-qid="answer_time" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Когда отвечать в чате</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="answer_time">
+        <button class="choice-btn" type="button" data-v="hours">В режиме работы компании</button>
+        <button class="choice-btn" type="button" data-v="daily">Ежедневно, включая выходные</button>
+        <button class="choice-btn" type="button" data-v="discuss">Обсудим</button>
       </div>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">45.</span>Документы, лицензии и обязательные сведения</label>
-      <div class="qhint">Для части категорий Авито требует подтверждающие документы или лицензию: медицина, финансы, стройматериалы с сертификацией и другие. При отсутствии требований укажите «нет»</div>
-      <textarea data-q="45. Документы и лицензии"></textarea>
+    <div class="q" data-qid="reviews" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Ответы на отзывы</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="reviews">
+        <button class="choice-btn" type="button" data-v="us">Отвечаем мы</button>
+        <button class="choice-btn" type="button" data-v="approve">Отвечаем мы, с согласованием</button>
+        <button class="choice-btn" type="button" data-v="no">Не требуется</button>
+      </div>
     </div>
-    <div class="q"><label class="qtitle"><span class="qnum">46.</span>Иные пожелания и ограничения</label>
-      <textarea data-q="46. Иные пожелания"></textarea>
+    <div class="q" data-qid="staff" data-show="{&quot;tier&quot;: [&quot;30&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Сколько ваших сотрудников работает с заявками с Авито</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">При нескольких сотрудниках подключим их к кабинету Авито Pro с отдельными правами</div>
+      <div class="choice-row" data-choice="staff">
+        <button class="choice-btn" type="button" data-v="one">Один человек</button>
+        <button class="choice-btn" type="button" data-v="few">2–3 человека</button>
+        <button class="choice-btn" type="button" data-v="many">Больше трёх</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s10">
+    <span class="hflow-tag">Раздел 10 / 11 — продвижение</span>
+    <h2 class="block-title">Продвижение и бюджет</h2>
+    <p class="block-hint">Размещения и продвижение оплачиваются с кошелька Авито — это не стоимость наших работ. Кошелёк пополняете вы, лимиты расходов задаются при выдаче доступа.</p>
+
+    <div class="q" data-qid="budget" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Ежемесячный бюджет кошелька Авито</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Ориентир для плана продвижения, точную сумму согласуем заранее</div>
+      <div class="choice-row" data-choice="budget">
+        <button class="choice-btn" type="button" data-v="a7" data-show="{&quot;tier&quot;: [&quot;7&quot;]}">До 5 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="b7" data-show="{&quot;tier&quot;: [&quot;7&quot;]}">5 000–15 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="c7" data-show="{&quot;tier&quot;: [&quot;7&quot;]}">15 000–30 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="a15" data-show="{&quot;tier&quot;: [&quot;15&quot;]}">До 15 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="b15" data-show="{&quot;tier&quot;: [&quot;15&quot;]}">15 000–40 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="c15" data-show="{&quot;tier&quot;: [&quot;15&quot;]}">40 000–80 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="a30" data-show="{&quot;tier&quot;: [&quot;30&quot;]}">До 30 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="b30" data-show="{&quot;tier&quot;: [&quot;30&quot;]}">30 000–80 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="c30" data-show="{&quot;tier&quot;: [&quot;30&quot;]}">80 000–150 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="d30" data-show="{&quot;tier&quot;: [&quot;30&quot;]}">Более 150 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="def">Определим вместе</button>
+      </div>
+    </div>
+    <div class="q" data-qid="goal" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Главный результат</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="goal">
+        <button class="choice-btn" type="button" data-v="calls">Звонки</button>
+        <button class="choice-btn" type="button" data-v="chats">Сообщения в чате</button>
+        <button class="choice-btn" type="button" data-v="orders">Заказы с доставкой</button>
+        <button class="choice-btn" type="button" data-v="all">Все обращения одинаково</button>
+      </div>
+    </div>
+    <div class="q" data-qid="visual" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Выделение цветом и XL-объявления для приоритетных позиций</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Платные услуги на 7 дней: делают объявление заметнее в поиске</div>
+      <div class="choice-row" data-choice="visual">
+        <button class="choice-btn" type="button" data-v="yes">Да, подключать</button>
+        <button class="choice-btn" type="button" data-v="no">Нет</button>
+        <button class="choice-btn" type="button" data-v="discuss">Обсудим</button>
+      </div>
+    </div>
+    <div class="q" data-qid="season" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Сезонность и пиковые периоды</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Когда спрос растёт и падает, распродажи, поступления новых партий</div>
+      <textarea data-field="season"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s11">
+    <span class="hflow-tag">Раздел 11 / 11 — согласование</span>
+    <h2 class="block-title">Согласование и обратная связь</h2>
+    <p class="block-hint">Как работаем в процессе.</p>
+
+    <div class="q" data-qid="messenger" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Мессенджер для рабочей группы</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Создадим общий чат для связи и согласования</div>
+      <div class="choice-row" data-choice="messenger">
+        <button class="choice-btn" type="button" data-v="tg">Telegram</button>
+        <button class="choice-btn" type="button" data-v="max">MAX</button>
+        <button class="choice-btn" type="button" data-v="wa">WhatsApp</button>
+      </div>
+    </div>
+    <div class="q" data-qid="approval" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Порядок согласования объявлений</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="approval">
+        <button class="choice-btn" type="button" data-v="first">Первые объявления, далее еженедельный отчёт</button>
+        <button class="choice-btn" type="button" data-v="each">Каждое объявление</button>
+        <button class="choice-btn" type="button" data-v="list">Список тем, затем готовые объявления</button>
+      </div>
+    </div>
+    <div class="q" data-qid="docs" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Лицензии, сертификаты и обязательные сведения</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Для медицины Авито требует номер лицензии в объявлении и профиль на ИНН лицензии. Для ряда товаров нужны сертификаты или маркировка. При отсутствии — «нет»</div>
+      <textarea data-field="docs"></textarea>
+    </div>
+    <div class="q" data-qid="other" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Иные пожелания и ограничения</span><span class="req-chip">обязательно</span></label>
+      <textarea data-field="other"></textarea>
     </div>
 
     <div class="hsubmit-panel">
@@ -754,35 +918,264 @@
 
 
 <script>
-  document.querySelectorAll('.choice-row').forEach(function(row){
+(function(){
+  /* ============================================================
+     НАСТРОЙКИ
+     ============================================================ */
+  var COMPANY_NAME = 'HDR Group';
+  var POLICY_URL   = '';
+  var API_URL   = 'https://script.google.com/macros/s/AKfycbyIj70GSaOepbivioyGsYPhy8cezGgzwqGUiGCpSO3yMIyGIVNDMlMvPWh3ReJzfZOd/exec';
+  var BRIEF_KEY = 'avito';            // лист в таблице: site / maps / vk / avito
+  var FILES_UPLOAD_URL = API_URL;
+  var MAX_FILES = 15, MAX_FILE_BYTES = 25 * 1024 * 1024, MAX_TOTAL_BYTES = 100 * 1024 * 1024;
+  var DRAFT_KEY = 'client_brief_avito_v2';
+  /* ============================================================ */
+
+  var $ = function(s, r){ return (r || document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  var questions = $$('.q[data-qid]');
+  var byId = {};
+  questions.forEach(function(q){ byId[q.dataset.qid] = q; });
+
+  /* ---------- выбор вариантов ---------- */
+  function choiceVal(id){
+    var row = $('.choice-row[data-choice="' + id + '"]');
+    return row ? (row.dataset.selected || '') : '';
+  }
+  function choiceLabel(row){
+    var b = row.querySelector('.choice-btn.active');
+    return b ? b.textContent : '';
+  }
+  function setChoice(row, v){
+    row.querySelectorAll('.choice-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.v === v); });
+    if(v) row.dataset.selected = v; else delete row.dataset.selected;
+  }
+  $$('.choice-row').forEach(function(row){
     row.querySelectorAll('.choice-btn').forEach(function(btn){
       btn.addEventListener('click', function(){
-        row.querySelectorAll('.choice-btn').forEach(function(b){ b.classList.remove('active'); });
-        btn.classList.add('active');
-        row.dataset.selected = btn.textContent;
-        updateProgress();
-        saveDraft();
+        setChoice(row, btn.dataset.v);
+        refresh(); saveDraft();
       });
     });
   });
 
-  var fields = Array.prototype.slice.call(document.querySelectorAll('[data-q]'));
-  var choiceGroups = Array.prototype.slice.call(document.querySelectorAll('.choice-row'));
+  /* ---------- карточки объявлений ---------- */
+  var slotData = [];
+  var slotWrap = $('#slotList');
+  var slotCounter = $('#slotCounter');
+  var SLOT_FIELDS = [
+    { k: 'name',    label: 'Название позиции',               ph: 'Например: Дверь межкомнатная «Модена», эмаль' },
+    { k: 'price',   label: 'Цена',                            ph: 'Например: 12 900 ₽ или от 3 000 ₽' },
+    { k: 'details', label: 'Что важно сказать покупателю',    ph: 'Характеристики, комплектация, сроки, условия', area: true },
+    { k: 'diff',    label: 'Чем отличается от других ваших объявлений', ph: 'Иная модель, назначение, формат услуги', tier: 15 },
+    { k: 'photo',   label: 'Фото этой позиции',               ph: 'Ссылка на папку или «нет»' }
+  ];
+  function tierN(){ return parseInt(choiceVal('tier'), 10) || 0; }
+  function renderSlots(){
+    var n = tierN();
+    while(slotData.length < n) slotData.push({});
+    slotWrap.innerHTML = '';
+    for(var i = 0; i < n; i++){
+      (function(i){
+        var card = document.createElement('div');
+        card.className = 'slot';
+        var head = document.createElement('div');
+        head.className = 'slot-head';
+        head.textContent = 'Объявление ' + (i < 9 ? '0' : '') + (i + 1);
+        card.appendChild(head);
+        var grid = document.createElement('div');
+        grid.className = 'slot-grid';
+        SLOT_FIELDS.forEach(function(f){
+          if(f.tier && n < f.tier) return;
+          var lab = document.createElement('label');
+          lab.className = 'slot-field' + (f.area ? ' slot-field--wide' : '');
+          var sp = document.createElement('span'); sp.textContent = f.label; lab.appendChild(sp);
+          var inp = document.createElement(f.area ? 'textarea' : 'input');
+          if(!f.area) inp.type = 'text';
+          inp.placeholder = f.ph;
+          inp.value = slotData[i][f.k] || '';
+          inp.addEventListener('input', function(){ slotData[i][f.k] = inp.value; refresh(true); saveDraft(); });
+          lab.appendChild(inp);
+          grid.appendChild(lab);
+        });
+        card.appendChild(grid);
+        slotWrap.appendChild(card);
+      })(i);
+    }
+  }
+  function filledSlots(){
+    var n = tierN(), c = 0;
+    for(var i = 0; i < n && i < slotData.length; i++){ if(slotData[i].name && slotData[i].name.trim()) c++; }
+    return c;
+  }
+  var renderedTier = -1;
 
-  /* ---------- приём файлов в поле прайс-листа ---------- */
+  /* ---------- видимость, обязательность, нумерация ---------- */
+  function matches(cond){
+    if(!cond) return true;
+    var c = JSON.parse(cond);
+    return Object.keys(c).every(function(k){ return c[k].indexOf(choiceVal(k)) !== -1; });
+  }
+  function needDirections(){
+    var mode = choiceVal('mode');
+    return mode === 'dirs' || (mode === 'self' && tierN() > 0 && filledSlots() < tierN());
+  }
+  function isVisible(q){ return !q.classList.contains('is-hidden'); }
+  function isRequired(q){
+    var id = q.dataset.qid;
+    if(id === 'directions') return needDirections();
+    if(id === 'price_file') return choiceVal('mode') === 'dirs';
+    if(id === 'slots') return choiceVal('mode') === 'self';
+    return !!q.dataset.req;
+  }
+  function fieldOf(q){ return q.querySelector('[data-field]'); }
+  function answerOf(q){
+    var id = q.dataset.qid;
+    if(id === 'slots'){
+      var out = [], n = tierN();
+      for(var i = 0; i < n; i++){
+        var s = slotData[i] || {};
+        if(!(s.name && s.name.trim())) continue;
+        var lines = ['Объявление ' + (i + 1) + ': ' + s.name.trim()];
+        if(s.price)   lines.push('Цена: ' + s.price.trim());
+        if(s.details) lines.push('Важно: ' + s.details.trim());
+        if(s.diff && n >= 15) lines.push('Отличие: ' + s.diff.trim());
+        if(s.photo)   lines.push('Фото: ' + s.photo.trim());
+        out.push(lines.join('\n'));
+      }
+      return out.join('\n\n');
+    }
+    var row = q.querySelector('.choice-row');
+    if(row) return choiceLabel(row);
+    var f = fieldOf(q);
+    return f ? f.value.trim() : '';
+  }
+  function hasAnswer(q){
+    if(q.dataset.qid === 'price_file' && attachedFiles.length) return true;
+    return !!answerOf(q);
+  }
+  function titleOf(q){
+    var t = q.querySelector('.qtitle-text');
+    return t ? t.textContent.replace(/\s+/g, ' ').trim() : '';
+  }
+
+  function refresh(soft){
+    var gateOpen = !!(choiceVal('tier') && choiceVal('kind') && choiceVal('mode'));
+    $('#gateNote').hidden = gateOpen;
+
+    if(!soft && tierN() !== renderedTier){ renderedTier = tierN(); renderSlots(); }
+
+    // скрытые варианты ответа
+    $$('.choice-btn[data-show]').forEach(function(b){
+      var ok = matches(b.dataset.show);
+      b.hidden = !ok;
+      var row = b.closest('.choice-row');
+      if(!ok && row.dataset.selected === b.dataset.v) setChoice(row, '');
+    });
+
+    questions.forEach(function(q){
+      var show = q.dataset.show ? matches(q.dataset.show) : true;
+      if(q.dataset.gate && !gateOpen) show = false;
+      if(q.dataset.qid === 'directions') show = needDirections();
+      q.classList.toggle('is-hidden', !show);
+      var req = show && isRequired(q);
+      q.classList.toggle('req', req);
+      var chip = q.querySelector('.req-chip');
+      if(chip) chip.hidden = !req;
+    });
+
+    // заголовок направлений в режиме «распишу сам»
+    var dirTitle = byId.directions.querySelector('.qtitle-text');
+    if(choiceVal('mode') === 'self'){
+      var rest = tierN() - filledSlots();
+      dirTitle.textContent = 'Направления для остальных ' + rest + ' ' + plural(rest, 'объявления', 'объявлений', 'объявлений');
+    } else {
+      dirTitle.textContent = 'Направления для объявлений';
+    }
+    if(slotCounter) slotCounter.textContent = 'Заполнено ' + filledSlots() + ' из ' + tierN();
+
+    // нумерация видимых вопросов
+    var n = 0;
+    questions.forEach(function(q){ if(isVisible(q)) q.querySelector('.qnum').textContent = (++n) + '.'; });
+
+    // разделы без видимых вопросов скрываем вместе с пунктом меню
+    $$('section.hpanel--flow[id]').forEach(function(sec){
+      var any = $$('.q[data-qid]', sec).some(isVisible);
+      sec.classList.toggle('is-hidden', !any);
+      var a = $('.section-nav a[href="#' + sec.id + '"]');
+      if(a) a.classList.toggle('is-hidden', !any);
+    });
+
+    updateProgress();
+  }
+  function plural(n, one, few, many){
+    var m10 = n % 10, m100 = n % 100;
+    if(m10 === 1 && m100 !== 11) return one;
+    if(m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
+    return many;
+  }
+
+  function visibleQs(){ return questions.filter(isVisible); }
+  function updateProgress(){
+    var vis = visibleQs();
+    var filled = vis.filter(hasAnswer).length;
+    var req = vis.filter(isRequired);
+    var reqDone = req.filter(hasAnswer).length;
+    var pct = vis.length ? filled / vis.length : 0;
+    var fill = $('#progressFill');
+    fill.style.width = (pct * 100) + '%';
+    $('#progressCount').textContent = filled;
+    $('#progressTotal').textContent = vis.length;
+    $('#reqCount').textContent = reqDone;
+    $('#reqTotal').textContent = req.length;
+    $('#reqBadge').classList.toggle('done', reqDone === req.length);
+    fill.classList.remove('stage-red', 'stage-orange', 'stage-green');
+    if(reqDone >= req.length){
+      if(pct >= 0.75) fill.classList.add('stage-green');
+      else if(pct >= 0.60) fill.classList.add('stage-orange');
+      else fill.classList.add('stage-red');
+    }
+  }
+
+  $$('[data-field]').forEach(function(f){
+    f.addEventListener('input', function(){ updateProgress(); saveDraft(); });
+  });
+
+  /* ---------- навигация по разделам ---------- */
+  (function(){
+    var header = $('.topbar');
+    var nav = $('#sectionNav');
+    function links(){ return $$('.section-nav a').filter(function(a){ return !a.classList.contains('is-hidden'); }); }
+    function syncHeadHeight(){ document.documentElement.style.setProperty('--head-h', header.offsetHeight + 'px'); }
+    syncHeadHeight();
+    window.addEventListener('resize', syncHeadHeight);
+    var ticking = false;
+    function syncActive(){
+      var line = header.offsetHeight + 40, current = 0, ls = links();
+      ls.forEach(function(a, i){
+        var sec = $(a.getAttribute('href'));
+        if(sec && sec.getBoundingClientRect().top <= line) current = i;
+      });
+      ls.forEach(function(a, i){
+        var on = i === current;
+        if(a.classList.contains('active') !== on) a.classList.toggle('active', on);
+        if(on){
+          var r = a.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+          if(r.left < nr.left || r.right > nr.right) nav.scrollTo({ left: a.offsetLeft - nav.clientWidth / 2 + a.offsetWidth / 2, behavior: 'smooth' });
+        }
+      });
+      ticking = false;
+    }
+    window.addEventListener('scroll', function(){ if(!ticking){ ticking = true; requestAnimationFrame(syncActive); } }, { passive: true });
+    syncActive();
+  })();
+
+  /* ---------- приём файлов ---------- */
   var attachedFiles = [];
-  var dz = document.getElementById('dropzone15');
-  var dzArea = dz.querySelector('textarea');
-  var dzList = document.getElementById('fileList15');
-
-  function isTextFile(file){
-    return /^text\//.test(file.type) || /\.(txt|csv|tsv|md)$/i.test(file.name);
-  }
-  function humanSize(bytes){
-    if(bytes < 1024) return bytes + ' Б';
-    if(bytes < 1048576) return Math.round(bytes/1024) + ' КБ';
-    return (bytes/1048576).toFixed(1) + ' МБ';
-  }
+  var dz = $('#dropzone'), dzArea = dz.querySelector('textarea'), dzList = $('#fileList');
+  function isTextFile(file){ return /^text\//.test(file.type) || /\.(txt|csv|tsv|md)$/i.test(file.name); }
+  function humanSize(b){ return b < 1024 ? b + ' Б' : b < 1048576 ? Math.round(b / 1024) + ' КБ' : (b / 1048576).toFixed(1) + ' МБ'; }
   function renderFileList(){
     dzList.innerHTML = '';
     dzList.hidden = attachedFiles.length === 0;
@@ -790,13 +1183,9 @@
       var li = document.createElement('li');
       li.appendChild(document.createTextNode(f.name + ' · ' + f.size));
       var x = document.createElement('button');
-      x.type = 'button';
-      x.textContent = '×';
+      x.type = 'button'; x.textContent = '×';
       x.setAttribute('aria-label', 'Убрать файл ' + f.name);
-      x.addEventListener('click', function(){
-        attachedFiles.splice(i, 1);
-        renderFileList();
-      });
+      x.addEventListener('click', function(){ attachedFiles.splice(i, 1); renderFileList(); updateProgress(); });
       li.appendChild(x);
       dzList.appendChild(li);
     });
@@ -808,327 +1197,119 @@
         reader.onload = function(){
           var prefix = dzArea.value.trim() ? dzArea.value.replace(/\s+$/, '') + '\n\n' : '';
           dzArea.value = prefix + '— из файла «' + file.name + '» —\n' + reader.result;
-          updateProgress();
-          saveDraft();
+          updateProgress(); saveDraft();
         };
         reader.readAsText(file, 'UTF-8');
-      } else {
-        if(!attachedFiles.some(function(f){ return f.name === file.name; })){
-          attachedFiles.push({ name: file.name, size: humanSize(file.size), bytes: file.size, file: file });
-        }
-        renderFileList();
+      } else if(!attachedFiles.some(function(f){ return f.name === file.name; })){
+        attachedFiles.push({ name: file.name, size: humanSize(file.size), bytes: file.size, file: file });
       }
     });
+    renderFileList(); updateProgress();
   }
-
-  ['dragenter','dragover'].forEach(function(ev){
-    dz.addEventListener(ev, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.add('is-over'); });
-  });
-  ['dragleave','dragend'].forEach(function(ev){
-    dz.addEventListener(ev, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.remove('is-over'); });
-  });
+  ['dragenter', 'dragover'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.add('is-over'); }); });
+  ['dragleave', 'dragend'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.remove('is-over'); }); });
   dz.addEventListener('drop', function(e){
-    e.preventDefault(); e.stopPropagation();
-    dz.classList.remove('is-over');
+    e.preventDefault(); dz.classList.remove('is-over');
     if(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
   });
-  document.getElementById('filePick15').addEventListener('change', function(e){
-    if(e.target.files && e.target.files.length) handleFiles(e.target.files);
-    e.target.value = '';
-  });
-  ['dragover','drop'].forEach(function(ev){
-    window.addEventListener(ev, function(e){ if(!dz.contains(e.target)) e.preventDefault(); });
-  });
+  $('#filePick').addEventListener('change', function(e){ if(e.target.files && e.target.files.length) handleFiles(e.target.files); e.target.value = ''; });
 
-  function requiredState(){
-    var reqFields = fields.filter(function(f){ return f.dataset.req; });
-    var reqGroups = choiceGroups.filter(function(g){ return g.dataset.req; });
-    var total = reqFields.length + reqGroups.length;
-    var done = reqFields.filter(function(f){ return f.value && f.value.trim().length > 0; }).length
-             + reqGroups.filter(function(g){ return !!g.dataset.selected; }).length;
-    return { total: total, done: done };
-  }
-
-  function updateProgress(){
-    var total = fields.length + choiceGroups.length;
-    var filled = fields.filter(function(f){ return f.value && f.value.trim().length > 0; }).length
-               + choiceGroups.filter(function(g){ return !!g.dataset.selected; }).length;
-    var pct = filled / total;
-    var fill = document.getElementById('progressFill');
-    fill.style.width = (pct * 100) + '%';
-    document.getElementById('progressCount').textContent = filled;
-    document.getElementById('progressTotal').textContent = total;
-
-    var req = requiredState();
-    document.getElementById('reqCount').textContent = req.done;
-    document.getElementById('reqTotal').textContent = req.total;
-    document.getElementById('reqBadge').classList.toggle('done', req.done === req.total);
-
-    /* цвет шкалы: пока не закрыты обязательные — приглушённый лайм,
-       дальше мягкий красный → оранжевый → зелёный */
-    fill.classList.remove('stage-red', 'stage-orange', 'stage-green');
-    if(req.done >= req.total){
-      if(pct >= 0.75)      fill.classList.add('stage-green');
-      else if(pct >= 0.60) fill.classList.add('stage-orange');
-      else                 fill.classList.add('stage-red');
-    }
-  }
-
-  /* ---------- навигация по разделам ---------- */
-  (function(){
-    var header = document.querySelector('.topbar');
-    var links = Array.prototype.slice.call(document.querySelectorAll('.section-nav a'));
-    var nav = document.getElementById('sectionNav');
-    var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
-
-    function syncHeadHeight(){
-      document.documentElement.style.setProperty('--head-h', header.offsetHeight + 'px');
-    }
-    syncHeadHeight();
-    window.addEventListener('resize', syncHeadHeight);
-
-    var ticking = false;
-    function syncActive(){
-      var line = header.offsetHeight + 40;
-      var current = 0;
-      sections.forEach(function(sec, i){
-        if(sec && sec.getBoundingClientRect().top <= line) current = i;
-      });
-      links.forEach(function(a, i){
-        var on = i === current;
-        if(a.classList.contains('active') !== on) a.classList.toggle('active', on);
-        if(on){
-          var r = a.getBoundingClientRect(), nr = nav.getBoundingClientRect();
-          if(r.left < nr.left || r.right > nr.right){
-            nav.scrollTo({ left: a.offsetLeft - nav.clientWidth / 2 + a.offsetWidth / 2, behavior: 'smooth' });
-          }
-        }
-      });
-      ticking = false;
-    }
-    window.addEventListener('scroll', function(){
-      if(!ticking){ ticking = true; window.requestAnimationFrame(syncActive); }
-    }, { passive: true });
-    syncActive();
-  })();
-
+  /* ---------- черновик ---------- */
   function saveDraft(){
     try{
-      var data = {};
-      fields.forEach(function(f){ data[f.dataset.q] = f.value; });
-      choiceGroups.forEach(function(g){ data['choice:'+g.dataset.group] = g.dataset.selected || ''; });
-      localStorage.setItem('client_brief_avito_draft_v1', JSON.stringify(data));
+      var d = { f: {}, c: {}, slots: slotData };
+      $$('[data-field]').forEach(function(f){ d.f[f.dataset.field] = f.value; });
+      $$('.choice-row').forEach(function(r){ d.c[r.dataset.choice] = r.dataset.selected || ''; });
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
     }catch(e){}
   }
-
   function loadDraft(){
     try{
-      var raw = localStorage.getItem('client_brief_avito_draft_v1');
+      var raw = localStorage.getItem(DRAFT_KEY);
       if(!raw) return;
-      var data = JSON.parse(raw);
-      fields.forEach(function(f){ if(data[f.dataset.q]) f.value = data[f.dataset.q]; });
-      choiceGroups.forEach(function(g){
-        var val = data['choice:'+g.dataset.group];
-        if(val){
-          g.dataset.selected = val;
-          g.querySelectorAll('.choice-btn').forEach(function(b){
-            if(b.textContent === val) b.classList.add('active');
-          });
-        }
-      });
+      var d = JSON.parse(raw);
+      $$('[data-field]').forEach(function(f){ if(d.f && d.f[f.dataset.field]) f.value = d.f[f.dataset.field]; });
+      $$('.choice-row').forEach(function(r){ if(d.c && d.c[r.dataset.choice]) setChoice(r, d.c[r.dataset.choice]); });
+      if(Array.isArray(d.slots)) slotData = d.slots;
     }catch(e){}
   }
 
-  fields.forEach(function(f){
-    f.addEventListener('input', function(){ updateProgress(); saveDraft(); });
-  });
-
-  /* ============================================================
-     НАСТРОЙКИ — заполнить перед публикацией страницы
-     ============================================================ */
-  var COMPANY_NAME       = 'HDR Group';   // владелец страницы, выводится в подвале
-  var POLICY_URL         = '';            // ССЫЛКА НА ПОЛИТИКУ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ — обязательна к заполнению
-
-  /* ---------- куда уходят ответы ---------- */
-  // Веб-приложение Google Apps Script: пишет ответы в Google Таблицу,
-  // файлы — в папку на Google Диске, и шлёт уведомление в Telegram (см. apps-script.gs).
-  var API_URL   = 'https://script.google.com/macros/s/AKfycbyIj70GSaOepbivioyGsYPhy8cezGgzwqGUiGCpSO3yMIyGIVNDMlMvPWh3ReJzfZOd/exec';
-  var BRIEF_KEY = 'avito';           // лист в таблице: site / maps / vk / avito
-  var FILES_UPLOAD_URL = API_URL;
-  var MAX_FILES = 15, MAX_FILE_BYTES = 25 * 1024 * 1024, MAX_TOTAL_BYTES = 100 * 1024 * 1024;
-
-  /* ============================================================ */
-
-
-  document.getElementById('footerCopy').textContent = '© ' + new Date().getFullYear() + ' ' + COMPANY_NAME;
-  ['policyLink','policyLinkFooter'].forEach(function(id){
+  /* ---------- подвал, согласие ---------- */
+  $('#footerCopy').textContent = '© ' + new Date().getFullYear() + ' ' + COMPANY_NAME;
+  ['policyLink', 'policyLinkFooter'].forEach(function(id){
     var a = document.getElementById(id);
     if(POLICY_URL){ a.href = POLICY_URL; }
     else { a.removeAttribute('href'); a.removeAttribute('target'); a.style.textDecoration = 'none'; a.style.cursor = 'default'; }
   });
-
-  var consentBox = document.getElementById('consentBox');
-  var sendFormBtn = document.getElementById('sendFormBtn');
-  var sendButtons = [sendFormBtn];
-
-  function syncConsent(){
-    var ok = consentBox.checked;
-    sendButtons.forEach(function(b){ b.disabled = !ok; });
-    if(!ok) document.getElementById('statusMsg').textContent = '';
-  }
+  var consentBox = $('#consentBox'), sendFormBtn = $('#sendFormBtn'), statusMsg = $('#statusMsg');
+  function syncConsent(){ sendFormBtn.disabled = !consentBox.checked; if(!consentBox.checked) statusMsg.textContent = ''; }
   consentBox.addEventListener('change', syncConsent);
   syncConsent();
+  function setStatus(text, kind){
+    statusMsg.textContent = text;
+    statusMsg.classList.toggle('is-error', kind === 'error');
+    statusMsg.classList.toggle('is-ok', kind === 'ok');
+  }
 
-  document.getElementById('clearBtn').addEventListener('click', function(){
+  $('#clearBtn').addEventListener('click', function(){
     if(!confirm('Очистить все ответы и удалить сохранённый черновик из браузера?')) return;
-    fields.forEach(function(f){ f.value = ''; });
-    choiceGroups.forEach(function(g){
-      delete g.dataset.selected;
-      g.querySelectorAll('.choice-btn').forEach(function(b){ b.classList.remove('active'); });
-    });
-    consentBox.checked = false;
-    attachedFiles.length = 0;
-    renderFileList();
-    syncConsent();
-    var out = document.getElementById('exportOut');
-    out.value = ''; out.style.display = 'none';
-    try{ localStorage.removeItem('client_brief_avito_draft_v1'); }catch(e){}
-    updateProgress();
-    document.getElementById('statusMsg').textContent = 'Анкета очищена, сохранённый черновик удалён.';
+    $$('[data-field]').forEach(function(f){ f.value = ''; });
+    $$('.choice-row').forEach(function(r){ setChoice(r, ''); });
+    slotData = []; renderedTier = -1;
+    attachedFiles.length = 0; renderFileList();
+    consentBox.checked = false; syncConsent();
+    try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
+    refresh();
+    setStatus('Анкета очищена, сохранённый черновик удалён.');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  function questionTitle(el){
-    var card = el.closest('.q');
-    if(!card) return '';
-    var label = card.querySelector('.qtitle');
-    if(!label) return '';
-    var clone = label.cloneNode(true);
-    clone.querySelectorAll('.req-chip, .qnum').forEach(function(el){ el.remove(); });
-    return clone.textContent.replace(/\s+/g, ' ').trim();
-  }
-
+  /* ---------- сбор ответов ---------- */
   function collectAnswers(){
-    var all = [];
-    fields.forEach(function(f){
-      all.push({
-        n: parseInt(f.dataset.q, 10),
-        label: f.dataset.q,
-        title: questionTitle(f),
-        required: !!f.dataset.req,
-        value: f.value.trim()
-      });
-    });
-    choiceGroups.forEach(function(g){
-      all.push({
-        n: parseInt(g.dataset.group, 10),
-        label: g.dataset.group + '. (выбор варианта)',
-        title: questionTitle(g),
-        required: !!g.dataset.req,
-        value: g.dataset.selected || ''
-      });
-    });
-    all.sort(function(a,b){ return a.n - b.n; });
-    return all;
-  }
-
-  function companyName(){
-    var f = fields.filter(function(x){ return x.dataset.q.indexOf('1. Наименование') === 0; })[0];
-    return (f && f.value.trim()) || 'компания не указана';
-  }
-
-  function buildExportText(){
-    var lines = ['АНКЕТА КЛИЕНТА — ведение профиля и объявлений на Авито', ''];
-    var all = collectAnswers();
-    all.forEach(function(item){
-      lines.push(item.label + ':');
-      lines.push(item.value || '(не заполнено)');
-      lines.push('');
-    });
-    if(attachedFiles.length){
-      lines.push('---');
-      lines.push('ПРИЛОЖЕННЫЕ ФАЙЛЫ (передаются вместе с анкетой, в этот текст не входят):');
-      attachedFiles.forEach(function(f){ lines.push('· ' + f.name + ' (' + f.size + ')'); });
-      lines.push('');
-    }
-    lines.push('---');
-    lines.push('Согласие на обработку персональных данных: предоставлено ' + new Date().toLocaleString('ru-RU'));
-    return lines.join('\n');
-  }
-
-  function showExportText(text){
-    var out = document.getElementById('exportOut');
-    out.value = text;
-    out.style.display = 'block';
-  }
-
-  var statusMsg = document.getElementById('statusMsg');
-
-  function esc(s){
-    return String(s).replace(/[&<>"]/g, function(c){
-      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c];
+    var n = 0;
+    return visibleQs().map(function(q){
+      n++;
+      return { n: n, id: q.dataset.qid, title: titleOf(q), required: isRequired(q), value: answerOf(q) };
     });
   }
-
-  function requiredWarning(){
-    var r = requiredState();
-    return r.done < r.total
-      ? ' Обратите внимание: не заполнено обязательных вопросов — ' + (r.total - r.done) + '.'
-      : '';
+  function companyName(){ var f = $('[data-field="name"]'); return (f && f.value.trim()) || 'компания не указана'; }
+  function missingRequired(){
+    return visibleQs().filter(function(q){ return isRequired(q) && !hasAnswer(q); });
   }
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
-  /* ---------- сборка PDF с ответами ---------- */
+  /* ---------- PDF ---------- */
   function buildPdfNode(){
     var node = document.createElement('div');
     node.style.cssText = 'position:fixed; left:-10000px; top:0; width:760px; background:#ffffff; color:#141414;'
       + 'font-family:Arial,"Helvetica Neue",Helvetica,sans-serif; font-size:13px; line-height:1.5; padding:38px 42px;';
-
-    var head = '<div style="border-bottom:2px solid #141414; padding-bottom:14px; margin-bottom:22px;">'
+    var html = '<div style="border-bottom:2px solid #141414; padding-bottom:14px; margin-bottom:22px;">'
       + '<div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#777;">Старт проекта · анкета клиента</div>'
       + '<div style="font-size:21px; font-weight:bold; margin-top:7px;">Ведение профиля и объявлений на Авито</div>'
-      + '<div style="font-size:12px; color:#555; margin-top:8px;">' + esc(companyName())
-      + ' &nbsp;·&nbsp; ' + esc(new Date().toLocaleString('ru-RU')) + '</div></div>';
-
-    var body = '';
-    collectAnswers().forEach(function(item){
-      var filled = !!item.value;
-      body += '<div style="margin-bottom:16px; page-break-inside:avoid;">'
-        + '<div style="font-size:12.5px; font-weight:bold; color:#141414;">'
-        + item.n + '. ' + esc(item.title || item.label)
-        + (item.required ? ' <span style="font-size:9px; font-weight:normal; color:#4E7F12;">[обязательный]</span>' : '')
-        + '</div>'
-        + '<div style="font-size:13px; color:' + (filled ? '#222' : '#999') + '; white-space:pre-wrap; '
-        + 'border-left:3px solid ' + (filled ? '#4E7F12' : '#DDD') + '; padding-left:11px; margin-top:5px;">'
-        + esc(filled ? item.value : 'не заполнено') + '</div></div>';
+      + '<div style="font-size:12px; color:#555; margin-top:8px;">' + esc(companyName()) + ' &nbsp;·&nbsp; ' + esc(new Date().toLocaleString('ru-RU')) + '</div></div>';
+    collectAnswers().forEach(function(a){
+      var filled = !!a.value;
+      html += '<div style="margin-bottom:16px; page-break-inside:avoid;">'
+        + '<div style="font-size:12.5px; font-weight:bold;">' + a.n + '. ' + esc(a.title)
+        + (a.required ? ' <span style="font-size:9px; font-weight:normal; color:#4E7F12;">[обязательный]</span>' : '') + '</div>'
+        + '<div style="font-size:13px; color:' + (filled ? '#222' : '#999') + '; white-space:pre-wrap; border-left:3px solid ' + (filled ? '#4E7F12' : '#DDD') + '; padding-left:11px; margin-top:5px;">'
+        + esc(filled ? a.value : 'не заполнено') + '</div></div>';
     });
-
-    var tail = '';
     if(attachedFiles.length){
-      tail += '<div style="margin-top:22px; padding-top:14px; border-top:1px solid #DDD;">'
-        + '<div style="font-size:12px; font-weight:bold;">Приложенные файлы</div>'
-        + '<div style="font-size:11.5px; color:#555; margin-top:4px;">Не входят в этот PDF — направляются отдельно:</div>';
-      attachedFiles.forEach(function(f){
-        tail += '<div style="font-size:12px; margin-top:3px;">· ' + esc(f.name) + ' (' + esc(f.size) + ')</div>';
-      });
-      tail += '</div>';
+      html += '<div style="margin-top:22px; padding-top:14px; border-top:1px solid #DDD;"><div style="font-size:12px; font-weight:bold;">Приложенные файлы</div>';
+      attachedFiles.forEach(function(f){ html += '<div style="font-size:12px; margin-top:3px;">· ' + esc(f.name) + ' (' + esc(f.size) + ')</div>'; });
+      html += '</div>';
     }
-    tail += '<div style="margin-top:22px; padding-top:14px; border-top:1px solid #DDD; font-size:11px; color:#666;">'
-      + 'Согласие на обработку персональных данных предоставлено ' + esc(new Date().toLocaleString('ru-RU')) + '.</div>';
-
-    node.innerHTML = head + body + tail;
+    node.innerHTML = html;
     return node;
   }
-
   function pdfFileName(){
     var name = companyName().replace(/[^\wА-Яа-яЁё\- ]+/g, '').trim().replace(/\s+/g, '-').slice(0, 40);
-    return 'anketa-' + (name || 'klient') + '.pdf';
+    return 'anketa-avito-' + (name || 'klient') + '.pdf';
   }
-
   function makePdf(){
     return new Promise(function(resolve, reject){
-      if(typeof html2canvas !== 'function' || !window.jspdf || !window.jspdf.jsPDF){
-        reject(new Error('libs')); return;
-      }
+      if(typeof html2canvas !== 'function' || !window.jspdf || !window.jspdf.jsPDF){ reject(new Error('libs')); return; }
       var node = buildPdfNode();
       document.body.appendChild(node);
       html2canvas(node, { scale: 2, backgroundColor: '#ffffff', logging: false }).then(function(canvas){
@@ -1137,43 +1318,40 @@
         var margin = 10, imgW = 190, pageH = 297 - margin * 2;
         var imgH = canvas.height * imgW / canvas.width;
         var img = canvas.toDataURL('image/jpeg', 0.85);
-        var position = margin, heightLeft = imgH;
+        var position = margin, left = imgH;
         pdf.addImage(img, 'JPEG', margin, position, imgW, imgH);
-        heightLeft -= pageH;
-        while(heightLeft > 0){
-          position = margin - (imgH - heightLeft);
-          pdf.addPage();
-          pdf.addImage(img, 'JPEG', margin, position, imgW, imgH);
-          heightLeft -= pageH;
-        }
-        var name = pdfFileName();
-        pdf.save(name);
-        resolve(name);
-      }).catch(function(err){
-        if(node.parentNode) document.body.removeChild(node);
-        reject(err);
-      });
+        left -= pageH;
+        while(left > 0){ position = margin - (imgH - left); pdf.addPage(); pdf.addImage(img, 'JPEG', margin, position, imgW, imgH); left -= pageH; }
+        var name = pdfFileName(); pdf.save(name); resolve(name);
+      }).catch(function(err){ if(node.parentNode) document.body.removeChild(node); reject(err); });
     });
   }
-
-  /* ---------- отправка в Google Форму ---------- */
-  var FILE_QUESTION = 15;           // номер вопроса, куда вписываются ссылки на файлы (0 — нет файлов)
-
-  function setStatus(text, kind){
-    statusMsg.textContent = text;
-    statusMsg.classList.toggle('is-error', kind === 'error');
-    statusMsg.classList.toggle('is-ok', kind === 'ok');
+  function buildExportText(){
+    var lines = ['АНКЕТА КЛИЕНТА — ведение профиля и объявлений на Авито', ''];
+    collectAnswers().forEach(function(a){ lines.push(a.n + '. ' + a.title + ':'); lines.push(a.value || '(не заполнено)'); lines.push(''); });
+    return lines.join('\n');
   }
-
-  function hasFiles(){ return typeof attachedFiles !== 'undefined' && attachedFiles.length > 0; }
-
-  function missingRequired(){
-    return collectAnswers().filter(function(a){
-      if(a.n === FILE_QUESTION && hasFiles()) return false; // приложенные файлы заполняют вопрос
-      return a.required && !a.value;
+  $('#downloadBtn').addEventListener('click', function(){
+    setStatus('Готовим PDF с ответами…');
+    makePdf().then(function(name){
+      var miss = missingRequired().length;
+      setStatus('PDF «' + name + '» сохранён в загрузки.' + (miss ? ' Не заполнено обязательных вопросов: ' + miss + '.' : ''));
+    }).catch(function(){
+      var text = buildExportText();
+      try{
+        var url = URL.createObjectURL(new Blob(['﻿' + text], { type: 'text/plain;charset=utf-8' }));
+        var a = document.createElement('a'); a.href = url; a.download = 'anketa-avito.txt';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+        setStatus('PDF собрать не удалось — сохранён текстовый файл с ответами.');
+      }catch(e){
+        var out = $('#exportOut'); out.value = text; out.style.display = 'block';
+        setStatus('Скачивание недоступно в этом браузере. Текст ответов показан ниже.');
+      }
     });
-  }
+  });
 
+  /* ---------- отправка ---------- */
   function readAsBase64(file){
     return new Promise(function(resolve, reject){
       var r = new FileReader();
@@ -1182,144 +1360,81 @@
       r.readAsDataURL(file);
     });
   }
-
-  // загружает файлы через Apps Script по одному (так быстрее и надёжнее, чем одним запросом);
-  // возвращает { note, failed } — note вписывается в вопрос с материалами
   function uploadFiles(onProgress){
     if(!attachedFiles.length) return Promise.resolve({ note: '', failed: [] });
-    if(!FILES_UPLOAD_URL){
-      return Promise.resolve({ failed: [], note: 'Клиент приложил файлы (не загружены автоматически, запросите отдельно):\n'
-        + attachedFiles.map(function(f){ return '· ' + f.name + ' (' + f.size + ')'; }).join('\n') });
-    }
     var folder = null, saved = [], failed = [], total = 0;
     var queue = attachedFiles.filter(function(f, i){
       if(i >= MAX_FILES){ failed.push(f.name + ' — больше ' + MAX_FILES + ' файлов'); return false; }
-      if(f.bytes > MAX_FILE_BYTES){ failed.push(f.name + ' — файл больше ' + Math.round(MAX_FILE_BYTES / 1048576) + ' МБ'); return false; }
-      if(total + f.bytes > MAX_TOTAL_BYTES){ failed.push(f.name + ' — превышен общий объём ' + Math.round(MAX_TOTAL_BYTES / 1048576) + ' МБ'); return false; }
+      if(f.bytes > MAX_FILE_BYTES){ failed.push(f.name + ' — файл больше 25 МБ'); return false; }
+      if(total + f.bytes > MAX_TOTAL_BYTES){ failed.push(f.name + ' — превышен общий объём 100 МБ'); return false; }
       total += f.bytes; return true;
     });
-
     var chain = Promise.resolve();
     queue.forEach(function(f, i){
       chain = chain.then(function(){
-        if(onProgress) onProgress(i + 1, queue.length, f);
+        if(onProgress) onProgress(i + 1, queue.length);
         return readAsBase64(f.file).then(function(data){
           // text/plain — чтобы браузер не делал preflight-запрос, Apps Script его не поддерживает
           return fetch(FILES_UPLOAD_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-              company: companyName(),
-              folderId: folder ? folder.id : '',
-              files: [{ name: f.name, type: f.file.type || 'application/octet-stream', data: data }]
-            })
+            method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ company: companyName(), folderId: folder ? folder.id : '',
+              files: [{ name: f.name, type: f.file.type || 'application/octet-stream', data: data }] })
           });
         }).then(function(res){ return res.json(); }).then(function(json){
           if(!json || !json.ok) throw new Error(json && json.error || 'нет ответа');
           if(!folder) folder = { id: json.folderId, url: json.folder };
           saved.push(json.files[0]);
-        }).catch(function(err){
-          failed.push(f.name + ' — ' + (err && err.message ? err.message : 'ошибка загрузки'));
-        });
+        }).catch(function(err){ failed.push(f.name + ' — ' + (err && err.message ? err.message : 'ошибка загрузки')); });
       });
     });
-
     return chain.then(function(){
       var lines = [];
-      if(saved.length){
-        lines.push('Файлы клиента (Google Диск): ' + folder.url);
-        saved.forEach(function(s){ lines.push('· ' + s.name + ' — ' + s.url); });
-      }
-      if(failed.length){
-        if(lines.length) lines.push('');
-        lines.push('Не загрузились, запросите у клиента:');
-        failed.forEach(function(x){ lines.push('· ' + x); });
-      }
+      if(saved.length){ lines.push('Файлы клиента (Google Диск): ' + folder.url); saved.forEach(function(s){ lines.push('· ' + s.name + ' — ' + s.url); }); }
+      if(failed.length){ if(lines.length) lines.push(''); lines.push('Не загрузились, запросите у клиента:'); failed.forEach(function(x){ lines.push('· ' + x); }); }
       return { note: lines.join('\n'), failed: failed };
     });
   }
-
   function sendToSheet(filesNote){
     var payload = {
-      kind: 'brief',
-      brief: BRIEF_KEY,
-      company: companyName(),
+      kind: 'brief', brief: BRIEF_KEY, company: companyName(),
       answers: collectAnswers().map(function(a){
-        var value = a.value;
-        if(a.n === FILE_QUESTION && filesNote) value = value ? value + '\n\n' + filesNote : filesNote;
-        return { n: a.n, title: a.n + '. ' + a.title, value: value };
+        var v = a.value;
+        if(a.id === 'price_file' && filesNote) v = v ? v + '\n\n' + filesNote : filesNote;
+        return { n: a.n, title: a.n + '. ' + a.title, value: v };
       })
     };
-    // text/plain — чтобы браузер не делал preflight-запрос, Apps Script его не поддерживает
-    return fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload)
-    }).then(function(res){ return res.json(); }).then(function(json){
-      if(!json || !json.ok) throw new Error(json && json.error || 'ответ не сохранён');
-      return json;
-    });
+    return fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
+      .then(function(res){ return res.json(); })
+      .then(function(json){ if(!json || !json.ok) throw new Error(json && json.error || 'ответ не сохранён'); return json; });
   }
-
   sendFormBtn.addEventListener('click', function(){
     if(!consentBox.checked) return;
     var missing = missingRequired();
     if(missing.length){
-      setStatus('Заполните обязательные вопросы: ' + missing.map(function(m){ return m.n; }).join(', ') + '. Без них анкета не примется.', 'error');
-      var first = document.querySelector('[data-q^="' + missing[0].n + '."], .choice-row[data-group="' + missing[0].n + '"]');
-      if(first){
-        first.closest('.q').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        if(first.focus && first.tagName !== 'DIV') setTimeout(function(){ first.focus({ preventScroll: true }); }, 400);
-      }
+      var nums = missing.map(function(q){ return q.querySelector('.qnum').textContent.replace('.', ''); });
+      setStatus('Заполните обязательные вопросы: ' + nums.join(', ') + '. Без них анкета не примется.', 'error');
+      missing[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
-    sendButtons.forEach(function(b){ b.disabled = true; });
-    setStatus('Отправляем анкету…');
-
-    var failedFiles = [];
-    uploadFiles(function(i, n, f){
-      setStatus('Загружаем файл ' + i + ' из ' + n + ' («' + f.name + '», ' + f.size + ')… Не закрывайте страницу, крупные файлы загружаются до минуты.');
-    }).then(function(r){
-      failedFiles = r.failed;
-      setStatus('Отправляем анкету…');
-      return sendToSheet(r.note);
-    }).then(function(){
-      if(failedFiles.length){
-        setStatus('Анкета отправлена, но часть файлов не загрузилась: '
-          + failedFiles.join('; ') + '. Мы свяжемся с вами в выбранном мессенджере и попросим прислать их.', 'error');
-      } else {
-        setStatus('Анкета отправлена. Спасибо! Мы свяжемся с вами в выбранном мессенджере.', 'ok');
-      }
-      sendFormBtn.textContent = 'Анкета отправлена';
-    }).catch(function(){
-      setStatus('Не удалось отправить анкету — проверьте интернет и попробуйте ещё раз. Ответы сохранены в браузере, заново заполнять не нужно.', 'error');
-      syncConsent();
-    });
-  });
-
-  document.getElementById('downloadBtn').addEventListener('click', function(){
-    setStatus('Готовим PDF с ответами…');
-    makePdf().then(function(fileName){
-      setStatus('PDF «' + fileName + '» сохранён в загрузки.' + requiredWarning());
-    }).catch(function(){
-      var text = buildExportText();
-      try{
-        var blob = new Blob(['﻿' + text], { type: 'text/plain;charset=utf-8' });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url; a.download = 'anketa-klienta.txt';
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
-        setStatus('PDF собрать не удалось — сохранён текстовый файл с ответами.');
-      }catch(e){
-        showExportText(text);
-        setStatus('Скачивание недоступно в этом браузере. Текст ответов показан ниже.');
-      }
-    });
+    sendFormBtn.disabled = true;
+    setStatus(attachedFiles.length ? 'Загружаем файлы…' : 'Отправляем анкету…');
+    uploadFiles(function(i, n){ setStatus('Загружаем файлы: ' + i + ' из ' + n + '…'); })
+      .then(function(up){ setStatus('Отправляем анкету…'); return sendToSheet(up.note).then(function(){ return up; }); })
+      .then(function(up){
+        var bad = up.failed.length > 0;
+        setStatus(bad ? 'Анкета отправлена, но часть файлов не загрузилась. Мы попросим прислать их в мессенджере.'
+                      : 'Анкета отправлена. Спасибо! Мы свяжемся с вами в выбранном мессенджере.', bad ? 'error' : 'ok');
+        sendFormBtn.textContent = 'Анкета отправлена';
+      })
+      .catch(function(){
+        setStatus('Не удалось отправить анкету — проверьте интернет и попробуйте ещё раз. Ответы сохранены в браузере, заново заполнять не нужно.', 'error');
+        syncConsent();
+      });
   });
 
   loadDraft();
-  updateProgress();
+  refresh();
+})();
 </script>
 
 </body>
