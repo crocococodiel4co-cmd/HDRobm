@@ -366,9 +366,6 @@
 </head>
 <body>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <header class="topbar">
   <div class="topbar-row">
     <span class="brand">СТАРТ ПРОЕКТА <small>ЗНАКОМСТВО С КОМПАНИЕЙ ПЕРЕД ВЕДЕНИЕМ ПРОФИЛЯ НА АВИТО</small></span>
@@ -544,14 +541,14 @@
       <textarea data-field="directions" placeholder="Направление и что в него входит — по строке на каждое" style="min-height:120px;"></textarea>
     </div>
     <div class="q" data-qid="price_file" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Прайс-лист, ассортимент или выгрузка</span><span class="req-chip">обязательно</span></label>
-      <div class="qhint">Впишите позиции, дайте ссылку или перетащите файл в поле: прайс, выгрузку из 1С или МойСклад, таблицу. TXT и CSV подставятся текстом, остальные файлы приложатся к анкете</div>
+      <div class="qhint">Впишите позиции или дайте ссылку на облако с прайсом, выгрузкой из 1С или МойСклад. Файл TXT или CSV можно перетащить в поле — он подставится текстом. Другие файлы (XLSX, PDF) отметьте здесь и приложите к сообщению вместе с PDF анкеты</div>
       <div class="dropzone" id="dropzone">
         <textarea data-field="price_file" placeholder="Начните печатать или перетащите сюда файл"></textarea>
         <div class="drop-overlay">Отпустите файл</div>
       </div>
       <div class="drop-actions">
         <label class="file-pick">Выбрать файл<input type="file" id="filePick" multiple hidden></label>
-        <span class="drop-note">TXT, CSV, XLSX, PDF, изображения · до 15 файлов, каждый до 25 МБ</span>
+        <span class="drop-note">TXT и CSV подставятся текстом · остальные файлы попадут в PDF списком «приложить к сообщению»</span>
       </div>
       <ul class="file-list" id="fileList" hidden></ul>
     </div>
@@ -842,24 +839,16 @@
 
     <div class="hsubmit-panel">
       <h3>Анкета заполнена?</h3>
-      <p>Нажмите «Отправить анкету» — ответы и приложенные файлы сразу придут нам.</p>
-
-      <div class="consent">
-        <input type="checkbox" id="consentBox">
-        <label for="consentBox">Я даю согласие на обработку персональных данных, указанных в настоящей анкете, на условиях <a href="#" id="policyLink" target="_blank" rel="noopener">Политики обработки персональных данных</a>. Согласие предоставляется в целях организации взаимодействия при оказании услуг и может быть отозвано.</label>
-      </div>
-
+      <p>Скачайте PDF с ответами и отправьте его вашему менеджеру HDR Group в рабочий чат.</p>
       <div class="btn-row">
-        <button class="btn btn-primary" id="sendFormBtn" type="button" disabled>Отправить анкету</button>
+        <button class="btn btn-primary" id="pdfBtn" type="button">Скачать PDF с ответами</button>
       </div>
       <div class="status-msg" id="statusMsg"></div>
       <textarea id="exportOut" readonly></textarea>
-
       <div class="aux-row">
-        <button class="aux-link" id="downloadBtn" type="button">Скачать PDF с ответами</button>
         <button class="aux-link aux-link--quiet" id="clearBtn" type="button">Очистить анкету и удалить черновик</button>
       </div>
-      <p class="aux-note">Анкета и файлы передаются напрямую, ничего открывать не нужно. Копию ответов можно сохранить себе в PDF.</p>
+      <p class="aux-note">Ответы никуда не отправляются со страницы — PDF формируется на вашем устройстве. Черновик хранится в этом браузере, к анкете можно вернуться позже.</p>
     </div>
   </section>
 
@@ -868,9 +857,7 @@
 <footer class="doc-footer">
   <p>Старт проекта · ведение профиля и объявлений на Авито</p>
   <p><span id="footerCopy">© 2026</span> · <a href="#" id="policyLinkFooter" target="_blank" rel="noopener">Политика обработки персональных данных</a></p>
-  <p>Черновик анкеты сохраняется только в браузере вашего устройства и не передаётся до момента отправки.</p>
 </footer>
-
 
 <script>
 (function(){
@@ -879,10 +866,6 @@
      ============================================================ */
   var COMPANY_NAME = 'HDR Group';
   var POLICY_URL   = '';
-  var API_URL   = 'https://script.google.com/macros/s/AKfycbyIj70GSaOepbivioyGsYPhy8cezGgzwqGUiGCpSO3yMIyGIVNDMlMvPWh3ReJzfZOd/exec';
-  var BRIEF_KEY = 'avito';            // лист в таблице: site / maps / vk / avito
-  var FILES_UPLOAD_URL = API_URL;
-  var MAX_FILES = 15, MAX_FILE_BYTES = 25 * 1024 * 1024, MAX_TOTAL_BYTES = 100 * 1024 * 1024;
   var DRAFT_KEY = 'client_brief_avito_v2';
   /* ============================================================ */
 
@@ -1189,17 +1172,14 @@
     }catch(e){}
   }
 
-  /* ---------- подвал, согласие ---------- */
+  /* ---------- подвал ---------- */
   $('#footerCopy').textContent = '© ' + new Date().getFullYear() + ' ' + COMPANY_NAME;
-  ['policyLink', 'policyLinkFooter'].forEach(function(id){
-    var a = document.getElementById(id);
+  (function(){
+    var a = document.getElementById('policyLinkFooter');
     if(POLICY_URL){ a.href = POLICY_URL; }
     else { a.removeAttribute('href'); a.removeAttribute('target'); a.style.textDecoration = 'none'; a.style.cursor = 'default'; }
-  });
-  var consentBox = $('#consentBox'), sendFormBtn = $('#sendFormBtn'), statusMsg = $('#statusMsg');
-  function syncConsent(){ sendFormBtn.disabled = !consentBox.checked; if(!consentBox.checked) statusMsg.textContent = ''; }
-  consentBox.addEventListener('change', syncConsent);
-  syncConsent();
+  })();
+  var statusMsg = $('#statusMsg'), pdfBtn = $('#pdfBtn');
   function setStatus(text, kind){
     statusMsg.textContent = text;
     statusMsg.classList.toggle('is-error', kind === 'error');
@@ -1212,7 +1192,6 @@
     $$('.choice-row').forEach(function(r){ setChoice(r, ''); });
     slotData = []; renderedTier = -1;
     attachedFiles.length = 0; renderFileList();
-    consentBox.checked = false; syncConsent();
     try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
     refresh();
     setStatus('Анкета очищена, сохранённый черновик удалён.');
@@ -1220,171 +1199,179 @@
   });
 
   /* ---------- сбор ответов ---------- */
+  function sectionTitle(q){
+    var sec = q.closest('section'), t = sec && sec.querySelector('.block-title');
+    return t ? t.textContent.trim() : '';
+  }
   function collectAnswers(){
     var n = 0;
     return visibleQs().map(function(q){
       n++;
-      return { n: n, id: q.dataset.qid, title: titleOf(q), required: isRequired(q), value: answerOf(q) };
+      return { n: n, id: q.dataset.qid, section: sectionTitle(q), title: titleOf(q), required: isRequired(q), value: answerOf(q) };
     });
   }
   function companyName(){ var f = $('[data-field="name"]'); return (f && f.value.trim()) || 'компания не указана'; }
-  function missingRequired(){
-    return visibleQs().filter(function(q){ return isRequired(q) && !hasAnswer(q); });
+  function missingRequired(){ return visibleQs().filter(function(q){ return isRequired(q) && !hasAnswer(q); }); }
+  function filledSlotRows(){
+    var rows = [], n = tierN();
+    for(var i = 0; i < n; i++){
+      var s = slotData[i] || {};
+      if(s.name && s.name.trim()) rows.push([String(i + 1), s.name || '', s.price || '', s.details || '', n >= 15 ? (s.diff || '') : '', s.photo || '']);
+    }
+    return rows;
   }
-  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
-  /* ---------- PDF ---------- */
-  function buildPdfNode(){
-    var node = document.createElement('div');
-    node.style.cssText = 'position:fixed; left:-10000px; top:0; width:760px; background:#ffffff; color:#141414;'
-      + 'font-family:Arial,"Helvetica Neue",Helvetica,sans-serif; font-size:13px; line-height:1.5; padding:38px 42px;';
-    var html = '<div style="border-bottom:2px solid #141414; padding-bottom:14px; margin-bottom:22px;">'
-      + '<div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#777;">Старт проекта · анкета клиента</div>'
-      + '<div style="font-size:21px; font-weight:bold; margin-top:7px;">Ведение профиля и объявлений на Авито</div>'
-      + '<div style="font-size:12px; color:#555; margin-top:8px;">' + esc(companyName()) + ' &nbsp;·&nbsp; ' + esc(new Date().toLocaleString('ru-RU')) + '</div></div>';
-    collectAnswers().forEach(function(a){
-      var filled = !!a.value;
-      html += '<div style="margin-bottom:16px; page-break-inside:avoid;">'
-        + '<div style="font-size:12.5px; font-weight:bold;">' + a.n + '. ' + esc(a.title)
-        + (a.required ? ' <span style="font-size:9px; font-weight:normal; color:#4E7F12;">[обязательный]</span>' : '') + '</div>'
-        + '<div style="font-size:13px; color:' + (filled ? '#222' : '#999') + '; white-space:pre-wrap; border-left:3px solid ' + (filled ? '#4E7F12' : '#DDD') + '; padding-left:11px; margin-top:5px;">'
-        + esc(filled ? a.value : 'не заполнено') + '</div></div>';
+  /* ---------- PDF (текстовый, pdfmake подгружается по клику) ---------- */
+  var PDF_LIBS = [
+    ['https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.js'],
+    ['https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/pdfmake.min.js', 'https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/vfs_fonts.js']
+  ];
+  function loadScript(src){
+    return new Promise(function(resolve, reject){
+      var el = document.createElement('script');
+      el.src = src; el.onload = resolve; el.onerror = function(){ el.remove(); reject(new Error(src)); };
+      document.head.appendChild(el);
+    });
+  }
+  var pdfReady = null;
+  function loadPdfLibs(){
+    if(window.pdfMake && window.pdfMake.vfs) return Promise.resolve();
+    if(pdfReady) return pdfReady;
+    var i = 0;
+    function attempt(){
+      var pair = PDF_LIBS[i];
+      return loadScript(pair[0]).then(function(){ return loadScript(pair[1]); }).then(function(){
+        if(!(window.pdfMake && window.pdfMake.vfs)) throw new Error('vfs');
+      }).catch(function(err){ i++; if(i < PDF_LIBS.length) return attempt(); throw err; });
+    }
+    pdfReady = attempt().catch(function(e){ pdfReady = null; throw e; });
+    return pdfReady;
+  }
+
+  var ACC = '#4E7F12', MUTED = '#8A8A8A';
+  function buildDoc(){
+    var answers = collectAnswers();
+    var date = new Date().toLocaleDateString('ru-RU');
+    var pick = function(id){ var a = answers.filter(function(x){ return x.id === id; })[0]; return a && a.value || '—'; };
+    var content = [
+      { text: 'БРИФ · ВЕДЕНИЕ ПРОФИЛЯ НА АВИТО', style: 'eyebrow' },
+      { text: companyName(), style: 'h1' },
+      { text: 'Заполнено ' + date, style: 'muted', margin: [0, 2, 0, 12] },
+      { table: { widths: ['*', '*', '*'], body: [
+          [{ text: 'Пакет', style: 'cap' }, { text: 'Что размещаем', style: 'cap' }, { text: 'Формат', style: 'cap' }],
+          [{ text: pick('tier'), bold: true }, { text: pick('kind'), bold: true }, { text: pick('mode'), bold: true }]
+        ] }, layout: { hLineWidth: function(i){ return i === 0 || i === 2 ? 1 : 0; }, vLineWidth: function(){ return 0; },
+          hLineColor: function(){ return ACC; }, paddingTop: function(){ return 5; }, paddingBottom: function(){ return 5; } },
+        margin: [0, 0, 0, 6] }
+    ];
+    var lastSection = '';
+    answers.forEach(function(a){
+      if(a.id === 'tier' || a.id === 'kind' || a.id === 'mode') return;
+      var value = a.value;
+      if(a.id === 'price_file' && attachedFiles.length){
+        value = (value ? value + '\n' : '') + 'Приложить к сообщению: ' + attachedFiles.map(function(f){ return f.name; }).join(', ');
+      }
+      if(!value && a.id !== 'slots' && !a.required) return;
+      if(a.section !== lastSection){ content.push({ text: a.section, style: 'h2', headlineLevel: 1 }); lastSection = a.section; }
+      var title = { text: a.n + '. ' + a.title, bold: true, style: 'q', headlineLevel: 2 };
+      if(a.id === 'slots'){
+        var rows = filledSlotRows();
+        content.push(title);
+        if(!rows.length){ content.push({ text: 'не заполнено', style: 'empty' }); return; }
+        var wide = tierN() >= 15;
+        var head = ['№', 'Название', 'Цена', 'Что важно'].concat(wide ? ['Отличие'] : []).concat(['Фото']);
+        var body = [head.map(function(h){ return { text: h, style: 'th' }; })];
+        rows.forEach(function(r){
+          var cells = [r[0], r[1], r[2], r[3]].concat(wide ? [r[4]] : []).concat([r[5]]);
+          body.push(cells.map(function(c){ return { text: c || '—', fontSize: 8.5 }; }));
+        });
+        content.push({ table: { headerRows: 1, dontBreakRows: true,
+          widths: wide ? [14, 90, 52, '*', 80, 70] : [14, 110, 60, '*', 80], body: body },
+          layout: { hLineWidth: function(){ return 0.5; }, vLineWidth: function(){ return 0; }, hLineColor: function(){ return '#D5D5D5'; },
+            fillColor: function(i){ return i === 0 ? '#EEF3E6' : null; }, paddingTop: function(){ return 4; }, paddingBottom: function(){ return 4; } },
+          margin: [0, 2, 0, 10] });
+        return;
+      }
+      content.push({ stack: [
+        title,
+        value ? { text: value, style: 'a' } : { text: 'не заполнено — обязательный вопрос', style: 'missing' }
+      ], unbreakable: (value || '').length < 900 });
     });
     if(attachedFiles.length){
-      html += '<div style="margin-top:22px; padding-top:14px; border-top:1px solid #DDD;"><div style="font-size:12px; font-weight:bold;">Приложенные файлы</div>';
-      attachedFiles.forEach(function(f){ html += '<div style="font-size:12px; margin-top:3px;">· ' + esc(f.name) + ' (' + esc(f.size) + ')</div>'; });
-      html += '</div>';
+      content.push({ text: 'Файлы, которые нужно приложить к сообщению', style: 'h2' });
+      content.push({ ul: attachedFiles.map(function(f){ return f.name + ' (' + f.size + ')'; }), fontSize: 9.5 });
     }
-    node.innerHTML = html;
-    return node;
+    return {
+      pageSize: 'A4', pageMargins: [40, 44, 40, 48],
+      pageBreakBefore: function(node, following, nodesOnNextPage, previous){
+        // заголовок раздела или вопроса не остаётся последней строкой страницы
+        return !!node.headlineLevel && following.length === 0;
+      },
+      info: { title: 'Бриф Авито — ' + companyName(), author: COMPANY_NAME },
+      footer: function(cur, total){ return { columns: [
+        { text: companyName() + ' · бриф Авито', fontSize: 7.5, color: MUTED },
+        { text: cur + ' / ' + total, alignment: 'right', fontSize: 7.5, color: MUTED }
+      ], margin: [40, 16, 40, 0] }; },
+      content: content,
+      defaultStyle: { font: 'Roboto', fontSize: 10, lineHeight: 1.25, color: '#1B1B1B' },
+      styles: {
+        eyebrow: { fontSize: 8, color: ACC, bold: true, characterSpacing: 1.2 },
+        h1: { fontSize: 20, bold: true, margin: [0, 4, 0, 0] },
+        h2: { fontSize: 12.5, bold: true, color: ACC, margin: [0, 14, 0, 6] },
+        cap: { fontSize: 7.5, color: MUTED },
+        q: { fontSize: 9.5, margin: [0, 5, 0, 2] },
+        a: { fontSize: 10, margin: [8, 0, 0, 3] },
+        empty: { fontSize: 9, italics: true, color: '#A0A0A0', margin: [8, 0, 0, 3] },
+        missing: { fontSize: 9, color: '#B4412F', margin: [8, 0, 0, 3] },
+        th: { fontSize: 8, bold: true }
+      }
+    };
   }
   function pdfFileName(){
     var name = companyName().replace(/[^\wА-Яа-яЁё\- ]+/g, '').trim().replace(/\s+/g, '-').slice(0, 40);
-    return 'anketa-avito-' + (name || 'klient') + '.pdf';
-  }
-  function makePdf(){
-    return new Promise(function(resolve, reject){
-      if(typeof html2canvas !== 'function' || !window.jspdf || !window.jspdf.jsPDF){ reject(new Error('libs')); return; }
-      var node = buildPdfNode();
-      document.body.appendChild(node);
-      html2canvas(node, { scale: 2, backgroundColor: '#ffffff', logging: false }).then(function(canvas){
-        document.body.removeChild(node);
-        var pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
-        var margin = 10, imgW = 190, pageH = 297 - margin * 2;
-        var imgH = canvas.height * imgW / canvas.width;
-        var img = canvas.toDataURL('image/jpeg', 0.85);
-        var position = margin, left = imgH;
-        pdf.addImage(img, 'JPEG', margin, position, imgW, imgH);
-        left -= pageH;
-        while(left > 0){ position = margin - (imgH - left); pdf.addPage(); pdf.addImage(img, 'JPEG', margin, position, imgW, imgH); left -= pageH; }
-        var name = pdfFileName(); pdf.save(name); resolve(name);
-      }).catch(function(err){ if(node.parentNode) document.body.removeChild(node); reject(err); });
-    });
+    return 'Бриф-Авито_' + (name || 'компания') + '_' + new Date().toLocaleDateString('ru-RU').replace(/\./g, '-') + '.pdf';
   }
   function buildExportText(){
-    var lines = ['АНКЕТА КЛИЕНТА — ведение профиля и объявлений на Авито', ''];
+    var lines = ['БРИФ — ведение профиля и объявлений на Авито', companyName(), ''];
     collectAnswers().forEach(function(a){ lines.push(a.n + '. ' + a.title + ':'); lines.push(a.value || '(не заполнено)'); lines.push(''); });
+    if(attachedFiles.length){ lines.push('Приложить отдельно:'); attachedFiles.forEach(function(f){ lines.push('· ' + f.name); }); }
     return lines.join('\n');
   }
-  $('#downloadBtn').addEventListener('click', function(){
-    setStatus('Готовим PDF с ответами…');
-    makePdf().then(function(name){
-      var miss = missingRequired().length;
-      setStatus('PDF «' + name + '» сохранён в загрузки.' + (miss ? ' Не заполнено обязательных вопросов: ' + miss + '.' : ''));
+  function afterNote(){
+    return attachedFiles.length
+      ? ' Отправьте его вашему менеджеру HDR Group в рабочий чат вместе с файлами: ' + attachedFiles.map(function(f){ return f.name; }).join(', ') + '.'
+      : ' Отправьте его вашему менеджеру HDR Group в рабочий чат.';
+  }
+  var warnedFor = '';
+  pdfBtn.addEventListener('click', function(){
+    var missing = missingRequired();
+    var key = missing.map(function(q){ return q.dataset.qid; }).join(',');
+    if(missing.length && warnedFor !== key){
+      warnedFor = key;
+      var nums = missing.map(function(q){ return q.querySelector('.qnum').textContent.replace('.', ''); });
+      setStatus('Не заполнены обязательные вопросы: ' + nums.join(', ') + '. Заполните их или нажмите кнопку ещё раз, чтобы скачать PDF как есть.', 'error');
+      missing[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    pdfBtn.disabled = true;
+    setStatus('Собираем PDF…');
+    loadPdfLibs().then(function(){
+      return new Promise(function(resolve){ window.pdfMake.createPdf(buildDoc()).download(pdfFileName(), resolve); });
+    }).then(function(){
+      setStatus('PDF «' + pdfFileName() + '» сохранён в загрузки.' + afterNote(), 'ok');
     }).catch(function(){
       var text = buildExportText();
       try{
         var url = URL.createObjectURL(new Blob(['﻿' + text], { type: 'text/plain;charset=utf-8' }));
-        var a = document.createElement('a'); a.href = url; a.download = 'anketa-avito.txt';
+        var a = document.createElement('a'); a.href = url; a.download = pdfFileName().replace(/\.pdf$/, '.txt');
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
         setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
-        setStatus('PDF собрать не удалось — сохранён текстовый файл с ответами.');
+        setStatus('PDF собрать не удалось — сохранён текстовый файл с ответами.' + afterNote(), 'error');
       }catch(e){
         var out = $('#exportOut'); out.value = text; out.style.display = 'block';
-        setStatus('Скачивание недоступно в этом браузере. Текст ответов показан ниже.');
+        setStatus('Скачивание недоступно в этом браузере. Скопируйте текст ответов ниже и отправьте менеджеру.', 'error');
       }
-    });
-  });
-
-  /* ---------- отправка ---------- */
-  function readAsBase64(file){
-    return new Promise(function(resolve, reject){
-      var r = new FileReader();
-      r.onload = function(){ resolve(String(r.result).split(',')[1] || ''); };
-      r.onerror = function(){ reject(r.error); };
-      r.readAsDataURL(file);
-    });
-  }
-  function uploadFiles(onProgress){
-    if(!attachedFiles.length) return Promise.resolve({ note: '', failed: [] });
-    var folder = null, saved = [], failed = [], total = 0;
-    var queue = attachedFiles.filter(function(f, i){
-      if(i >= MAX_FILES){ failed.push(f.name + ' — больше ' + MAX_FILES + ' файлов'); return false; }
-      if(f.bytes > MAX_FILE_BYTES){ failed.push(f.name + ' — файл больше 25 МБ'); return false; }
-      if(total + f.bytes > MAX_TOTAL_BYTES){ failed.push(f.name + ' — превышен общий объём 100 МБ'); return false; }
-      total += f.bytes; return true;
-    });
-    var chain = Promise.resolve();
-    queue.forEach(function(f, i){
-      chain = chain.then(function(){
-        if(onProgress) onProgress(i + 1, queue.length);
-        return readAsBase64(f.file).then(function(data){
-          // text/plain — чтобы браузер не делал preflight-запрос, Apps Script его не поддерживает
-          return fetch(FILES_UPLOAD_URL, {
-            method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ company: companyName(), folderId: folder ? folder.id : '',
-              files: [{ name: f.name, type: f.file.type || 'application/octet-stream', data: data }] })
-          });
-        }).then(function(res){ return res.json(); }).then(function(json){
-          if(!json || !json.ok) throw new Error(json && json.error || 'нет ответа');
-          if(!folder) folder = { id: json.folderId, url: json.folder };
-          saved.push(json.files[0]);
-        }).catch(function(err){ failed.push(f.name + ' — ' + (err && err.message ? err.message : 'ошибка загрузки')); });
-      });
-    });
-    return chain.then(function(){
-      var lines = [];
-      if(saved.length){ lines.push('Файлы клиента (Google Диск): ' + folder.url); saved.forEach(function(s){ lines.push('· ' + s.name + ' — ' + s.url); }); }
-      if(failed.length){ if(lines.length) lines.push(''); lines.push('Не загрузились, запросите у клиента:'); failed.forEach(function(x){ lines.push('· ' + x); }); }
-      return { note: lines.join('\n'), failed: failed };
-    });
-  }
-  function sendToSheet(filesNote){
-    var payload = {
-      kind: 'brief', brief: BRIEF_KEY, company: companyName(),
-      answers: collectAnswers().map(function(a){
-        var v = a.value;
-        if(a.id === 'price_file' && filesNote) v = v ? v + '\n\n' + filesNote : filesNote;
-        return { n: a.n, title: a.n + '. ' + a.title, value: v };
-      })
-    };
-    return fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
-      .then(function(res){ return res.json(); })
-      .then(function(json){ if(!json || !json.ok) throw new Error(json && json.error || 'ответ не сохранён'); return json; });
-  }
-  sendFormBtn.addEventListener('click', function(){
-    if(!consentBox.checked) return;
-    var missing = missingRequired();
-    if(missing.length){
-      var nums = missing.map(function(q){ return q.querySelector('.qnum').textContent.replace('.', ''); });
-      setStatus('Заполните обязательные вопросы: ' + nums.join(', ') + '. Без них анкета не примется.', 'error');
-      missing[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return;
-    }
-    sendFormBtn.disabled = true;
-    setStatus(attachedFiles.length ? 'Загружаем файлы…' : 'Отправляем анкету…');
-    uploadFiles(function(i, n){ setStatus('Загружаем файлы: ' + i + ' из ' + n + '…'); })
-      .then(function(up){ setStatus('Отправляем анкету…'); return sendToSheet(up.note).then(function(){ return up; }); })
-      .then(function(up){
-        var bad = up.failed.length > 0;
-        setStatus(bad ? 'Анкета отправлена, но часть файлов не загрузилась. Мы попросим прислать их в мессенджере.'
-                      : 'Анкета отправлена. Спасибо! Мы свяжемся с вами в выбранном мессенджере.', bad ? 'error' : 'ok');
-        sendFormBtn.textContent = 'Анкета отправлена';
-      })
-      .catch(function(){
-        setStatus('Не удалось отправить анкету — проверьте интернет и попробуйте ещё раз. Ответы сохранены в браузере, заново заполнять не нужно.', 'error');
-        syncConsent();
-      });
+    }).then(function(){ pdfBtn.disabled = false; });
   });
 
   loadDraft();
