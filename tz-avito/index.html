@@ -541,14 +541,14 @@
       <textarea data-field="directions" placeholder="Направление и что в него входит — по строке на каждое" style="min-height:120px;"></textarea>
     </div>
     <div class="q" data-qid="price_file" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Прайс-лист, ассортимент или выгрузка</span><span class="req-chip">обязательно</span></label>
-      <div class="qhint">Впишите позиции или дайте ссылку на облако с прайсом, выгрузкой из 1С или МойСклад. Файл TXT или CSV можно перетащить в поле — он подставится текстом. Другие файлы (XLSX, PDF) отметьте здесь и приложите к сообщению вместе с PDF анкеты</div>
+      <div class="qhint">Впишите позиции или дайте ссылку на облако с прайсом, выгрузкой из 1С или МойСклад. Файл TXT или CSV можно перетащить в поле — он подставится текстом. Другие файлы (XLSX, PDF, фото) прикрепите здесь — они загрузятся нам вместе с анкетой</div>
       <div class="dropzone" id="dropzone">
         <textarea data-field="price_file" placeholder="Начните печатать или перетащите сюда файл"></textarea>
         <div class="drop-overlay">Отпустите файл</div>
       </div>
       <div class="drop-actions">
         <label class="file-pick">Выбрать файл<input type="file" id="filePick" multiple hidden></label>
-        <span class="drop-note">TXT и CSV подставятся текстом · остальные файлы попадут в PDF списком «приложить к сообщению»</span>
+        <span class="drop-note">TXT и CSV подставятся текстом · остальные файлы (XLSX, PDF, фото) загрузятся нам вместе с анкетой · до 15 файлов, каждый до 25 МБ</span>
       </div>
       <ul class="file-list" id="fileList" hidden></ul>
     </div>
@@ -1207,7 +1207,7 @@
     $$('[data-field]').forEach(function(f){ f.value = ''; });
     $$('.choice-row').forEach(function(r){ setChoice(r, ''); });
     slotData = []; renderedTier = -1;
-    attachedFiles.length = 0; renderFileList();
+    attachedFiles.length = 0; renderFileList(); resetUpload();
     consentBox.checked = false; syncConsent();
     try{ localStorage.removeItem(DRAFT_KEY); localStorage.removeItem(DRAFT_KEY + '_sent'); }catch(e){}
     refresh();
@@ -1286,7 +1286,10 @@
       if(a.id === 'tier' || a.id === 'kind' || a.id === 'mode') return;
       var value = a.value;
       if(a.id === 'price_file' && attachedFiles.length){
-        value = (value ? value + '\n' : '') + 'Приложить к сообщению: ' + attachedFiles.map(function(f){ return f.name; }).join(', ');
+        var parts = [];
+        if(uploadedFiles().length) parts.push('Файлы загружены на Google Диск HDR Group: ' + uploadedFiles().map(function(f){ return f.name; }).join(', '));
+        if(notUploaded().length) parts.push('Приложить к сообщению: ' + notUploaded().map(function(f){ return f.name; }).join(', '));
+        value = (value ? value + '\n' : '') + parts.join('\n');
       }
       if(!value && a.id !== 'slots' && !a.required) return;
       if(a.section !== lastSection){ content.push({ text: a.section, style: 'h2', headlineLevel: 1 }); lastSection = a.section; }
@@ -1314,9 +1317,17 @@
         value ? { text: value, style: 'a' } : { text: 'не заполнено — обязательный вопрос', style: 'missing' }
       ], unbreakable: (value || '').length < 900 });
     });
-    if(attachedFiles.length){
+    if(uploadedFiles().length){
+      content.push({ text: 'Файлы клиента на Google Диске', style: 'h2' });
+      if(upload.folder) content.push({ text: [{ text: 'Папка: ' }, { text: upload.folder, link: upload.folder, color: ACC }], fontSize: 9.5, margin: [0, 0, 0, 4] });
+      content.push({ ul: uploadedFiles().map(function(f){
+        var url = upload.saved[fileKey(f)];
+        return { text: [{ text: f.name + ' (' + f.size + ') — ' }, { text: url, link: url, color: ACC }] };
+      }), fontSize: 9 });
+    }
+    if(notUploaded().length){
       content.push({ text: 'Файлы, которые нужно приложить к сообщению', style: 'h2' });
-      content.push({ ul: attachedFiles.map(function(f){ return f.name + ' (' + f.size + ')'; }), fontSize: 9.5 });
+      content.push({ ul: notUploaded().map(function(f){ return f.name + ' (' + f.size + ')'; }), fontSize: 9.5 });
     }
     return {
       pageSize: 'A4', pageMargins: [40, 44, 40, 48],
@@ -1355,10 +1366,58 @@
     return lines.join('\n');
   }
   function afterNote(){
-    return attachedFiles.length
-      ? ' Отправьте его вашему менеджеру HDR Group в рабочий чат вместе с файлами: ' + attachedFiles.map(function(f){ return f.name; }).join(', ') + '.'
+    return notUploaded().length
+      ? ' Отправьте его вашему менеджеру HDR Group в рабочий чат вместе с файлами: ' + notUploaded().map(function(f){ return f.name; }).join(', ') + '.'
       : ' Отправьте его вашему менеджеру HDR Group в рабочий чат.';
   }
+  /* ---------- загрузка файлов на Google Диск HDR Group ---------- */
+  // тот же Apps Script, что пересылает PDF: файлы ложатся в папку «Компания — дата»
+  var MAX_FILES = 15, MAX_FILE_BYTES = 25 * 1024 * 1024, MAX_TOTAL_BYTES = 100 * 1024 * 1024;
+  var upload = { folderId: '', folder: '', saved: {}, failed: [] };
+  function resetUpload(){ upload = { folderId: '', folder: '', saved: {}, failed: [] }; }
+  function fileKey(f){ return f.name + '|' + f.bytes; }
+  function readAsBase64(file){
+    return new Promise(function(resolve, reject){
+      var r = new FileReader();
+      r.onload = function(){ resolve(String(r.result).split(',')[1] || ''); };
+      r.onerror = function(){ reject(r.error); };
+      r.readAsDataURL(file);
+    });
+  }
+  // загружает по одному файлы, которых ещё нет на Диске; уже загруженные повторно не шлёт
+  function uploadFiles(onProgress){
+    upload.failed = [];
+    if(!attachedFiles.length || !RELAY_URL) return Promise.resolve();
+    var total = 0, queue = [];
+    attachedFiles.forEach(function(f, i){
+      if(upload.saved[fileKey(f)]) return;
+      if(i >= MAX_FILES){ upload.failed.push(f.name + ' — больше ' + MAX_FILES + ' файлов'); return; }
+      if(f.bytes > MAX_FILE_BYTES){ upload.failed.push(f.name + ' — файл больше 25 МБ'); return; }
+      if(total + f.bytes > MAX_TOTAL_BYTES){ upload.failed.push(f.name + ' — превышен общий объём 100 МБ'); return; }
+      total += f.bytes; queue.push(f);
+    });
+    var chain = Promise.resolve();
+    queue.forEach(function(f, i){
+      chain = chain.then(function(){
+        if(onProgress) onProgress(i + 1, queue.length, f);
+        return readAsBase64(f.file).then(function(data){
+          return fetch(RELAY_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ company: companyName(), folderId: upload.folderId,
+              files: [{ name: f.name, type: f.file.type || 'application/octet-stream', data: data }] }) });
+        }).then(function(r){ return r.json(); }).then(function(j){
+          if(!j || !j.ok) throw new Error(j && j.error || 'нет ответа');
+          upload.folderId = j.folderId; upload.folder = j.folder;
+          upload.saved[fileKey(f)] = j.files[0].url;
+        }).catch(function(err){
+          upload.failed.push(f.name + ' — ' + (err && err.message ? err.message : 'ошибка загрузки'));
+        });
+      });
+    });
+    return chain;
+  }
+  function uploadedFiles(){ return attachedFiles.filter(function(f){ return upload.saved[fileKey(f)]; }); }
+  function notUploaded(){ return attachedFiles.filter(function(f){ return !upload.saved[fileKey(f)]; }); }
+
   /* ---------- копия PDF в Telegram HDR Group ---------- */
   function answerLabel(id){ var row = $('.choice-row[data-choice="' + id + '"]'); return row ? choiceLabel(row) : ''; }
   function relayMeta(){
@@ -1367,11 +1426,12 @@
       company: companyName(),
       package: answerLabel('tier'), kind: answerLabel('kind'), mode: answerLabel('mode'),
       required: req.filter(hasAnswer).length + ' из ' + req.length,
-      files: attachedFiles.map(function(f){ return f.name; }).join(', ')
+      files: notUploaded().map(function(f){ return f.name; }).join(', '),
+      folder: uploadedFiles().length ? upload.folder : ''
     };
   }
   function signature(){
-    var str = JSON.stringify([collectAnswers().map(function(a){ return a.value; }), attachedFiles.map(function(f){ return f.name; })]);
+    var str = JSON.stringify([collectAnswers().map(function(a){ return a.value; }), attachedFiles.map(function(f){ return f.name; }), upload.folder]);
     var h = 0; for(var i = 0; i < str.length; i++){ h = (h * 31 + str.charCodeAt(i)) | 0; }
     return String(h);
   }
@@ -1391,7 +1451,10 @@
     });
   }
   function filesNote(){
-    return attachedFiles.length ? ' Файлы ' + attachedFiles.map(function(f){ return f.name; }).join(', ') + ' пришлите менеджеру в рабочий чат.' : '';
+    var out = '';
+    if(uploadedFiles().length) out += ' Файлы (' + uploadedFiles().length + ') тоже переданы.';
+    if(notUploaded().length) out += ' Не удалось загрузить: ' + (upload.failed.length ? upload.failed.join('; ') : notUploaded().map(function(f){ return f.name; }).join(', ')) + '. Эти файлы пришлите менеджеру в рабочий чат.';
+    return out;
   }
 
   var warnedFor = '';
@@ -1408,7 +1471,12 @@
     pdfBtn.disabled = true;
     setStatus('Собираем PDF…');
     var name = pdfFileName(), doc;
-    loadPdfLibs().then(function(){
+    uploadFiles(function(i, n, f){
+      setStatus('Загружаем файл ' + i + ' из ' + n + ' («' + f.name + '», ' + f.size + ')… Не закрывайте страницу, крупные файлы загружаются до минуты.');
+    }).then(function(){
+      setStatus('Собираем PDF…');
+      return loadPdfLibs();
+    }).then(function(){
       doc = window.pdfMake.createPdf(buildDoc());
       return new Promise(function(resolve){ doc.download(name, resolve); });
     }).then(function(){
