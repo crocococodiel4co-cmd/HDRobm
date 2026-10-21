@@ -1,0 +1,1458 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Бриф Яндекс Директа</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --h-cream:#F1E6D2;
+    --ink:#EEF5FF; --ink-soft:#9CB4D2; --line:rgba(126,178,255,.17);
+    --accent:#E8A92C; --accent-soft:#F6CB6A;
+    --bg:#07101E;
+    --font-display:"Bricolage Grotesque","Arial Black",sans-serif;
+    --font-body:"Public Sans",-apple-system,"Segoe UI",sans-serif;
+    --font-mono:"IBM Plex Mono","SFMono-Regular",monospace;
+  }
+  *{box-sizing:border-box;}
+  html{ overflow-x:hidden; width:100%; }
+  body{
+    margin:0; color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1100px 520px at 12% -10%, rgba(191,143,40,.16), transparent 62%),
+      radial-gradient(760px 420px at 92% 4%, rgba(146,109,29,.12), transparent 64%),
+      radial-gradient(900px 620px at 62% 106%, rgba(124,93,26,.11), transparent 62%),
+      linear-gradient(163deg,
+        rgba(156,117,34,.10) 0%,
+        rgba(42,33,14,.04) 34%,
+        rgba(20,17,9,0) 58%,
+        rgba(114,86,24,.08) 100%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+  img,svg{ max-width:100%; }
+  h1,h2,h3,h4{ font-family:var(--font-display); font-weight:700; color:var(--h-cream); margin:0; text-wrap:balance; }
+  a{ color:var(--accent-soft); }
+  .mono{ font-family:var(--font-mono); }
+
+  /* ---------- закреплённая шапка со шкалой заполнения ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    padding:0; color:#EAF2FF;
+    background:linear-gradient(180deg,#0C1F26,#08161C);
+    border-bottom:1px solid rgba(212,173,88,.20);
+    box-shadow:0 8px 22px -14px rgba(0,0,0,.9);
+  }
+  .topbar-row{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px 26px; flex-wrap:wrap; padding:14px 34px 12px;
+  }
+  .topbar .brand{
+    font-family:var(--font-display); font-weight:800; font-size:22px;
+    color:#fff; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; min-width:0;
+  }
+  .topbar .brand small{ font-family:var(--font-mono); font-weight:500; font-size:11px; color:#8FB2D8; letter-spacing:.07em; }
+  .topbar-progress{
+    display:flex; align-items:baseline; gap:8px 16px; flex-wrap:wrap;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.03em;
+  }
+  .tp-main{ color:#9FBEDD; }
+  .tp-req{ color:#E0A33C; }
+  .tp-req.done{ color:#6FCF97; }
+  /* навигация по разделам */
+  .section-nav{
+    display:flex; gap:2px; overflow-x:auto; padding:0 34px 10px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  }
+  .section-nav::-webkit-scrollbar{ display:none; }
+  .section-nav a{
+    flex:0 0 auto; display:inline-flex; align-items:baseline; gap:6px;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.03em;
+    color:#8FA9C6; text-decoration:none; padding:6px 11px;
+    border:1px solid transparent; white-space:nowrap;
+    transition:color .15s, background .15s, border-color .15s;
+  }
+  .section-nav a i{ font-style:normal; color:#5D7B9C; font-size:10px; }
+  .section-nav a:hover{ color:#DCE9F8; border-color:rgba(212,173,88,.30); }
+  .section-nav a:focus-visible{ outline:2px solid var(--accent-soft); outline-offset:-2px; }
+  .section-nav a.active{ color:#07101E; background:var(--accent-soft); border-color:var(--accent-soft); }
+  .section-nav a.active i{ color:rgba(7,16,30,.55); }
+
+  /* шкала заполнения: цвет меняется по мере продвижения */
+  .progress-bar{ height:4px; background:rgba(212,173,88,.13); overflow:hidden; }
+  .progress-fill{
+    height:100%; width:0%; background:#90702A;
+    transition:width .25s ease, background-color .4s ease, box-shadow .4s ease;
+    box-shadow:0 0 9px 1px rgba(144,112,42,.5);
+  }
+  .progress-fill.stage-red{    background:#C4736E; box-shadow:0 0 9px 1px rgba(196,115,110,.45); }
+  .progress-fill.stage-orange{ background:#D2A05E; box-shadow:0 0 9px 1px rgba(210,160,94,.45); }
+  .progress-fill.stage-green{  background:#7FB894; box-shadow:0 0 9px 1px rgba(127,184,148,.45); }
+
+  @media (max-width:820px){
+    .topbar-row{ padding:11px 16px 8px; gap:7px 14px; }
+    .topbar .brand{ flex-direction:column; align-items:flex-start; gap:2px; font-size:17px; }
+    .topbar .brand small{ letter-spacing:.04em; font-size:10px; }
+    .topbar-progress{ font-size:10.5px; gap:6px 12px; }
+    .section-nav{ padding:0 16px 8px; }
+    .section-nav a{ font-size:10.5px; padding:5px 9px; }
+  }
+
+  .wrap{ max-width:880px; margin:0 auto; padding:44px 28px 40px; width:100%; }
+  section.hpanel--flow{ scroll-margin-top:calc(var(--head-h, 128px) + 14px); }
+
+  /* ---------- flow sections ---------- */
+  section.hpanel--flow{ margin-bottom:46px; }
+  main.wrap section.hpanel--flow:last-of-type{ margin-bottom:0; }
+  .hflow-tag{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.24em; text-transform:uppercase;
+    color:var(--accent-soft); margin-bottom:16px;
+  }
+  .hflow-tag::before{ content:""; width:26px; height:1px; background:var(--accent); display:block; flex:0 0 auto; }
+  .hflow-tag::after{ content:""; flex:1 1 auto; height:1px; background:linear-gradient(90deg, rgba(191,143,40,.40), transparent); }
+
+  /* заголовок блока: 38px, межстрочное и отступ до описания сокращены на 25% */
+  h2.block-title{
+    font-size:clamp(27px, 5vw, 38px);
+    line-height:1.16;
+    margin-bottom:15px;
+    letter-spacing:-.01em;
+  }
+  .block-hint{ font-size:14px; color:var(--ink-soft); margin:0 0 22px; max-width:60ch; }
+
+  /* ---------- hero ---------- */
+  .hero-title{ font-size:clamp(26px,3.6vw,36px); line-height:1.15; margin-bottom:18px; max-width:22ch; }
+  .hero-text{ color:#C3D6EE; font-size:15.5px; max-width:64ch; margin:0; }
+  .hero-points{ margin:0; padding:0; list-style:none; max-width:62ch; }
+  .hero-points li{
+    position:relative; padding-left:20px; color:#C3D6EE; font-size:15px; line-height:1.45; margin-bottom:8px;
+  }
+  .hero-points li:last-child{ margin-bottom:0; }
+  .hero-points li::before{
+    content:""; position:absolute; left:0; top:.62em; width:8px; height:1px; background:var(--accent);
+  }
+  .hero-facts{
+    position:relative; display:grid; grid-template-columns:repeat(3,1fr);
+    margin-top:28px; border:1px solid var(--line); background:rgba(160,205,255,.025);
+  }
+  .hero-facts::before, .hero-facts::after{ content:""; position:absolute; width:14px; height:14px; pointer-events:none; }
+  .hero-facts::before{ left:0; top:0; border-left:2px solid var(--accent); border-top:2px solid var(--accent); }
+  .hero-facts::after{ right:0; bottom:0; border-right:2px solid var(--accent); border-bottom:2px solid var(--accent); }
+  .hero-facts div{ padding:16px 18px; border-right:1px solid var(--line); }
+  .hero-facts div:last-child{ border-right:0; }
+  .hero-facts b{ display:block; color:var(--h-cream); font-size:14.5px; font-weight:600; margin-bottom:4px; text-transform:uppercase; letter-spacing:.02em; }
+  .hero-facts span{ color:#9FB9D8; font-size:13px; }
+  @media (max-width:720px){
+    .hero-facts{ grid-template-columns:1fr; }
+    .hero-facts div{ border-right:0; border-bottom:1px solid var(--line); }
+    .hero-facts div:last-child{ border-bottom:0; }
+  }
+  .hnote{
+    border:1px solid var(--line); border-left:2px solid var(--accent);
+    padding:16px 18px; color:#A9C2DE; font-size:13.5px; background:rgba(212,173,88,.04); margin-top:18px;
+  }
+  .hnote b{ color:var(--h-cream); }
+  .hnote p{ margin:0; }
+  .hnote p + p{ margin-top:9px; }
+
+  /* ---------- question cards ---------- */
+  .q{
+    position:relative; overflow:hidden;
+    background:linear-gradient(160deg, rgba(146,107,24,.20), rgba(8,17,32,.72));
+    border:1px solid rgba(212,173,88,.26);
+    padding:18px 20px; margin-bottom:14px;
+  }
+  .q::after{ content:""; position:absolute; left:0; right:0; top:0; height:1px; background:linear-gradient(90deg, transparent, rgba(222,182,96,.55), transparent); }
+  .q.req{ border-left:3px solid var(--accent); }
+  .req-chip{
+    display:inline-block; font-family:var(--font-mono); font-size:9.5px; font-weight:600;
+    letter-spacing:.09em; text-transform:uppercase; color:#07101E; background:var(--accent-soft);
+    padding:2px 7px; margin-left:9px; vertical-align:1px; white-space:nowrap;
+  }
+  .q label.qtitle{ display:block; font-size:14.5px; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .q .qnum{ font-family:var(--font-mono); color:var(--accent-soft); margin-right:6px; }
+  .q .qhint{ font-size:12.5px; color:var(--ink-soft); margin-bottom:10px; }
+  .q input[type=text], .q textarea{
+    width:100%; border:1px solid rgba(212,173,88,.32); background:rgba(6,15,28,.7);
+    font-family:var(--font-body); font-size:14px; color:#EEF5FF; padding:11px 13px; border-radius:0; resize:vertical;
+  }
+  .q textarea{ min-height:72px; }
+  .q input::placeholder, .q textarea::placeholder{ color:#91805A; }
+  .q input:focus, .q textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(191,143,40,.20); }
+  .choice-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .choice-btn{
+    font-family:var(--font-mono); font-size:12px; padding:8px 14px;
+    border:1px solid rgba(212,173,88,.34); background:rgba(6,15,28,.5); color:var(--ink);
+    cursor:pointer; transition:.15s; letter-spacing:.02em;
+  }
+  .choice-btn.active{ background:var(--accent); border-color:var(--accent); color:#07101E; font-weight:600; }
+
+  /* ---------- поле с приёмом файлов ---------- */
+  .dropzone{ position:relative; }
+  .dropzone textarea{ min-height:110px; }
+  .dropzone.is-over textarea{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(191,143,40,.20); }
+  .drop-overlay{
+    position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+    background:rgba(26,21,9,.88); border:1px dashed var(--accent);
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent-soft); pointer-events:none;
+  }
+  .dropzone.is-over .drop-overlay{ display:flex; }
+  .drop-actions{ display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; margin-top:9px; }
+  .file-pick{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase;
+    padding:7px 13px; border:1px solid rgba(212,173,88,.34); background:rgba(6,15,28,.5);
+    color:var(--ink); cursor:pointer; transition:.15s;
+  }
+  .file-pick:hover{ border-color:var(--accent); color:#fff; }
+  .drop-note{ font-size:11.5px; color:var(--ink-faint,#7C97B8); }
+  .file-list{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:7px; }
+  .file-list li{
+    display:flex; align-items:center; gap:8px;
+    font-family:var(--font-mono); font-size:11.5px; color:var(--ink);
+    border:1px solid rgba(212,173,88,.32); background:rgba(6,15,28,.55); padding:6px 8px 6px 11px;
+  }
+  .file-list button{
+    background:none; border:0; color:#8FA9C6; cursor:pointer; font-size:15px; line-height:1; padding:0 3px;
+  }
+  .file-list button:hover{ color:var(--accent-soft); }
+
+  /* ---------- submit block ---------- */
+  .hsubmit-panel{
+    position:relative; overflow:hidden; text-align:center;
+    background:linear-gradient(160deg, rgba(146,107,24,.32), rgba(8,17,32,.82));
+    border:1px solid rgba(212,173,88,.32); padding:30px 24px;
+  }
+  .hsubmit-panel::before{ content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(220px 150px at 88% -14%, rgba(222,182,96,.32), transparent 68%); }
+  .hsubmit-panel > *{ position:relative; z-index:1; }
+  .hsubmit-panel h3{ font-size:18px; margin-bottom:8px; }
+  .hsubmit-panel p{ font-size:13.5px; color:var(--ink-soft); margin:0 0 18px; max-width:52ch; margin-left:auto; margin-right:auto; }
+
+  /* кнопки: матовое стекло, градиентная обводка с отблеском, слабое лайм-свечение */
+  .btn-row{
+    display:flex; flex-wrap:wrap; justify-content:center;
+    gap:10px; margin:0;
+  }
+  .btn{
+    position:relative; isolation:isolate;
+    font-family:var(--font-mono); font-weight:700; font-size:12.5px; cursor:pointer;
+    padding:10px 18px; border-radius:0; letter-spacing:.05em; text-transform:uppercase;
+    border:1px solid transparent; color:#F4F9FF;
+    text-shadow:0 1px 2px rgba(4,10,20,.75);
+    background:rgba(206,164,74,.06);
+    -webkit-backdrop-filter:blur(10px) saturate(125%);
+    backdrop-filter:blur(10px) saturate(125%);
+    box-shadow:0 0 20px -8px rgba(191,143,40,.42), inset 0 1px 0 rgba(242,228,198,.10);
+    transition:background .18s ease, box-shadow .18s ease, color .18s ease;
+    max-width:100%;
+  }
+  .btn::before{
+    content:""; position:absolute; inset:0; padding:1px; pointer-events:none; z-index:-1;
+    background:linear-gradient(115deg,
+      rgba(215,180,105,.18) 0%,
+      rgba(246,234,208,.72) 22%,
+      rgba(211,171,84,.20) 46%,
+      rgba(246,234,208,.66) 72%,
+      rgba(215,180,105,.18) 100%);
+    background-size:300% 100%;
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    animation:btnSheen 7s linear infinite;
+  }
+  @keyframes btnSheen{ from{ background-position:0 0; } to{ background-position:-300% 0; } }
+  .btn:hover{
+    background:rgba(206,164,74,.11);
+    box-shadow:0 0 26px -7px rgba(191,143,40,.58), inset 0 1px 0 rgba(242,228,198,.15);
+    color:#fff;
+  }
+  .btn:focus-visible{ outline:2px solid var(--accent-soft); outline-offset:2px; }
+  .btn-primary{ color:#FFFFFF; background:rgba(206,164,74,.11); }
+  .btn-secondary{ color:#EAF3FF; }
+  .btn-secondary::before{ animation-duration:9s; opacity:.8; }
+  @media (prefers-reduced-motion:reduce){ .btn::before{ animation:none; } }
+  @media (max-width:420px){
+    .btn-row{ flex-direction:column; }
+    .btn{ width:100%; }
+  }
+
+  .btn[disabled]{ cursor:not-allowed; color:#BAAD91; background:rgba(206,164,74,.03); box-shadow:none; }
+  .btn[disabled]::before{ animation:none; opacity:.35; }
+  .btn[disabled]:hover{ background:rgba(206,164,74,.03); box-shadow:none; color:#BAAD91; }
+
+  /* ---------- согласие на обработку персональных данных ---------- */
+  .consent{
+    display:flex; align-items:flex-start; gap:11px; text-align:left;
+    border:1px solid rgba(212,173,88,.30); border-left:2px solid var(--accent);
+    background:rgba(6,15,28,.45); padding:14px 16px; margin:0 auto 18px; max-width:56ch;
+  }
+  .consent input[type=checkbox]{
+    appearance:none; -webkit-appearance:none; flex:0 0 auto;
+    width:18px; height:18px; margin:1px 0 0; border:1px solid rgba(221,184,104,.55);
+    background:rgba(6,15,28,.8); cursor:pointer; position:relative;
+  }
+  .consent input[type=checkbox]:checked{ background:var(--accent); border-color:var(--accent); }
+  .consent input[type=checkbox]:checked::after{
+    content:""; position:absolute; left:5px; top:1px; width:5px; height:10px;
+    border:solid #07101E; border-width:0 2px 2px 0; transform:rotate(42deg);
+  }
+  .consent input[type=checkbox]:focus-visible{ outline:2px solid var(--accent-soft); outline-offset:2px; }
+  .consent label{ font-size:13px; color:#B7CCE6; line-height:1.5; cursor:pointer; }
+
+  .aux-row{
+    display:flex; flex-wrap:wrap; justify-content:center; align-items:center;
+    gap:10px 12px; margin-top:22px; padding-top:18px; border-top:1px solid rgba(178,158,255,.16);
+  }
+  .aux-link{
+    font-family:var(--font-mono); font-size:12.5px; letter-spacing:.02em; color:#C9BEEB;
+    background:rgba(6,15,28,.5); border:1px solid rgba(178,158,255,.30); cursor:pointer;
+    padding:10px 18px; transition:.15s;
+  }
+  .aux-link:hover{ border-color:var(--accent); color:#fff; }
+  .aux-link:focus-visible{ outline:2px solid var(--accent-soft); outline-offset:2px; }
+  .aux-link--quiet{ color:#9C8FC0; border-color:rgba(178,158,255,.18); }
+  .aux-link--quiet:hover{ border-color:#FF9B9B; color:#FFC4C4; }
+  @media (max-width:560px){ .aux-link{ flex:1 1 100%; } }
+  .aux-note{ font-size:11.5px; color:#7C97B8; margin:16px auto 0; max-width:560px; line-height:1.55; }
+
+  .status-msg.is-error{ color:#FF9B9B; }
+  .status-msg.is-ok{ color:#9BE8B4; }
+  .status-msg{ font-size:12.5px; color:var(--accent-soft); margin-top:14px; min-height:16px; }
+  textarea#exportOut{
+    width:100%; min-height:160px; margin-top:14px; font-family:var(--font-mono); font-size:12px;
+    border:1px solid rgba(212,173,88,.32); padding:12px; background:rgba(6,15,28,.7); color:var(--ink); display:none;
+  }
+
+  footer.doc-footer{ margin-top:0; text-align:center; padding:0 24px 22px; }
+  footer.doc-footer p{ font-size:12px; color:#7C97B8; margin:0; }
+  footer.doc-footer p + p{ margin-top:5px; }
+  footer.doc-footer a{ color:#8FB2D8; text-decoration:underline; text-underline-offset:3px; }
+  footer.doc-footer a:hover{ color:var(--accent-soft); }
+
+  /* ---------- адаптивная анкета ---------- */
+  .is-hidden{ display:none !important; }
+  .choice-btn[hidden]{ display:none; }
+  .req-chip[hidden]{ display:none; }
+  .gate-note{
+    border:1px dashed rgba(212,173,88,.45); background:rgba(146,107,24,.08);
+    padding:16px 18px; margin:6px 0 0; font-size:14px; color:#DED0AF;
+  }
+  .gate-note b{ color:var(--h-cream); }
+  .slot-counter{
+    display:inline-block; font-family:var(--font-mono); font-size:11px; letter-spacing:.05em;
+    color:#07101E; background:var(--accent-soft); padding:3px 9px; margin:2px 0 12px;
+  }
+  .slot-list{ display:grid; gap:10px; }
+  .slot{ border:1px solid rgba(212,173,88,.22); background:rgba(6,15,28,.45); padding:12px 14px 14px; }
+  .slot-head{ font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent-soft); margin-bottom:10px; }
+  .slot-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px 12px; }
+  .slot-field{ display:flex; flex-direction:column; gap:5px; min-width:0; }
+  .slot-field--wide{ grid-column:1 / -1; }
+  .slot-field span{ font-size:12px; color:var(--ink-soft); }
+  .slot-field input, .slot-field textarea{
+    width:100%; border:1px solid rgba(212,173,88,.26); background:rgba(6,15,28,.7);
+    font-family:var(--font-body); font-size:13.5px; color:#EEF5FF; padding:9px 11px; border-radius:0; resize:vertical;
+  }
+  .slot-field textarea{ min-height:58px; }
+  .slot-field input:focus, .slot-field textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(194,146,42,.18); }
+  .slot-field input::placeholder, .slot-field textarea::placeholder{ color:#61809F; }
+  @media (max-width:640px){ .slot-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-row">
+    <span class="brand">СТАРТ ПРОЕКТА <small>ЗНАКОМСТВО С КОМПАНИЕЙ ПЕРЕД ЗАПУСКОМ РЕКЛАМЫ В ЯНДЕКС ДИРЕКТЕ</small></span>
+    <div class="topbar-progress">
+      <span class="tp-main"><span id="progressCount">0</span> / <span id="progressTotal">0</span> заполнено</span>
+      <span class="tp-req" id="reqBadge">обязательных <span id="reqCount">0</span> / <span id="reqTotal">0</span></span>
+    </div>
+  </div>
+  <nav class="section-nav" id="sectionNav" aria-label="Разделы анкеты">
+    <a href="#s1"><i>01</i> Формат</a>
+    <a href="#s2"><i>02</i> Компания</a>
+    <a href="#s3"><i>03</i> Цели</a>
+    <a href="#s4"><i>04</i> Бюджет</a>
+    <a href="#s5"><i>05</i> География</a>
+    <a href="#s6"><i>06</i> Сайт и аналитика</a>
+    <a href="#s7"><i>07</i> Продажи</a>
+    <a href="#s8"><i>08</i> Текущая реклама</a>
+    <a href="#s9"><i>09</i> Материалы</a>
+    <a href="#s10"><i>10</i> Запуск</a>
+  </nav>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</header>
+
+<main class="wrap">
+
+  <section class="hpanel--flow">
+    <h1 class="hero-title">Чем точнее мы поймём ваш бизнес, тем дешевле обойдётся каждая заявка из Директа</h1>
+    <ul class="hero-points">
+      <li>Анкета заполняется один раз, до запуска рекламы.</li>
+      <li>Сначала ответьте на три вопроса о формате работы — остальные разделы подстроятся под ответы.</li>
+      <li>Если точного ответа нет — напишите примерно или «не знаю», уточним на созвоне.</li>
+      <li>Цифры по чеку, марже и продажам нужны для расчёта прогноза и остаются только у нашей команды.</li>
+    </ul>
+    <div class="hero-facts">
+      <div><b>10 разделов</b><span>состав вопросов зависит от задачи и текущей рекламы</span></div>
+      <div><b>15–20 минут</b><span>ориентировочное время заполнения</span></div>
+      <div><b>Прогноз до запуска</b><span>по ответам оценим спрос, конкурентов и стартовый бюджет</span></div>
+    </div>
+    <div class="hnote">
+      <p><b>Состав работ.</b> Настройка: анализ спроса и конкурентов, ключевые фразы и минус-слова, структура кампаний, тексты и креативы объявлений, цели в Яндекс Метрике, запуск. Ведение: контроль расходов, чистка поисковых запросов и площадок, ставки и стратегии, тесты объявлений, регулярные отчёты.</p>
+      <p><b>Бюджет.</b> Рекламный бюджет вы оплачиваете напрямую Яндексу — он не входит в стоимость наших работ. К сумме пополнения Яндекс добавляет НДС.</p>
+      <p><b>Правила площадки.</b> Все объявления проходят модерацию Яндекса. Для медицины, финансов, образования, БАДов и ряда других тематик нужны документы, а в объявления добавляются обязательные предупреждения — отметьте их в разделе 09. В рекламе нельзя гарантировать результат и использовать «лучший» и «№ 1» без подтверждения.</p>
+      <p><b>Доступ к кабинету.</b> Пароль не нужен — доступ выдаётся нашему логину, кабинет и история остаются вашими. <a href="../access/direct/" target="_blank" rel="noopener">Как выдать доступ</a></p>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s1">
+    <span class="hflow-tag">Раздел 01 / 10 — формат</span>
+    <h2 class="block-title">Формат работы</h2>
+    <p class="block-hint">Три вопроса, от которых зависит остальная анкета: есть ли реклама сейчас, что нужно сделать и куда она будет вести.</p>
+
+    <div class="q" data-qid="status" data-req="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Реклама в Яндекс Директе сейчас</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="status">
+        <button class="choice-btn" type="button" data-v="new">Не запускали</button>
+        <button class="choice-btn" type="button" data-v="paused">Запускали, сейчас остановлена</button>
+        <button class="choice-btn" type="button" data-v="live">Работает сейчас</button>
+      </div>
+    </div>
+    <div class="q" data-qid="format" data-req="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что нужно сделать</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Ведение — ежемесячная работа: контроль расходов, чистка поисковых запросов и площадок, ставки и стратегии, тесты объявлений, отчёты. Разовая настройка заканчивается запуском и передачей кампаний вам</div>
+      <div class="choice-row" data-choice="format">
+        <button class="choice-btn" type="button" data-v="setup">Только настроить и запустить</button>
+        <button class="choice-btn" type="button" data-v="full">Настроить и вести постоянно</button>
+        <button class="choice-btn" type="button" data-v="takeover" data-show="{&quot;status&quot;: [&quot;paused&quot;, &quot;live&quot;]}">Взять в ведение действующую рекламу</button>
+      </div>
+    </div>
+    <div class="q" data-qid="landing" data-req="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Куда будет вести реклама</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">От этого зависит тип кампании. Без сайта Директ может принимать звонки и сообщения в мессенджерах прямо из объявления</div>
+      <div class="choice-row" data-choice="landing">
+        <button class="choice-btn" type="button" data-v="site">Сайт или лендинг</button>
+        <button class="choice-btn" type="button" data-v="nosite">Сайта нет — нужны звонки и сообщения</button>
+        <button class="choice-btn" type="button" data-v="maps">Карточка организации на Яндекс Картах</button>
+        <button class="choice-btn" type="button" data-v="market">Товары на маркетплейсе</button>
+        <button class="choice-btn" type="button" data-v="tg">Telegram-канал</button>
+        <button class="choice-btn" type="button" data-v="app">Мобильное приложение</button>
+      </div>
+    </div>
+    <div class="gate-note" id="gateNote"><b>Ответьте на три вопроса выше</b> — после этого появятся остальные разделы, подобранные под вашу задачу.</div>
+  </section>
+
+  <section class="hpanel--flow" id="s2">
+    <span class="hflow-tag">Раздел 02 / 10 — компания</span>
+    <h2 class="block-title">Компания и предложение</h2>
+    <p class="block-hint">Из этих ответов собираем тексты объявлений и выбираем, что рекламировать в первую очередь.</p>
+
+    <div class="q" data-qid="name" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Название компании</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Как называть компанию в объявлениях. ООО и ИП можно не указывать</div>
+      <input type="text" data-field="name">
+    </div>
+    <div class="q" data-qid="about" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Чем занимается компания</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Сфера, товары или услуги, для кого работаете — два-три предложения</div>
+      <textarea data-field="about"></textarea>
+    </div>
+    <div class="q" data-qid="priority" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что рекламируем в первую очередь</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Самые прибыльные направления или те, что нужно масштабировать. Лучше начать с одного-трёх — так бюджет не размывается</div>
+      <textarea data-field="priority"></textarea>
+    </div>
+    <div class="q" data-qid="exclude" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что рекламировать не нужно</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Направления, товары, услуги или типы клиентов, на которые не тратим бюджет</div>
+      <textarea data-field="exclude"></textarea>
+    </div>
+    <div class="q" data-qid="advantages" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Почему клиенты выбирают вас</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Цена, сроки, гарантия, опыт, своё производство, сервис. Эти доводы пойдут в заголовки и тексты объявлений</div>
+      <textarea data-field="advantages"></textarea>
+    </div>
+    <div class="q" data-qid="segment" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Ценовой сегмент</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="segment">
+        <button class="choice-btn" type="button" data-v="econ">Бюджетный</button>
+        <button class="choice-btn" type="button" data-v="mid">Средний</button>
+        <button class="choice-btn" type="button" data-v="prem">Премиальный</button>
+        <button class="choice-btn" type="button" data-v="mix">У направлений разный</button>
+      </div>
+    </div>
+    <div class="q" data-qid="check" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Средний чек</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Можно примерно. Если направлений несколько — по каждому приоритетному</div>
+      <input type="text" data-field="check">
+    </div>
+    <div class="q" data-qid="margin" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Маржинальность и минимальная сумма заказа</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Сколько примерно зарабатываете с одной продажи. По ней считаем предельную стоимость клиента. Если не готовы делиться — пропустите</div>
+      <input type="text" data-field="margin">
+    </div>
+    <div class="q" data-qid="competitors" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Основные конкуренты</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">3–5 компаний или ссылки на их сайты — изучим их объявления и предложения</div>
+      <textarea data-field="competitors"></textarea>
+    </div>
+    <div class="q" data-qid="offers" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Акции и предложения для рекламы</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Скидки, бесплатный расчёт или замер, консультация, доставка, рассрочка, подарок. Если нет — «нет»</div>
+      <textarea data-field="offers"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s3">
+    <span class="hflow-tag">Раздел 03 / 10 — цели</span>
+    <h2 class="block-title">Цели и ожидания</h2>
+    <p class="block-hint">На какое действие клиента настраиваем рекламу и по каким цифрам оцениваем её работу.</p>
+
+    <div class="q" data-qid="goal" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Главный результат от рекламы</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Директ обучается на одном-двух главных действиях — выберите самое ценное для бизнеса</div>
+      <div class="choice-row" data-choice="goal">
+        <button class="choice-btn" type="button" data-v="calls">Звонки</button>
+        <button class="choice-btn" type="button" data-v="leads" data-show="{&quot;landing&quot;: [&quot;site&quot;]}">Заявки с сайта</button>
+        <button class="choice-btn" type="button" data-v="sales" data-show="{&quot;landing&quot;: [&quot;site&quot;, &quot;market&quot;]}">Онлайн-продажи</button>
+        <button class="choice-btn" type="button" data-v="booking">Записи на услугу</button>
+        <button class="choice-btn" type="button" data-v="msg">Сообщения в мессенджерах</button>
+        <button class="choice-btn" type="button" data-v="visits">Посещения точки</button>
+        <button class="choice-btn" type="button" data-v="subs" data-show="{&quot;landing&quot;: [&quot;tg&quot;]}">Подписчики канала</button>
+        <button class="choice-btn" type="button" data-v="installs" data-show="{&quot;landing&quot;: [&quot;app&quot;]}">Установки приложения</button>
+      </div>
+    </div>
+    <div class="q" data-qid="volume" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Сколько обращений или продаж в месяц хотите получать</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Ориентир. Реальный прогноз дадим после анализа спроса и конкурентов</div>
+      <input type="text" data-field="volume">
+    </div>
+    <div class="q" data-qid="cpa" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Сколько готовы платить за заявку или нового клиента</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Если не знаете — «не знаю», рассчитаем по среднему чеку, марже и доле заявок, которые доходят до продажи</div>
+      <input type="text" data-field="cpa">
+    </div>
+    <div class="q" data-qid="kpi" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Как будете оценивать эффективность</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="kpi">
+        <button class="choice-btn" type="button" data-v="cpl">По стоимости заявки</button>
+        <button class="choice-btn" type="button" data-v="cps">По стоимости продажи</button>
+        <button class="choice-btn" type="button" data-v="roi">По выручке и окупаемости</button>
+        <button class="choice-btn" type="button" data-v="vol">По количеству обращений</button>
+        <button class="choice-btn" type="button" data-v="unk">Подскажите вы</button>
+      </div>
+    </div>
+    <div class="q" data-qid="success" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что будет хорошим результатом первого месяца</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Первые 2–4 недели — обучение стратегий и тесты: Директу нужно накопить данные о конверсиях. Опишите, какой старт для вас нормален</div>
+      <textarea data-field="success"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s4">
+    <span class="hflow-tag">Раздел 04 / 10 — бюджет</span>
+    <h2 class="block-title">Рекламный бюджет</h2>
+    <p class="block-hint">Рекламный бюджет — это пополнение кабинета Яндекс Директа. Он оплачивается напрямую Яндексу и не входит в стоимость наших работ.</p>
+
+    <div class="q" data-qid="budget" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Рекламный бюджет в месяц</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Без НДС и без оплаты наших услуг. Чтобы автостратегия обучалась, недельный бюджет кампании должен покрывать хотя бы 10 целевых действий</div>
+      <div class="choice-row" data-choice="budget">
+        <button class="choice-btn" type="button" data-v="a">До 30 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="b">30 000–60 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="c">60 000–100 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="d">100 000–200 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="e">Более 200 000 ₽</button>
+        <button class="choice-btn" type="button" data-v="def">Определим вместе после оценки ниши</button>
+      </div>
+    </div>
+    <div class="q" data-qid="cap" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Жёсткий потолок расходов</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Сумма в месяц, которую нельзя превышать ни при каких условиях. Если нет — «нет»</div>
+      <input type="text" data-field="cap">
+    </div>
+    <div class="q" data-qid="scale" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Если реклама окупается</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="scale">
+        <button class="choice-btn" type="button" data-v="grow">Готовы увеличивать бюджет</button>
+        <button class="choice-btn" type="button" data-v="test">Сначала тест 1–2 месяца, потом решим</button>
+        <button class="choice-btn" type="button" data-v="fixed">Бюджет фиксированный</button>
+      </div>
+    </div>
+    <div class="q" data-qid="payer" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Кто пополняет рекламный кабинет</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">От этого зависят закрывающие документы. Маркировку рекламы Директ выполняет автоматически</div>
+      <div class="choice-row" data-choice="payer">
+        <button class="choice-btn" type="button" data-v="legal">Юрлицо или ИП по счёту</button>
+        <button class="choice-btn" type="button" data-v="person">Физлицо картой</button>
+        <button class="choice-btn" type="button" data-v="unk">Обсудим</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s5">
+    <span class="hflow-tag">Раздел 05 / 10 — география</span>
+    <h2 class="block-title">География, аудитория, показы</h2>
+    <p class="block-hint">Где, кому и когда показываем объявления.</p>
+
+    <div class="q" data-qid="geo" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Где показывать рекламу</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Город, районы, регион, вся Россия. Если доставляете или выезжаете — зона обслуживания</div>
+      <textarea data-field="geo"></textarea>
+    </div>
+    <div class="q" data-qid="points" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Точки продаж или оказания услуг</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="points">
+        <button class="choice-btn" type="button" data-v="one">Одна точка</button>
+        <button class="choice-btn" type="button" data-v="city">Несколько в одном городе</button>
+        <button class="choice-btn" type="button" data-v="geo">В разных городах</button>
+        <button class="choice-btn" type="button" data-v="online">Работаем онлайн, без точек</button>
+      </div>
+    </div>
+    <div class="q" data-qid="addresses" data-show="{&quot;points&quot;: [&quot;one&quot;, &quot;city&quot;, &quot;geo&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Адреса, телефоны и режим работы точек</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Отдельные кампании под города или филиалы настроим, если у них разные цены, ассортимент или телефоны</div>
+      <textarea data-field="addresses"></textarea>
+    </div>
+    <div class="q" data-qid="audience" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Кто ваш клиент и кому рекламу показывать не нужно</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Частные лица или компании, пол, возраст, доход, в какой ситуации к вам обращаются</div>
+      <textarea data-field="audience"></textarea>
+    </div>
+    <div class="q" data-qid="placements" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Где показывать объявления</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Поиск — люди, которые уже ищут ваш товар или услугу. Рекламная сеть Яндекса — сайты, приложения и мессенджеры партнёров: больше охвата, клик дешевле. Ещё объявления можно показывать в Яндекс Картах</div>
+      <div class="choice-row" data-choice="placements">
+        <button class="choice-btn" type="button" data-v="all">Доверяю выбор вам</button>
+        <button class="choice-btn" type="button" data-v="search">Только в поиске Яндекса</button>
+        <button class="choice-btn" type="button" data-v="both">В поиске и рекламной сети</button>
+      </div>
+    </div>
+    <div class="q" data-qid="schedule" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Когда показывать рекламу</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Если звонки принимаете только днём, ночью рекламу можно вести на сайт или отключать — решим вместе</div>
+      <div class="choice-row" data-choice="schedule">
+        <button class="choice-btn" type="button" data-v="24">Круглосуточно</button>
+        <button class="choice-btn" type="button" data-v="work">Только в рабочие часы</button>
+        <button class="choice-btn" type="button" data-v="custom">По своему графику</button>
+      </div>
+    </div>
+    <div class="q" data-qid="hours" data-show="{&quot;schedule&quot;: [&quot;work&quot;, &quot;custom&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Дни и часы показа</span><span class="req-chip">обязательно</span></label>
+      <input type="text" data-field="hours">
+    </div>
+    <div class="q" data-qid="brand" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Реклама по запросам с названием вашей компании</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Защищает тех, кто ищет вас по названию, от объявлений конкурентов</div>
+      <div class="choice-row" data-choice="brand">
+        <button class="choice-btn" type="button" data-v="yes">Нужна</button>
+        <button class="choice-btn" type="button" data-v="no">Не нужна</button>
+        <button class="choice-btn" type="button" data-v="unk">Решите сами</button>
+      </div>
+    </div>
+    <div class="q" data-qid="season" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Сезонность</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Месяцы роста и спада спроса, сезонные акции, даты, к которым усиливаем рекламу</div>
+      <textarea data-field="season"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s6">
+    <span class="hflow-tag">Раздел 06 / 10 — сайт и аналитика</span>
+    <h2 class="block-title">Сайт, контакты и аналитика</h2>
+    <p class="block-hint">Куда приходит человек после клика и как мы считаем заявки и продажи.</p>
+
+    <div class="q" data-qid="site_url" data-req="1" data-show="{&quot;landing&quot;: [&quot;site&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Адрес сайта</span><span class="req-chip">обязательно</span></label>
+      <input type="text" data-field="site_url">
+    </div>
+    <div class="q" data-qid="pages" data-show="{&quot;landing&quot;: [&quot;site&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Страницы, на которые ведём рекламу</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Отдельная страница под каждую услугу или категорию даёт заявку дешевле, чем общая главная. Если таких нет — «только главная»</div>
+      <textarea data-field="pages"></textarea>
+    </div>
+    <div class="q" data-qid="contacts" data-show="{&quot;landing&quot;: [&quot;site&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Как посетитель может связаться с вами на сайте</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Телефон, форма заявки, онлайн-запись, чат, мессенджеры, корзина — и какой способ для вас ценнее</div>
+      <textarea data-field="contacts"></textarea>
+    </div>
+    <div class="q" data-qid="feed" data-show="{&quot;landing&quot;: [&quot;site&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Товарный каталог</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">По фиду Директ сам создаёт объявления на каждый товар и показывает их в товарной галерее и рекламной сети</div>
+      <div class="choice-row" data-choice="feed">
+        <button class="choice-btn" type="button" data-v="feed">Есть фид YML или CSV</button>
+        <button class="choice-btn" type="button" data-v="catalog">Каталог на сайте, фида нет</button>
+        <button class="choice-btn" type="button" data-v="services">Продаём услуги, каталог не нужен</button>
+        <button class="choice-btn" type="button" data-v="unk">Не знаю</button>
+      </div>
+    </div>
+    <div class="q" data-qid="site_edit" data-show="{&quot;landing&quot;: [&quot;site&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Можно ли дорабатывать сайт</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Для роста конверсии иногда нужно добавить форму, кнопку мессенджера или отдельную посадочную страницу</div>
+      <div class="choice-row" data-choice="site_edit">
+        <button class="choice-btn" type="button" data-v="dev">Да, есть разработчик</button>
+        <button class="choice-btn" type="button" data-v="help">Да, нужна помощь</button>
+        <button class="choice-btn" type="button" data-v="no">Нет</button>
+      </div>
+    </div>
+    <div class="q" data-qid="nosite_contact" data-req="1" data-show="{&quot;landing&quot;: [&quot;nosite&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Куда принимать обращения</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Телефон, Telegram, WhatsApp, MAX. Директ может брать оплату за звонок или сообщение. Если нужна посадочная страница — напишите, обсудим</div>
+      <textarea data-field="nosite_contact"></textarea>
+    </div>
+    <div class="q" data-qid="maps_link" data-req="1" data-show="{&quot;landing&quot;: [&quot;maps&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Ссылка на карточку в Яндекс Картах</span><span class="req-chip">обязательно</span></label>
+      <input type="text" data-field="maps_link">
+    </div>
+    <div class="q" data-qid="market_link" data-req="1" data-show="{&quot;landing&quot;: [&quot;market&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Ссылки на магазин или товары на маркетплейсе</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Ozon, Wildberries, Яндекс Маркет и другие</div>
+      <textarea data-field="market_link"></textarea>
+    </div>
+    <div class="q" data-qid="tg_link" data-req="1" data-show="{&quot;landing&quot;: [&quot;tg&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Ссылка на Telegram-канал</span><span class="req-chip">обязательно</span></label>
+      <input type="text" data-field="tg_link">
+    </div>
+    <div class="q" data-qid="app_link" data-req="1" data-show="{&quot;landing&quot;: [&quot;app&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Ссылки на приложение</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">App Store, Google Play, RuStore</div>
+      <textarea data-field="app_link"></textarea>
+    </div>
+    <div class="q" data-qid="app_tracker" data-show="{&quot;landing&quot;: [&quot;app&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Трекер установок</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="app_tracker">
+        <button class="choice-btn" type="button" data-v="am">AppMetrica</button>
+        <button class="choice-btn" type="button" data-v="mmp">AppsFlyer или другой</button>
+        <button class="choice-btn" type="button" data-v="none">Нет</button>
+        <button class="choice-btn" type="button" data-v="unk">Не знаю</button>
+      </div>
+    </div>
+    <div class="q" data-qid="metrika" data-req="1" data-show="{&quot;landing&quot;: [&quot;site&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Яндекс Метрика</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Цели нужны, чтобы Директ обучался на заявках и звонках, а не на кликах, и чтобы работала оплата за конверсии. Если Метрики нет — установим и настроим цели</div>
+      <div class="choice-row" data-choice="metrika">
+        <button class="choice-btn" type="button" data-v="goals">Установлена, цели настроены</button>
+        <button class="choice-btn" type="button" data-v="nogoals">Установлена, целей нет</button>
+        <button class="choice-btn" type="button" data-v="none">Не установлена</button>
+        <button class="choice-btn" type="button" data-v="unk">Не знаю</button>
+      </div>
+    </div>
+    <div class="q" data-qid="calltrack" data-show="{&quot;landing&quot;: [&quot;site&quot;, &quot;nosite&quot;, &quot;maps&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Отслеживание звонков</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Коллтрекинг показывает, с какой кампании и запроса пришёл звонок</div>
+      <div class="choice-row" data-choice="calltrack">
+        <button class="choice-btn" type="button" data-v="yes">Есть коллтрекинг</button>
+        <button class="choice-btn" type="button" data-v="no">Нет</button>
+        <button class="choice-btn" type="button" data-v="unk">Не знаю</button>
+      </div>
+    </div>
+    <div class="q" data-qid="crm" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">CRM-система</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">amoCRM, Битрикс24, YCLIENTS, 1С или другая. Если нет — «нет»</div>
+      <input type="text" data-field="crm">
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s7">
+    <span class="hflow-tag">Раздел 07 / 10 — продажи</span>
+    <h2 class="block-title">Обработка заявок и продажи</h2>
+    <p class="block-hint">Реклама приводит обращения, деньги приносит их обработка. Эти ответы помогают не привести больше заявок, чем вы успеете принять, и считать отдачу в продажах.</p>
+
+    <div class="q" data-qid="handler" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Кто обрабатывает заявки</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Менеджер, администратор, руководитель, колл-центр</div>
+      <input type="text" data-field="handler">
+    </div>
+    <div class="q" data-qid="speed" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Как быстро отвечаете на обращения</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="speed">
+        <button class="choice-btn" type="button" data-v="15">В течение 15 минут</button>
+        <button class="choice-btn" type="button" data-v="hour">В течение часа</button>
+        <button class="choice-btn" type="button" data-v="day">В течение дня</button>
+        <button class="choice-btn" type="button" data-v="unk">Не отслеживаем</button>
+      </div>
+    </div>
+    <div class="q" data-qid="capacity" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Сколько обращений в день можете качественно обработать</span><span class="req-chip">обязательно</span></label>
+      <input type="text" data-field="capacity">
+    </div>
+    <div class="q" data-qid="conversion" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Какая доля обращений доходит до продажи</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Примерно, в процентах. Если не знаете — «не знаю»</div>
+      <input type="text" data-field="conversion">
+    </div>
+    <div class="q" data-qid="cycle" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Как быстро клиент принимает решение</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="cycle">
+        <button class="choice-btn" type="button" data-v="now">Сразу, в день обращения</button>
+        <button class="choice-btn" type="button" data-v="days">За несколько дней</button>
+        <button class="choice-btn" type="button" data-v="weeks">За несколько недель</button>
+        <button class="choice-btn" type="button" data-v="months">Месяц и дольше</button>
+      </div>
+    </div>
+    <div class="q" data-qid="quality" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Какие обращения считаете нецелевыми</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Не тот регион, слишком маленький заказ, частные лица вместо компаний и т. п.</div>
+      <textarea data-field="quality"></textarea>
+    </div>
+    <div class="q" data-qid="sales_data" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Готовы передавать данные о продажах</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Тогда Директ будет оптимизировать рекламу на реальные продажи, а не на все заявки подряд</div>
+      <div class="choice-row" data-choice="sales_data">
+        <button class="choice-btn" type="button" data-v="crm">Да, через интеграцию с CRM</button>
+        <button class="choice-btn" type="button" data-v="table">Да, таблицей раз в неделю или месяц</button>
+        <button class="choice-btn" type="button" data-v="no">Нет</button>
+      </div>
+    </div>
+    <div class="q" data-qid="limits" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Ограничения по наличию, загрузке или объёму заказов</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Например: принимаем не больше 20 заказов в неделю, товар заканчивается к концу сезона. Если нет — «нет»</div>
+      <textarea data-field="limits"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s8">
+    <span class="hflow-tag">Раздел 08 / 10 — текущая реклама</span>
+    <h2 class="block-title">Опыт с Директом</h2>
+    <p class="block-hint">Что уже пробовали — чтобы не повторять ошибки и сохранить то, что работало.</p>
+
+    <div class="q" data-qid="who_ran" data-show="{&quot;status&quot;: [&quot;paused&quot;, &quot;live&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Кто вёл рекламу</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="who_ran">
+        <button class="choice-btn" type="button" data-v="self">Сами</button>
+        <button class="choice-btn" type="button" data-v="free">Фрилансер</button>
+        <button class="choice-btn" type="button" data-v="agency">Агентство</button>
+        <button class="choice-btn" type="button" data-v="master">Мастер кампаний без специалиста</button>
+      </div>
+    </div>
+    <div class="q" data-qid="spend" data-show="{&quot;status&quot;: [&quot;paused&quot;, &quot;live&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Сколько тратили в месяц</span><span class="req-chip">обязательно</span></label>
+      <input type="text" data-field="spend">
+    </div>
+    <div class="q" data-qid="results" data-show="{&quot;status&quot;: [&quot;paused&quot;, &quot;live&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Сколько было обращений и почём</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Заявки или звонки в месяц и средняя стоимость обращения, если знаете</div>
+      <textarea data-field="results"></textarea>
+    </div>
+    <div class="q" data-qid="worked" data-show="{&quot;status&quot;: [&quot;paused&quot;, &quot;live&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что работало лучше всего</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Кампании, направления, объявления, регионы</div>
+      <textarea data-field="worked"></textarea>
+    </div>
+    <div class="q" data-qid="problems" data-req="1" data-show="{&quot;status&quot;: [&quot;paused&quot;, &quot;live&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что не устраивало</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Дорогие заявки, мало обращений, нецелевой трафик, нет продаж, непрозрачные отчёты</div>
+      <textarea data-field="problems"></textarea>
+    </div>
+    <div class="q" data-qid="moderation" data-show="{&quot;status&quot;: [&quot;paused&quot;, &quot;live&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Отклонения объявлений и блокировки</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="moderation">
+        <button class="choice-btn" type="button" data-v="no">Не было</button>
+        <button class="choice-btn" type="button" data-v="rej">Отклоняли объявления</button>
+        <button class="choice-btn" type="button" data-v="ban">Блокировали кабинет или сайт</button>
+        <button class="choice-btn" type="button" data-v="unk">Не знаю</button>
+      </div>
+    </div>
+    <div class="q" data-qid="stats" data-show="{&quot;status&quot;: [&quot;paused&quot;, &quot;live&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Статистика за последние 1–3 месяца</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="stats">
+        <button class="choice-btn" type="button" data-v="access">Будет видна по доступу к кабинету</button>
+        <button class="choice-btn" type="button" data-v="export">Выгрузим отчёт</button>
+        <button class="choice-btn" type="button" data-v="none">Статистики нет</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s9">
+    <span class="hflow-tag">Раздел 09 / 10 — материалы</span>
+    <h2 class="block-title">Материалы и ограничения</h2>
+    <p class="block-hint">Что используем в объявлениях и что нужно учесть на модерации.</p>
+
+    <div class="q" data-qid="materials" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Фото, видео, логотип, прайс-лист</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Ссылка на облако или файлы. Для рекламной сети нужны изображения от 450 пикселей по каждой стороне, видео расширяет охват. Если материалов нет — подготовим креативы сами</div>
+      <div class="dropzone" id="dropzone">
+        <textarea data-field="materials" placeholder="Ссылка на облако или перетащите сюда файлы"></textarea>
+        <div class="drop-overlay">Отпустите файл</div>
+      </div>
+      <div class="drop-actions">
+        <label class="file-pick">Выбрать файл<input type="file" id="filePick" multiple hidden></label>
+        <span class="drop-note">TXT и CSV подставятся текстом · остальные файлы (фото, видео, PDF, XLSX) загрузятся нам вместе с анкетой · до 15 файлов, каждый до 25 МБ</span>
+      </div>
+      <ul class="file-list" id="fileList" hidden></ul>
+    </div>
+    <div class="q" data-qid="docs" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Лицензии, сертификаты и документы для модерации</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Медицина, финансовые услуги, образование, БАДы, оружие и ряд других тематик проходят модерацию только с документами, а в объявления добавляются обязательные предупреждения. Если не требуется — «нет»</div>
+      <textarea data-field="docs"></textarea>
+    </div>
+    <div class="q" data-qid="forbidden" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что нельзя говорить и обещать в рекламе</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Запретные слова и обещания, упоминания конкурентов, требования головного бренда или франшизы</div>
+      <textarea data-field="forbidden"></textarea>
+    </div>
+  </section>
+
+  <section class="hpanel--flow" id="s10">
+    <span class="hflow-tag">Раздел 10 / 10 — запуск</span>
+    <h2 class="block-title">Запуск и совместная работа</h2>
+    <p class="block-hint">Сроки, доступы и порядок согласования.</p>
+
+    <div class="q" data-qid="launch" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Когда нужен запуск</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Срок подготовки назовём после созвона. Модерация объявлений в Яндексе обычно занимает несколько часов</div>
+      <div class="choice-row" data-choice="launch">
+        <button class="choice-btn" type="button" data-v="asap">Как можно скорее</button>
+        <button class="choice-btn" type="button" data-v="date">К конкретной дате</button>
+        <button class="choice-btn" type="button" data-v="calm">Без спешки, главное — качество</button>
+      </div>
+    </div>
+    <div class="q" data-qid="launch_date" data-req="1" data-show="{&quot;launch&quot;: [&quot;date&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Дата и с чем она связана</span><span class="req-chip">обязательно</span></label>
+      <input type="text" data-field="launch_date">
+    </div>
+    <div class="q" data-qid="cabinet" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Рекламный кабинет Яндекс Директа</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Пароль не нужен — доступ выдаётся нашему логину, кабинет и вся история остаются вашими. <a href="../access/direct/" target="_blank" rel="noopener">Как выдать доступ</a></div>
+      <div class="choice-row" data-choice="cabinet">
+        <button class="choice-btn" type="button" data-v="done">Доступ уже выдан</button>
+        <button class="choice-btn" type="button" data-v="will">Есть, выдадим по инструкции</button>
+        <button class="choice-btn" type="button" data-v="none">Кабинета нет — создадим вместе</button>
+        <button class="choice-btn" type="button" data-v="help">Нужна помощь</button>
+      </div>
+    </div>
+    <div class="q" data-qid="reports" data-show="{&quot;format&quot;: [&quot;full&quot;, &quot;takeover&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Как часто присылать отчёт</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="reports">
+        <button class="choice-btn" type="button" data-v="week">Раз в неделю</button>
+        <button class="choice-btn" type="button" data-v="two">Раз в две недели</button>
+        <button class="choice-btn" type="button" data-v="month">Раз в месяц</button>
+      </div>
+    </div>
+    <div class="q" data-qid="report_format" data-show="{&quot;format&quot;: [&quot;full&quot;, &quot;takeover&quot;]}" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Формат отчёта</span><span class="req-chip">обязательно</span></label>
+      <div class="choice-row" data-choice="report_format">
+        <button class="choice-btn" type="button" data-v="chat">Коротко в рабочий чат</button>
+        <button class="choice-btn" type="button" data-v="doc">Таблица или документ</button>
+        <button class="choice-btn" type="button" data-v="call">Созвон с разбором</button>
+      </div>
+    </div>
+    <div class="q" data-qid="approval" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Что согласовываем перед запуском</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Изменение рекламного бюджета всегда согласуем с вами</div>
+      <div class="choice-row" data-choice="approval">
+        <button class="choice-btn" type="button" data-v="all">Структуру кампаний и тексты</button>
+        <button class="choice-btn" type="button" data-v="texts">Только тексты объявлений</button>
+        <button class="choice-btn" type="button" data-v="trust">Доверяем, покажите после запуска</button>
+      </div>
+    </div>
+    <div class="q" data-qid="decider" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Кто со стороны компании принимает решения</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Имя, должность, телефон или ник в мессенджере</div>
+      <input type="text" data-field="decider">
+    </div>
+    <div class="q" data-qid="messenger" data-req="1" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Мессенджер для рабочей группы</span><span class="req-chip">обязательно</span></label>
+      <div class="qhint">Создадим общий чат для связи и согласования</div>
+      <div class="choice-row" data-choice="messenger">
+        <button class="choice-btn" type="button" data-v="tg">Telegram</button>
+        <button class="choice-btn" type="button" data-v="max">MAX</button>
+        <button class="choice-btn" type="button" data-v="wa">WhatsApp</button>
+      </div>
+    </div>
+    <div class="q" data-qid="other" data-gate="1"><label class="qtitle"><span class="qnum"></span><span class="qtitle-text">Иные пожелания и ограничения</span><span class="req-chip">обязательно</span></label>
+      <textarea data-field="other"></textarea>
+    </div>
+
+    <div class="hsubmit-panel">
+      <h3>Анкета заполнена?</h3>
+      <p>Скачайте PDF с ответами — копия автоматически придёт вашему менеджеру HDR Group.</p>
+      <div class="consent">
+        <input type="checkbox" id="consentBox">
+        <label for="consentBox">Я даю согласие на обработку персональных данных, указанных в настоящей анкете, на условиях <a href="#" id="policyLink" target="_blank" rel="noopener">Политики обработки персональных данных</a>. Согласие предоставляется в целях организации взаимодействия при оказании услуг и может быть отозвано.</label>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="pdfBtn" type="button" disabled>Скачать PDF с ответами</button>
+      </div>
+      <div class="status-msg" id="statusMsg"></div>
+      <textarea id="exportOut" readonly></textarea>
+      <div class="aux-row">
+        <button class="aux-link aux-link--quiet" id="clearBtn" type="button">Очистить анкету и удалить черновик</button>
+      </div>
+      <p class="aux-note">PDF формируется на вашем устройстве, при скачивании его копия передаётся HDR Group. Черновик хранится в этом браузере, к анкете можно вернуться позже.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="doc-footer">
+  <p>Старт проекта · настройка и ведение рекламы в Яндекс Директе</p>
+  <p><span id="footerCopy">© 2026</span> · <a href="#" id="policyLinkFooter" target="_blank" rel="noopener">Политика обработки персональных данных</a></p>
+</footer>
+
+<script>
+(function(){
+  /* ============================================================
+     НАСТРОЙКИ
+     ============================================================ */
+  var COMPANY_NAME = 'HDR Group';
+  var POLICY_URL   = '';
+  var DRAFT_KEY = 'client_brief_direct_v1';
+  // Посредник Google Apps Script (tools/brief-telegram.gs): пересылает копию PDF в Telegram HDR Group.
+  // Пусто — копия не отправляется, клиент просто скачивает PDF.
+  var RELAY_URL = 'https://script.google.com/macros/s/AKfycbyIj70GSaOepbivioyGsYPhy8cezGgzwqGUiGCpSO3yMIyGIVNDMlMvPWh3ReJzfZOd/exec';
+  var BRIEF_KEY = 'direct';
+  var GATE = ['format', 'status', 'landing'];  // первые три вопроса открывают анкету
+  /* ============================================================ */
+
+  var $ = function(s, r){ return (r || document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  var questions = $$('.q[data-qid]');
+  var byId = {};
+  questions.forEach(function(q){ byId[q.dataset.qid] = q; });
+
+  /* ---------- выбор вариантов ---------- */
+  function choiceVal(id){
+    var row = $('.choice-row[data-choice="' + id + '"]');
+    return row ? (row.dataset.selected || '') : '';
+  }
+  function choiceLabel(row){
+    var b = row.querySelector('.choice-btn.active');
+    return b ? b.textContent : '';
+  }
+  function setChoice(row, v){
+    row.querySelectorAll('.choice-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.v === v); });
+    if(v) row.dataset.selected = v; else delete row.dataset.selected;
+  }
+  $$('.choice-row').forEach(function(row){
+    row.querySelectorAll('.choice-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        setChoice(row, btn.dataset.v);
+        refresh(); saveDraft();
+      });
+    });
+  });
+
+  /* ---------- видимость, обязательность, нумерация ---------- */
+  function matches(cond){
+    if(!cond) return true;
+    var c = JSON.parse(cond);
+    return Object.keys(c).every(function(k){ return c[k].indexOf(choiceVal(k)) !== -1; });
+  }
+  function isVisible(q){ return !q.classList.contains('is-hidden'); }
+  function isRequired(q){ return !!q.dataset.req; }
+  function fieldOf(q){ return q.querySelector('[data-field]'); }
+  function answerOf(q){
+    var row = q.querySelector('.choice-row');
+    if(row) return choiceLabel(row);
+    var f = fieldOf(q);
+    return f ? f.value.trim() : '';
+  }
+  function hasAnswer(q){
+    if(q.dataset.qid === 'materials' && attachedFiles.length) return true;
+    return !!answerOf(q);
+  }
+  function titleOf(q){
+    var t = q.querySelector('.qtitle-text');
+    return t ? t.textContent.replace(/\s+/g, ' ').trim() : '';
+  }
+
+  function refresh(soft){
+    var gateOpen = GATE.every(function(id){ return !!choiceVal(id); });
+    $('#gateNote').hidden = gateOpen;
+
+    // скрытые варианты ответа
+    $$('.choice-btn[data-show]').forEach(function(b){
+      var ok = matches(b.dataset.show);
+      b.hidden = !ok;
+      var row = b.closest('.choice-row');
+      if(!ok && row.dataset.selected === b.dataset.v) setChoice(row, '');
+    });
+
+    questions.forEach(function(q){
+      var show = q.dataset.show ? matches(q.dataset.show) : true;
+      if(q.dataset.gate && !gateOpen) show = false;
+      q.classList.toggle('is-hidden', !show);
+      var req = show && isRequired(q);
+      q.classList.toggle('req', req);
+      var chip = q.querySelector('.req-chip');
+      if(chip) chip.hidden = !req;
+    });
+
+    // нумерация видимых вопросов
+    var n = 0;
+    questions.forEach(function(q){ if(isVisible(q)) q.querySelector('.qnum').textContent = (++n) + '.'; });
+
+    // разделы без видимых вопросов скрываем вместе с пунктом меню
+    $$('section.hpanel--flow[id]').forEach(function(sec){
+      var any = $$('.q[data-qid]', sec).some(isVisible);
+      sec.classList.toggle('is-hidden', !any);
+      var a = $('.section-nav a[href="#' + sec.id + '"]');
+      if(a) a.classList.toggle('is-hidden', !any);
+    });
+
+    updateProgress();
+  }
+  function plural(n, one, few, many){
+    var m10 = n % 10, m100 = n % 100;
+    if(m10 === 1 && m100 !== 11) return one;
+    if(m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
+    return many;
+  }
+
+  function visibleQs(){ return questions.filter(isVisible); }
+  function updateProgress(){
+    var vis = visibleQs();
+    var filled = vis.filter(hasAnswer).length;
+    var req = vis.filter(isRequired);
+    var reqDone = req.filter(hasAnswer).length;
+    var pct = vis.length ? filled / vis.length : 0;
+    var fill = $('#progressFill');
+    fill.style.width = (pct * 100) + '%';
+    $('#progressCount').textContent = filled;
+    $('#progressTotal').textContent = vis.length;
+    $('#reqCount').textContent = reqDone;
+    $('#reqTotal').textContent = req.length;
+    $('#reqBadge').classList.toggle('done', reqDone === req.length);
+    fill.classList.remove('stage-red', 'stage-orange', 'stage-green');
+    if(reqDone >= req.length){
+      if(pct >= 0.75) fill.classList.add('stage-green');
+      else if(pct >= 0.60) fill.classList.add('stage-orange');
+      else fill.classList.add('stage-red');
+    }
+  }
+
+  $$('[data-field]').forEach(function(f){
+    f.addEventListener('input', function(){ updateProgress(); saveDraft(); });
+  });
+
+  /* ---------- навигация по разделам ---------- */
+  (function(){
+    var header = $('.topbar');
+    var nav = $('#sectionNav');
+    function links(){ return $$('.section-nav a').filter(function(a){ return !a.classList.contains('is-hidden'); }); }
+    function syncHeadHeight(){ document.documentElement.style.setProperty('--head-h', header.offsetHeight + 'px'); }
+    syncHeadHeight();
+    window.addEventListener('resize', syncHeadHeight);
+    var ticking = false;
+    function syncActive(){
+      var line = header.offsetHeight + 40, current = 0, ls = links();
+      ls.forEach(function(a, i){
+        var sec = $(a.getAttribute('href'));
+        if(sec && sec.getBoundingClientRect().top <= line) current = i;
+      });
+      ls.forEach(function(a, i){
+        var on = i === current;
+        if(a.classList.contains('active') !== on) a.classList.toggle('active', on);
+        if(on){
+          var r = a.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+          if(r.left < nr.left || r.right > nr.right) nav.scrollTo({ left: a.offsetLeft - nav.clientWidth / 2 + a.offsetWidth / 2, behavior: 'smooth' });
+        }
+      });
+      ticking = false;
+    }
+    window.addEventListener('scroll', function(){ if(!ticking){ ticking = true; requestAnimationFrame(syncActive); } }, { passive: true });
+    syncActive();
+  })();
+
+  /* ---------- приём файлов ---------- */
+  var attachedFiles = [];
+  var dz = $('#dropzone'), dzArea = dz.querySelector('textarea'), dzList = $('#fileList');
+  function isTextFile(file){ return /^text\//.test(file.type) || /\.(txt|csv|tsv|md)$/i.test(file.name); }
+  function humanSize(b){ return b < 1024 ? b + ' Б' : b < 1048576 ? Math.round(b / 1024) + ' КБ' : (b / 1048576).toFixed(1) + ' МБ'; }
+  function renderFileList(){
+    dzList.innerHTML = '';
+    dzList.hidden = attachedFiles.length === 0;
+    attachedFiles.forEach(function(f, i){
+      var li = document.createElement('li');
+      li.appendChild(document.createTextNode(f.name + ' · ' + f.size));
+      var x = document.createElement('button');
+      x.type = 'button'; x.textContent = '×';
+      x.setAttribute('aria-label', 'Убрать файл ' + f.name);
+      x.addEventListener('click', function(){ attachedFiles.splice(i, 1); renderFileList(); updateProgress(); });
+      li.appendChild(x);
+      dzList.appendChild(li);
+    });
+  }
+  function handleFiles(list){
+    Array.prototype.forEach.call(list, function(file){
+      if(isTextFile(file)){
+        var reader = new FileReader();
+        reader.onload = function(){
+          var prefix = dzArea.value.trim() ? dzArea.value.replace(/\s+$/, '') + '\n\n' : '';
+          dzArea.value = prefix + '— из файла «' + file.name + '» —\n' + reader.result;
+          updateProgress(); saveDraft();
+        };
+        reader.readAsText(file, 'UTF-8');
+      } else if(!attachedFiles.some(function(f){ return f.name === file.name; })){
+        attachedFiles.push({ name: file.name, size: humanSize(file.size), bytes: file.size, file: file });
+      }
+    });
+    renderFileList(); updateProgress();
+  }
+  ['dragenter', 'dragover'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.add('is-over'); }); });
+  ['dragleave', 'dragend'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.remove('is-over'); }); });
+  dz.addEventListener('drop', function(e){
+    e.preventDefault(); dz.classList.remove('is-over');
+    if(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+  });
+  $('#filePick').addEventListener('change', function(e){ if(e.target.files && e.target.files.length) handleFiles(e.target.files); e.target.value = ''; });
+
+  /* ---------- черновик ---------- */
+  function saveDraft(){
+    try{
+      var d = { f: {}, c: {} };
+      $$('[data-field]').forEach(function(f){ d.f[f.dataset.field] = f.value; });
+      $$('.choice-row').forEach(function(r){ d.c[r.dataset.choice] = r.dataset.selected || ''; });
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+    }catch(e){}
+  }
+  function loadDraft(){
+    try{
+      var raw = localStorage.getItem(DRAFT_KEY);
+      if(!raw) return;
+      var d = JSON.parse(raw);
+      $$('[data-field]').forEach(function(f){ if(d.f && d.f[f.dataset.field]) f.value = d.f[f.dataset.field]; });
+      $$('.choice-row').forEach(function(r){ if(d.c && d.c[r.dataset.choice]) setChoice(r, d.c[r.dataset.choice]); });
+    }catch(e){}
+  }
+
+  /* ---------- подвал ---------- */
+  $('#footerCopy').textContent = '© ' + new Date().getFullYear() + ' ' + COMPANY_NAME;
+  (function(){
+    var a = document.getElementById('policyLinkFooter');
+    if(POLICY_URL){ a.href = POLICY_URL; }
+    else { a.removeAttribute('href'); a.removeAttribute('target'); a.style.textDecoration = 'none'; a.style.cursor = 'default'; }
+  })();
+  var statusMsg = $('#statusMsg'), pdfBtn = $('#pdfBtn'), consentBox = $('#consentBox');
+  (function(){
+    var a = document.getElementById('policyLink');
+    if(POLICY_URL){ a.href = POLICY_URL; }
+    else { a.removeAttribute('href'); a.removeAttribute('target'); a.style.textDecoration = 'none'; a.style.cursor = 'default'; }
+  })();
+  function syncConsent(){ pdfBtn.disabled = !consentBox.checked; }
+  consentBox.addEventListener('change', syncConsent);
+  syncConsent();
+  function setStatus(text, kind){
+    statusMsg.textContent = text;
+    statusMsg.classList.toggle('is-error', kind === 'error');
+    statusMsg.classList.toggle('is-ok', kind === 'ok');
+  }
+
+  $('#clearBtn').addEventListener('click', function(){
+    if(!confirm('Очистить все ответы и удалить сохранённый черновик из браузера?')) return;
+    $$('[data-field]').forEach(function(f){ f.value = ''; });
+    $$('.choice-row').forEach(function(r){ setChoice(r, ''); });
+    attachedFiles.length = 0; renderFileList(); resetUpload();
+    consentBox.checked = false; syncConsent();
+    try{ localStorage.removeItem(DRAFT_KEY); localStorage.removeItem(DRAFT_KEY + '_sent'); }catch(e){}
+    refresh();
+    setStatus('Анкета очищена, сохранённый черновик удалён.');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ---------- сбор ответов ---------- */
+  function sectionTitle(q){
+    var sec = q.closest('section'), t = sec && sec.querySelector('.block-title');
+    return t ? t.textContent.trim() : '';
+  }
+  function collectAnswers(){
+    var n = 0;
+    return visibleQs().map(function(q){
+      n++;
+      return { n: n, id: q.dataset.qid, section: sectionTitle(q), title: titleOf(q), required: isRequired(q), value: answerOf(q) };
+    });
+  }
+  function companyName(){ var f = $('[data-field="name"]'); return (f && f.value.trim()) || 'компания не указана'; }
+  function missingRequired(){ return visibleQs().filter(function(q){ return isRequired(q) && !hasAnswer(q); }); }
+  /* ---------- PDF (текстовый, pdfmake подгружается по клику) ---------- */
+  var PDF_LIBS = [
+    ['https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.js'],
+    ['https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/pdfmake.min.js', 'https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/vfs_fonts.js']
+  ];
+  function loadScript(src){
+    return new Promise(function(resolve, reject){
+      var el = document.createElement('script');
+      el.src = src; el.onload = resolve; el.onerror = function(){ el.remove(); reject(new Error(src)); };
+      document.head.appendChild(el);
+    });
+  }
+  var pdfReady = null;
+  function loadPdfLibs(){
+    if(window.pdfMake && window.pdfMake.vfs) return Promise.resolve();
+    if(pdfReady) return pdfReady;
+    var i = 0;
+    function attempt(){
+      var pair = PDF_LIBS[i];
+      return loadScript(pair[0]).then(function(){ return loadScript(pair[1]); }).then(function(){
+        if(!(window.pdfMake && window.pdfMake.vfs)) throw new Error('vfs');
+      }).catch(function(err){ i++; if(i < PDF_LIBS.length) return attempt(); throw err; });
+    }
+    pdfReady = attempt().catch(function(e){ pdfReady = null; throw e; });
+    return pdfReady;
+  }
+
+  var ACC = '#9A6400', MUTED = '#8A8A8A';
+  function buildDoc(){
+    var answers = collectAnswers();
+    var date = new Date().toLocaleDateString('ru-RU');
+    var pick = function(id){ var a = answers.filter(function(x){ return x.id === id; })[0]; return a && a.value || '—'; };
+    var content = [
+      { text: 'БРИФ · ЯНДЕКС ДИРЕКТ', style: 'eyebrow' },
+      { text: companyName(), style: 'h1' },
+      { text: 'Заполнено ' + date, style: 'muted', margin: [0, 2, 0, 12] },
+      { table: { widths: ['*', '*', '*'], body: [
+          [{ text: 'Задача', style: 'cap' }, { text: 'Реклама сейчас', style: 'cap' }, { text: 'Куда ведём', style: 'cap' }],
+          [{ text: pick('format'), bold: true }, { text: pick('status'), bold: true }, { text: pick('landing'), bold: true }]
+        ] }, layout: { hLineWidth: function(i){ return i === 0 || i === 2 ? 1 : 0; }, vLineWidth: function(){ return 0; },
+          hLineColor: function(){ return ACC; }, paddingTop: function(){ return 5; }, paddingBottom: function(){ return 5; } },
+        margin: [0, 0, 0, 6] }
+    ];
+    var lastSection = '';
+    answers.forEach(function(a){
+      if(GATE.indexOf(a.id) !== -1) return;
+      var value = a.value;
+      if(a.id === 'materials' && attachedFiles.length){
+        var parts = [];
+        if(uploadedFiles().length) parts.push('Файлы загружены на Google Диск HDR Group: ' + uploadedFiles().map(function(f){ return f.name; }).join(', '));
+        if(notUploaded().length) parts.push('Приложить к сообщению: ' + notUploaded().map(function(f){ return f.name; }).join(', '));
+        value = (value ? value + '\n' : '') + parts.join('\n');
+      }
+      if(!value && !a.required) return;
+      if(a.section !== lastSection){ content.push({ text: a.section, style: 'h2', headlineLevel: 1 }); lastSection = a.section; }
+      var title = { text: a.n + '. ' + a.title, bold: true, style: 'q', headlineLevel: 2 };
+      content.push({ stack: [
+        title,
+        value ? { text: value, style: 'a' } : { text: 'не заполнено — обязательный вопрос', style: 'missing' }
+      ], unbreakable: (value || '').length < 900 });
+    });
+    if(uploadedFiles().length){
+      content.push({ text: 'Файлы клиента на Google Диске', style: 'h2' });
+      if(upload.folder) content.push({ text: [{ text: 'Папка: ' }, { text: upload.folder, link: upload.folder, color: ACC }], fontSize: 9.5, margin: [0, 0, 0, 4] });
+      content.push({ ul: uploadedFiles().map(function(f){
+        var url = upload.saved[fileKey(f)];
+        return { text: [{ text: f.name + ' (' + f.size + ') — ' }, { text: url, link: url, color: ACC }] };
+      }), fontSize: 9 });
+    }
+    if(notUploaded().length){
+      content.push({ text: 'Файлы, которые нужно приложить к сообщению', style: 'h2' });
+      content.push({ ul: notUploaded().map(function(f){ return f.name + ' (' + f.size + ')'; }), fontSize: 9.5 });
+    }
+    return {
+      pageSize: 'A4', pageMargins: [40, 44, 40, 48],
+      pageBreakBefore: function(node, following, nodesOnNextPage, previous){
+        // заголовок раздела или вопроса не остаётся последней строкой страницы
+        return !!node.headlineLevel && following.length === 0;
+      },
+      info: { title: 'Бриф Яндекс Директ — ' + companyName(), author: COMPANY_NAME },
+      footer: function(cur, total){ return { columns: [
+        { text: companyName() + ' · бриф Яндекс Директ', fontSize: 7.5, color: MUTED },
+        { text: cur + ' / ' + total, alignment: 'right', fontSize: 7.5, color: MUTED }
+      ], margin: [40, 16, 40, 0] }; },
+      content: content,
+      defaultStyle: { font: 'Roboto', fontSize: 10, lineHeight: 1.25, color: '#1B1B1B' },
+      styles: {
+        eyebrow: { fontSize: 8, color: ACC, bold: true, characterSpacing: 1.2 },
+        h1: { fontSize: 20, bold: true, margin: [0, 4, 0, 0] },
+        h2: { fontSize: 12.5, bold: true, color: ACC, margin: [0, 14, 0, 6] },
+        cap: { fontSize: 7.5, color: MUTED },
+        q: { fontSize: 9.5, margin: [0, 5, 0, 2] },
+        a: { fontSize: 10, margin: [8, 0, 0, 3] },
+        empty: { fontSize: 9, italics: true, color: '#A0A0A0', margin: [8, 0, 0, 3] },
+        missing: { fontSize: 9, color: '#B4412F', margin: [8, 0, 0, 3] },
+        th: { fontSize: 8, bold: true }
+      }
+    };
+  }
+  function pdfFileName(){
+    var name = companyName().replace(/[^\wА-Яа-яЁё\- ]+/g, '').trim().replace(/\s+/g, '-').slice(0, 40);
+    return 'Бриф-Директ_' + (name || 'компания') + '_' + new Date().toLocaleDateString('ru-RU').replace(/\./g, '-') + '.pdf';
+  }
+  function buildExportText(){
+    var lines = ['БРИФ — настройка и ведение рекламы в Яндекс Директе', companyName(), ''];
+    collectAnswers().forEach(function(a){ lines.push(a.n + '. ' + a.title + ':'); lines.push(a.value || '(не заполнено)'); lines.push(''); });
+    if(attachedFiles.length){ lines.push('Приложить отдельно:'); attachedFiles.forEach(function(f){ lines.push('· ' + f.name); }); }
+    return lines.join('\n');
+  }
+  function afterNote(){
+    return notUploaded().length
+      ? ' Отправьте его вашему менеджеру HDR Group в рабочий чат вместе с файлами: ' + notUploaded().map(function(f){ return f.name; }).join(', ') + '.'
+      : ' Отправьте его вашему менеджеру HDR Group в рабочий чат.';
+  }
+  /* ---------- загрузка файлов на Google Диск HDR Group ---------- */
+  // тот же Apps Script, что пересылает PDF: файлы ложатся в папку «Компания — дата»
+  var MAX_FILES = 15, MAX_FILE_BYTES = 25 * 1024 * 1024, MAX_TOTAL_BYTES = 100 * 1024 * 1024;
+  var upload = { folderId: '', folder: '', saved: {}, failed: [] };
+  function resetUpload(){ upload = { folderId: '', folder: '', saved: {}, failed: [] }; }
+  function fileKey(f){ return f.name + '|' + f.bytes; }
+  function readAsBase64(file){
+    return new Promise(function(resolve, reject){
+      var r = new FileReader();
+      r.onload = function(){ resolve(String(r.result).split(',')[1] || ''); };
+      r.onerror = function(){ reject(r.error); };
+      r.readAsDataURL(file);
+    });
+  }
+  // загружает по одному файлы, которых ещё нет на Диске; уже загруженные повторно не шлёт
+  function uploadFiles(onProgress){
+    upload.failed = [];
+    if(!attachedFiles.length || !RELAY_URL) return Promise.resolve();
+    var total = 0, queue = [];
+    attachedFiles.forEach(function(f, i){
+      if(upload.saved[fileKey(f)]) return;
+      if(i >= MAX_FILES){ upload.failed.push(f.name + ' — больше ' + MAX_FILES + ' файлов'); return; }
+      if(f.bytes > MAX_FILE_BYTES){ upload.failed.push(f.name + ' — файл больше 25 МБ'); return; }
+      if(total + f.bytes > MAX_TOTAL_BYTES){ upload.failed.push(f.name + ' — превышен общий объём 100 МБ'); return; }
+      total += f.bytes; queue.push(f);
+    });
+    var chain = Promise.resolve();
+    queue.forEach(function(f, i){
+      chain = chain.then(function(){
+        if(onProgress) onProgress(i + 1, queue.length, f);
+        return readAsBase64(f.file).then(function(data){
+          return fetch(RELAY_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ company: companyName(), folderId: upload.folderId,
+              files: [{ name: f.name, type: f.file.type || 'application/octet-stream', data: data }] }) });
+        }).then(function(r){ return r.json(); }).then(function(j){
+          if(!j || !j.ok) throw new Error(j && j.error || 'нет ответа');
+          upload.folderId = j.folderId; upload.folder = j.folder;
+          upload.saved[fileKey(f)] = j.files[0].url;
+        }).catch(function(err){
+          upload.failed.push(f.name + ' — ' + (err && err.message ? err.message : 'ошибка загрузки'));
+        });
+      });
+    });
+    return chain;
+  }
+  function uploadedFiles(){ return attachedFiles.filter(function(f){ return upload.saved[fileKey(f)]; }); }
+  function notUploaded(){ return attachedFiles.filter(function(f){ return !upload.saved[fileKey(f)]; }); }
+
+  /* ---------- копия PDF в Telegram HDR Group ---------- */
+  function answerLabel(id){ var row = $('.choice-row[data-choice="' + id + '"]'); return row ? choiceLabel(row) : ''; }
+  function relayMeta(){
+    var vis = visibleQs(), req = vis.filter(isRequired);
+    return {
+      company: companyName(),
+      package: answerLabel('format'), kind: answerLabel('status'), mode: answerLabel('landing'),
+      labels: { package: 'Задача', kind: 'Реклама сейчас', mode: 'Куда ведём' },
+      required: req.filter(hasAnswer).length + ' из ' + req.length,
+      files: notUploaded().map(function(f){ return f.name; }).join(', '),
+      folder: uploadedFiles().length ? upload.folder : ''
+    };
+  }
+  function signature(){
+    var str = JSON.stringify([collectAnswers().map(function(a){ return a.value; }), attachedFiles.map(function(f){ return f.name; }), upload.folder]);
+    var h = 0; for(var i = 0; i < str.length; i++){ h = (h * 31 + str.charCodeAt(i)) | 0; }
+    return String(h);
+  }
+  function sendCopy(doc, fileName){
+    if(!RELAY_URL) return Promise.resolve('off');
+    var sig = signature(), prev = '';
+    try{ prev = localStorage.getItem(DRAFT_KEY + '_sent') || ''; }catch(e){}
+    if(prev === sig) return Promise.resolve('same');
+    return new Promise(function(resolve){ doc.getBase64(resolve); }).then(function(b64){
+      // text/plain — без preflight-запроса, Apps Script его не поддерживает
+      return fetch(RELAY_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ brief: BRIEF_KEY, fileName: fileName, pdf: b64, meta: relayMeta(), update: !!prev }) });
+    }).then(function(r){ return r.json(); }).then(function(j){
+      if(!j || !j.ok) throw new Error(j && j.error || 'relay');
+      try{ localStorage.setItem(DRAFT_KEY + '_sent', sig); }catch(e){}
+      return 'sent';
+    });
+  }
+  function filesNote(){
+    var out = '';
+    if(uploadedFiles().length) out += ' Файлы (' + uploadedFiles().length + ') тоже переданы.';
+    if(notUploaded().length) out += ' Не удалось загрузить: ' + (upload.failed.length ? upload.failed.join('; ') : notUploaded().map(function(f){ return f.name; }).join(', ')) + '. Эти файлы пришлите менеджеру в рабочий чат.';
+    return out;
+  }
+
+  var warnedFor = '';
+  pdfBtn.addEventListener('click', function(){
+    var missing = missingRequired();
+    var key = missing.map(function(q){ return q.dataset.qid; }).join(',');
+    if(missing.length && warnedFor !== key){
+      warnedFor = key;
+      var nums = missing.map(function(q){ return q.querySelector('.qnum').textContent.replace('.', ''); });
+      setStatus('Не заполнены обязательные вопросы: ' + nums.join(', ') + '. Заполните их или нажмите кнопку ещё раз, чтобы скачать PDF как есть.', 'error');
+      missing[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    pdfBtn.disabled = true;
+    setStatus('Собираем PDF…');
+    var name = pdfFileName(), doc;
+    uploadFiles(function(i, n, f){
+      setStatus('Загружаем файл ' + i + ' из ' + n + ' («' + f.name + '», ' + f.size + ')… Не закрывайте страницу, крупные файлы загружаются до минуты.');
+    }).then(function(){
+      setStatus('Собираем PDF…');
+      return loadPdfLibs();
+    }).then(function(){
+      doc = window.pdfMake.createPdf(buildDoc());
+      return new Promise(function(resolve){ doc.download(name, resolve); });
+    }).then(function(){
+      setStatus('PDF «' + name + '» сохранён в загрузки. Передаём копию менеджеру…');
+      return sendCopy(doc, name).then(function(state){
+        if(state === 'off') setStatus('PDF «' + name + '» сохранён в загрузки.' + afterNote(), 'ok');
+        else setStatus('PDF «' + name + '» сохранён в загрузки, копия уже у вашего менеджера HDR Group.' + filesNote(), 'ok');
+      }, function(){
+        setStatus('PDF «' + name + '» сохранён в загрузки. Автоматически передать копию не получилось —' + afterNote().replace(' Отправьте', ' отправьте'), 'ok');
+      });
+    }).catch(function(){
+      var text = buildExportText();
+      try{
+        var url = URL.createObjectURL(new Blob(['﻿' + text], { type: 'text/plain;charset=utf-8' }));
+        var a = document.createElement('a'); a.href = url; a.download = name.replace(/\.pdf$/, '.txt');
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+        setStatus('PDF собрать не удалось — сохранён текстовый файл с ответами.' + afterNote(), 'error');
+      }catch(e){
+        var out = $('#exportOut'); out.value = text; out.style.display = 'block';
+        setStatus('Скачивание недоступно в этом браузере. Скопируйте текст ответов ниже и отправьте менеджеру.', 'error');
+      }
+    }).then(function(){ syncConsent(); });
+  });
+
+  loadDraft();
+  refresh();
+})();
+</script>
+
+</body>
+</html>
