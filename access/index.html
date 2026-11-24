@@ -118,7 +118,7 @@ footer{max-width:1180px;margin:0 auto;padding:30px 24px 40px;display:flex;align-
         <li>Права владельца остаются у вас</li>
         <li>Доступ можно отключить в любой момент</li>
       </ul>
-      <div class="login"><span>Наш логин</span><code id="login">hdrgroup2026</code><button class="btn" id="copy" type="button">Скопировать</button></div>
+      <div class="login"><span>Почта для доступа</span><code id="login">akauntinghdr@yandex.ru</code><button class="btn" id="copy" type="button">Скопировать</button></div>
     </section>
 
     <section class="cards" aria-labelledby="h-list">
@@ -193,7 +193,7 @@ footer{max-width:1180px;margin:0 auto;padding:30px 24px 40px;display:flex;align-
   var b=document.getElementById('copy'),c=document.getElementById('login');
   b.addEventListener('click',function(){
     function sel(){var r=document.createRange();r.selectNodeContents(c);var x=getSelection();x.removeAllRanges();x.addRange(r);b.textContent='Выделено';}
-    try{navigator.clipboard.writeText('hdrgroup2026').then(function(){b.textContent='Скопировано';setTimeout(function(){b.textContent='Скопировать'},1800)},sel);}catch(e){sel();}
+    try{navigator.clipboard.writeText('akauntinghdr@yandex.ru').then(function(){b.textContent='Скопировано';setTimeout(function(){b.textContent='Скопировать'},1800)},sel);}catch(e){sel();}
   });
 })();
 </script>
